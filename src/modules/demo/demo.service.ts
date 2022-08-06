@@ -8,20 +8,14 @@ import { LoggerService } from '../../common/logger/custom.logger';
 
 @Injectable()
 export class DemoService extends BaseService<Demo, DemoRepository> {
-  constructor(
-    // private readonly repository2: DemoRepository,
-    repository: DemoRepository,
-    logger: LoggerService,
-  ) {
+  constructor(repository: DemoRepository, logger: LoggerService) {
     super(repository, logger);
   }
 
-  create(createDemoDto: CreateDemoDto) {
-    return this.repository.save(createDemoDto);
-  }
+  create(createDemoDto: CreateDemoDto) {}
 
   findAll() {
-    return this.repository.find();
+    return this.repository.sortCus();
   }
 
   findOne(id: number) {

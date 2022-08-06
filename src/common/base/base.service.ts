@@ -1,7 +1,9 @@
 import { BaseEntity, Repository } from 'typeorm';
 import { LoggerService } from '../logger/custom.logger';
 
-// export interface IBaseService<T> {}
+// export interface IBaseService<T> {
+//   index();
+// }
 
 export class BaseService<T extends BaseEntity, R extends Repository<T>> {
   protected readonly repository: R;

@@ -1,7 +1,7 @@
 export class BaseResponseDto<T> {
   message: string;
   data: T;
-  constructor(message: string, data: T | null = null) {
+  constructor(message = 'success', data: T | null = null) {
     this.message = message;
     if (data instanceof String) {
       this.data = { ...data };
