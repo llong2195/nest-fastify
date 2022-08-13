@@ -1,15 +1,22 @@
+import appConfig from '@config/app.config';
+import authConfig from '@config/auth.config';
+import databaseConfig from '@config/database.config';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DemoModule } from './modules/demo/demo.module';
-import { DatabaseModule } from './common/database/database.module';
-import appConfig from './common/config/app.config';
-import authConfig from './common/config/auth.config';
-import databaseConfig from './common/config/database.config';
-import { LoggerModule } from './common/logger/logger.module';
+import { REDIS_HOST, REDIS_PORT } from './config';
+import { DatabaseModule } from './database/database.module';
+import { LoggerModule } from './logger/logger.module';
+import { AllExceptionFilter } from './filter/exception.filter';
+import { CronModule } from './modules/cron/cron.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
+import { UploadFileModule } from './modules/upload-file/upload-file.module';
+import { ValidatorsModule } from './validators/validators.module';
 
 @Module({
   imports: [
@@ -18,22 +25,36 @@ import { LoggerModule } from './common/logger/logger.module';
       load: [appConfig, databaseConfig, authConfig],
     }),
 
-    ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 10,
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: config.get<number>('THROTTLE_TTL'),
+        limit: config.get<number>('THROTTLE_LIMIT'),
+      }),
     }),
 
     BullModule.forRoot({
       redis: {
-        host: process.env['REDIS_HOST'] || 'localhost',
-        port: Number(process.env['REDIS_PORT']) || 6379,
+        host: REDIS_HOST || 'localhost',
+        port: Number(REDIS_PORT) || 6379,
       },
     }),
     LoggerModule,
     DatabaseModule,
-    DemoModule,
+    CronModule,
+    AuthModule,
+    UserModule,
+    UploadFileModule,
+    ValidatorsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionFilter,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}

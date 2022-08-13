@@ -1,0 +1,11 @@
+{
+	"login_required": "Vui Lòng Đăng Nhập Để Sử Dụng Tính Năng Này",
+	"required_fields": "Vui Lòng Nhập Các Trường Bắt Buộc",
+	"invalid_request": "Dữ Liệu Không Hợp Lệ",
+	"login_succecss": "Đăng Nhập Thành Công!",
+	"register_success": "Đăng Ký Thành Công!",
+	"email_exists": "Email đã tồn tại!",
+	"login_fail": "Tài Khoản hoặc Mật Khẩu Không Đúng",
+	"succecss": "Thành Công",
+	"access_denied": "Truy cập không hợp lệ"
+}
