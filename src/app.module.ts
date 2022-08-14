@@ -22,8 +22,15 @@ import { ValidatorsModule } from './validators/validators.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['.env', '.env.development.local', '.env.development'],
       load: [appConfig, databaseConfig, authConfig],
     }),
+
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '../../', '/public'),
+    //   serveRoot: '/',
+    //   exclude: ['/api/*', '/auth/*'],
+    // }),
 
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
@@ -36,8 +43,8 @@ import { ValidatorsModule } from './validators/validators.module';
 
     BullModule.forRoot({
       redis: {
-        host: REDIS_HOST || 'localhost',
-        port: Number(REDIS_PORT) || 6379,
+        host: REDIS_HOST,
+        port: Number(REDIS_PORT),
       },
     }),
     LoggerModule,

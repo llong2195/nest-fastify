@@ -29,7 +29,7 @@ export class UploadFileController {
       `${req.protocol}://${req.get('Host')}`,
     );
     return new BaseResponseDto<UploadFile>(
-      'Success',
+      'success',
       plainToClass(UploadFile, uploadfile),
     );
   }

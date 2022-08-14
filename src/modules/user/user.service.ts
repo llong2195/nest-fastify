@@ -14,7 +14,7 @@ export class UserService extends BaseService<User, UserRepository> {
   }
 
   findById(id: number): Promise<User> {
-    return this.findById(id);
+    return this._findById(id);
   }
 
   getInactiveUsers(): Promise<User[]> {

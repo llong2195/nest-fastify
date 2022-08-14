@@ -26,13 +26,13 @@ export class UserController {
   @Get()
   async index(): Promise<BaseResponseDto<User[]>> {
     const users = await this.userService._findByAdmin('ASC', false, 0);
-    return new BaseResponseDto<User[]>('Success', users);
+    return new BaseResponseDto<User[]>('success', users);
   }
 
   @Get('/inactive')
   async getInactiveUser(): Promise<BaseResponseDto<User[]>> {
     const users = await this.userService.getInactiveUsers();
-    return new BaseResponseDto<User[]>('Success', users);
+    return new BaseResponseDto<User[]>('success', users);
   }
 
   @Get('/:id')
@@ -41,7 +41,7 @@ export class UserController {
     if (!user) {
       throw new NotFoundException();
     }
-    return new BaseResponseDto<User>('Success', user);
+    return new BaseResponseDto<User>('success', user);
   }
 
   @Post()
@@ -50,7 +50,7 @@ export class UserController {
   ): Promise<BaseResponseDto<User>> {
     const createdUser = await this.userService._store(userData);
     return new BaseResponseDto<User>(
-      'Success',
+      'success',
       plainToClass(User, createdUser),
     );
   }
@@ -62,7 +62,7 @@ export class UserController {
   ): Promise<BaseResponseDto<User>> {
     const createdUser = this.userService._update(id, userData);
     return new BaseResponseDto<User>(
-      'Success',
+      'success',
       plainToClass(User, createdUser),
     );
   }
@@ -72,6 +72,6 @@ export class UserController {
     @Param('id') id: number,
   ): Promise<BaseResponseDto<DeleteResult>> {
     await this.userService._softDelete(id);
-    return new BaseResponseDto<DeleteResult>('Success', null);
+    return new BaseResponseDto<DeleteResult>('success', null);
   }
 }

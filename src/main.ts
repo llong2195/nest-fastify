@@ -9,6 +9,7 @@ import { AppModule } from './app.module';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { ValidationConfig } from '@config/validation.config';
 import { ValidatorsModule } from '@validators/validators.module';
+import { runInCluster } from './util/runInCluster';
 
 declare const module: any;
 
@@ -43,3 +44,5 @@ async function bootstrap() {
   }
 }
 bootstrap();
+
+// runInCluster(bootstrap);
