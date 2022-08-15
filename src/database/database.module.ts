@@ -18,6 +18,7 @@ import { join } from 'path';
         // subscribers: [__dirname + './../**/**/**.subscriber{.ts,.js}'],
         synchronize: true,
         autoLoadEntities: true,
+        logger: 'simple-console',
       }),
       inject: [ConfigService],
     }),

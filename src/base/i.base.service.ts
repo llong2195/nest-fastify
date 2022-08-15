@@ -3,8 +3,8 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 
 export interface IBaseService<T> {
   _findByAdmin(
-    orderBy: string,
     deleted: boolean,
+    orderValue: string,
     page: number,
   ): Promise<T[] | T | unknown | null>;
 

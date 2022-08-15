@@ -25,14 +25,14 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
   // ADMIN
 
   async _findByAdmin(
-    orderBy: 'ASC' | 'DESC',
     deleted: boolean,
+    orderValue: 'ASC' | 'DESC',
     page: 0,
   ): Promise<T[] | null> {
     return await this.repository.find({
       where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
       skip: page * PAGE_SIZE,
-      order: { createdAt: orderBy } as unknown as FindOptionsOrder<T>,
+      order: { createdAt: orderValue } as unknown as FindOptionsOrder<T>,
     });
   }
 

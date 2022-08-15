@@ -14,7 +14,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err, user, info) {
-    console.warn(`JwtAuthGuard: ${info}`);
+    console.warn(`JwtAuthGuard: ${info}`, info);
+    console.warn(`JwtAuthGuard: ${err}`);
 
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
