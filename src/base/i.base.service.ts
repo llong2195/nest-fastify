@@ -1,4 +1,3 @@
-import { DeleteResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export interface IBaseService<T> {
@@ -23,5 +22,5 @@ export interface IBaseService<T> {
 
   _findById(id: number): Promise<T | unknown | null>;
 
-  _findByIds(id: [number]): Promise<T[] | unknown | null>;
+  _findByIds(ids: [number]): Promise<T[] | unknown | null>;
 }

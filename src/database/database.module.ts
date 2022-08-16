@@ -15,7 +15,6 @@ import { join } from 'path';
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_DB_NAME'),
         entities: [__dirname + './../**/**/**.entity{.ts,.js}'],
-        // subscribers: [__dirname + './../**/**/**.subscriber{.ts,.js}'],
         synchronize: true,
         autoLoadEntities: true,
         logger: 'simple-console',

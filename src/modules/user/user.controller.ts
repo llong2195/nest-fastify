@@ -25,7 +25,7 @@ export class UserController {
 
   @Get()
   async index(): Promise<BaseResponseDto<User[]>> {
-    const users = await this.userService._findByAdmin('ASC', false, 0);
+    const users = await this.userService._findByAdmin(false, 'ASC', 0);
     return new BaseResponseDto<User[]>('success', users);
   }
 

@@ -1,6 +1,5 @@
 import {
   BaseEntity,
-  DeepPartial,
   FindOptionsOrder,
   FindOptionsWhere,
   In,
@@ -91,9 +90,9 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
     });
   }
 
-  async _findByIds(id: [EntityId]): Promise<T[] | null> {
+  async _findByIds(ids: [EntityId]): Promise<T[] | null> {
     return this.repository.find({
-      where: { id: In(id) } as unknown as FindOptionsWhere<T>,
+      where: { id: In(ids) } as unknown as FindOptionsWhere<T>,
     });
   }
 }

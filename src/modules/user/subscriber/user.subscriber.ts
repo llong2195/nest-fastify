@@ -21,10 +21,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     this.bcryptSalt = configService.get<number>('bcryptSalt');
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  listenTo(): string | Function {
+  listenTo() {
     return User;
   }
 

@@ -1,13 +1,20 @@
+import {
+  DATABASE_HOST,
+  DATABASE_PORT,
+  DATABASE_USERNAME,
+  DATABASE_PASSWORD,
+  DATABASE_DB_NAME,
+} from '@config/config';
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
-  host: process.env.DATABASE_HOST || 'localhost',
-  port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
-  username: process.env.DATABASE_USERNAME || 'root',
-  password: process.env.DATABASE_PASSWORD || 'password',
-  database: process.env.DATABASE_DB_NAME || 'ttt',
+  host: DATABASE_HOST || 'localhost',
+  port: DATABASE_PORT || 3306,
+  username: DATABASE_USERNAME || 'root',
+  password: DATABASE_PASSWORD || 'password',
+  database: DATABASE_DB_NAME || 'test',
   dropSchema: false,
   keepConnectionAlive: true,
   logging: true,

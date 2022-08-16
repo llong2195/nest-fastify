@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 // App
 export const NODE_ENV = process.env.NODE_ENV || 'development';
 export const PORT = parseInt(process.env.PORT, 10) || 4000;
@@ -7,7 +10,11 @@ export const TIMEZONE = process.env.TIMEZONE || 'Asia/Ho_Chi_Minh';
 export const API_PREFIX = process.env.API_PREFIX || 'api';
 export const PAGE_SIZE = parseInt(process.env.PAGE_SIZE, 10) || 20;
 
-//
+// THROTTLE
+export const THROTTLE_TTL = parseInt(process.env.THROTTLE_TTL) || 300;
+export const THROTTLE_LIMIT = parseInt(process.env.THROTTLE_LIMIT) || 300;
+
+// BCRYPT_SALT
 export const BCRYPT_SALT = parseInt(process.env.BCRYPT_SALT, 10) || 10;
 
 // i18n
@@ -16,7 +23,7 @@ export const DEFAULT_LOCALE = process.env.DEFAULT_LOCALE || 'vi';
 // JSON Web Token
 export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
-export const jwtRefreshTokenExpiration =
+export const JWT_REFRESH_TOKEN_EXPIRATION =
   process.env.JWT_REFRESH_TOKEN_EXPIRATION;
 
 // DATABASE
