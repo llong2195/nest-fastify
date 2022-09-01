@@ -6,9 +6,7 @@ export const ConvertToArrayOfNumbers = () =>
     if (!values) {
       return [];
     }
-    return (Array.isArray(values) ? values : values.split(',')).map(
-      (value: string) => Number(value),
-    );
+    return (Array.isArray(values) ? values : values.split(',')).map((value: string) => Number(value));
   });
 
 export const ConvertToBoolean = () =>

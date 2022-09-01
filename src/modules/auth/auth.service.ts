@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { ConfigService } from '@nestjs/config';
@@ -15,14 +10,11 @@ import authConfig from '@config/auth.config';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly userService: UserService,
     private readonly configService: ConfigService, // private readonly nodemailerService: NodemailerService,
   ) {}
-  async validateUser(
-    email: string,
-    password: string,
-  ): Promise<User | undefined> {
+  async validateUser(email: string, password: string): Promise<User | undefined> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Username is incorrect');
@@ -51,31 +43,4 @@ export class AuthService {
 
     return { ...user, token };
   }
-
-  // async sendOtp(forgotPassword: forgotPasswordDto): Promise<any> {
-  //   const data = await this.userService.createOtp(forgotPassword);
-  //   // console.log(data)
-  //   return this.nodemailerService.send(data.email, {
-  //     subject: 'Mã OTP',
-  //     html: `<h1>Mã OTP của bạn là : <i>${data.OTP}</i></h1> `,
-  //   });
-  // }
-
-  // async verifyAndResetPassword(resetPasswordDto: ResetPasswordDto) {
-  //   const user = await this.userService.verifyOtp(
-  //     resetPasswordDto.email,
-  //     resetPasswordDto.otp,
-  //   );
-  //   // console.log(user)
-  //   if (user) {
-  //     const updateUser = await this.userService.changePassword(user.id, {
-  //       password: resetPasswordDto.password,
-  //       password_confirmation: resetPasswordDto.passwordConfirmation,
-  //     });
-  //     await this.userService.removeOtp(user.id);
-  //     return updateUser;
-  //   } else {
-  //     throw new HttpException('Invalid OTP', HttpStatus.BAD_REQUEST);
-  //   }
-  // }
 }

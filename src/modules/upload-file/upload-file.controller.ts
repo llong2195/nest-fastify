@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Post,
-  UseInterceptors,
-  HttpCode,
-  UploadedFile,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, UseInterceptors, HttpCode, UploadedFile, Req, UseGuards } from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '@config/multer.config';
@@ -25,20 +17,13 @@ export class UploadFileController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file', multerOptions))
   @HttpCode(HttpStatus.OK)
-  @Post()
-  async create(
-    @AuthUser() authUser: AuthUserDto,
-    @UploadedFile() file: Express.Multer.File,
-    @Req() req: Request,
-  ) {
+  @Post('/image')
+  async create(@AuthUser() authUser: AuthUserDto, @UploadedFile() file: Express.Multer.File, @Req() req: Request) {
     const uploadfile = await this.uploadFileService.uploadFile(
       authUser.id,
       file,
       `${req.protocol}://${req.get('Host')}`,
     );
-    return new BaseResponseDto<UploadFile>(
-      'success',
-      plainToClass(UploadFile, uploadfile),
-    );
+    return new BaseResponseDto<UploadFile>(plainToClass(UploadFile, uploadfile));
   }
 }

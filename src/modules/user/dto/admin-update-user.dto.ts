@@ -1,11 +1,4 @@
-import {
-  IsBoolean,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  Length,
-  Validate,
-} from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
 import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
 import { Role } from 'src/constant/role.enum';
 

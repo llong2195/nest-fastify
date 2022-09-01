@@ -1,7 +1,7 @@
 export class BaseResponseDto<T> {
   message: string;
   data: T;
-  constructor(message = 'success', data: T | null = null) {
+  constructor(data: T | null = null, message = 'success') {
     this.message = message;
     if (data instanceof String) {
       this.data = { ...data };
@@ -17,41 +17,11 @@ export class AuthUserDto {
 }
 
 export class PaginationResponse<T> {
+  message: string;
   items: T[];
   total: number;
 
-  constructor(items: T[] = [], total = 0) {
-    return { items, total };
+  constructor(items: T[] = [], total = 0, message = 'success') {
+    return { message, items, total };
   }
-}
-
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Min } from 'class-validator';
-
-export class PaginationQueryDto {
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  limit: number;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  page: number;
-
-  @IsOptional()
-  keyword: string;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  id: number;
-
-  @IsOptional()
-  filter: { [key: string]: any };
-
-  @IsOptional()
-  sort: { by: string; direction: 'ASC' | 'DESC' };
 }

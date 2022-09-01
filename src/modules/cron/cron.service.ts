@@ -1,10 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  Cron,
-  CronExpression,
-  Interval,
-  SchedulerRegistry,
-} from '@nestjs/schedule';
+import { Cron, CronExpression, Interval, SchedulerRegistry } from '@nestjs/schedule';
 import { exec } from 'child_process';
 
 @Injectable()
@@ -33,5 +28,11 @@ export class CronService {
         // console.log(derr)
       },
     );
+  }
+
+  // @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron('0 */1 * * * *')
+  handlerCronEvery1Minute() {
+    this.logger.log(`Cron run : 1 minute`);
   }
 }

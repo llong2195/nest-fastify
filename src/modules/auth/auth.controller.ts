@@ -23,35 +23,28 @@ import { AuthUser } from 'src/decorators/auth.user.decorator';
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('v1/auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
 
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('/login')
   async login(@Body() request: LoginRequestDto): Promise<BaseResponseDto<any>> {
     const data = await this.authService.login(request);
-    return new BaseResponseDto<any>('success', plainToClass(User, data));
+    return new BaseResponseDto<any>(plainToClass(User, data));
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/my-profile')
-  async myProfile(
-    @AuthUser() authUser: AuthUserDto,
-  ): Promise<BaseResponseDto<User>> {
+  async myProfile(@AuthUser() authUser: AuthUserDto): Promise<BaseResponseDto<User>> {
     const user = await this.userService.findById(authUser.id);
-    return new BaseResponseDto<User>('success', plainToClass(User, user));
+    return new BaseResponseDto<User>(plainToClass(User, user));
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('/register')
-  async register(
-    @Body() registerRequestDto: RegisterRequestDto,
-  ): Promise<BaseResponseDto<User>> {
+  async register(@Body() registerRequestDto: RegisterRequestDto): Promise<BaseResponseDto<User>> {
     const user = await this.userService._store(registerRequestDto);
 
-    return new BaseResponseDto<User>('success', plainToClass(User, user));
+    return new BaseResponseDto<User>(plainToClass(User, user));
   }
 }

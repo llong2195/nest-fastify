@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
 import { DateAudit } from 'src/base/date_audit.entity';
 import { Role } from 'src/constant/role.enum';
@@ -53,7 +45,6 @@ export class User extends DateAudit {
 
   @Expose()
   get fullName(): string {
-    if (this?.firstName && this?.lastName)
-      return `${this?.firstName} ${this?.lastName}`;
+    if (this?.firstName && this?.lastName) return `${this?.firstName} ${this?.lastName}`;
   }
 }

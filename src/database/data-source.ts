@@ -1,10 +1,4 @@
-import {
-  DATABASE_HOST,
-  DATABASE_PORT,
-  DATABASE_USERNAME,
-  DATABASE_PASSWORD,
-  DATABASE_DB_NAME,
-} from '@config/config';
+import { DATABASE_HOST, DATABASE_PORT, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_DB_NAME } from '@config/config';
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 

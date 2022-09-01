@@ -8,7 +8,7 @@ import { join } from 'path';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        type: 'mysql',
+        type: configService.get<string>('DATABASE_CONNECTION') as any,
         host: configService.get<string>('DATABASE_HOST'),
         port: configService.get<number>('DATABASE_PORT'),
         username: configService.get<string>('DATABASE_USERNAME'),
@@ -17,7 +17,7 @@ import { join } from 'path';
         entities: [__dirname + './../**/**/**.entity{.ts,.js}'],
         synchronize: true,
         autoLoadEntities: true,
-        logger: 'simple-console',
+        logger: 'debug',
       }),
       inject: [ConfigService],
     }),

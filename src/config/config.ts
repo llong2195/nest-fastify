@@ -23,8 +23,7 @@ export const DEFAULT_LOCALE = process.env.DEFAULT_LOCALE || 'vi';
 // JSON Web Token
 export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
-export const JWT_REFRESH_TOKEN_EXPIRATION =
-  process.env.JWT_REFRESH_TOKEN_EXPIRATION;
+export const JWT_REFRESH_TOKEN_EXPIRATION = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
 
 // DATABASE
 export const DATABASE_CONNECTION = process.env.DATABASE_CONNECTION || 'mysql';

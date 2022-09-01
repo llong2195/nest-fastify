@@ -1,9 +1,4 @@
-import {
-  EntitySubscriberInterface,
-  EventSubscriber,
-  InsertEvent,
-  UpdateEvent,
-} from 'typeorm';
+import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -13,10 +8,7 @@ import { DataSource } from 'typeorm';
 export class UserSubscriber implements EntitySubscriberInterface<User> {
   private readonly bcryptSalt: number;
 
-  constructor(
-    dataSource: DataSource,
-    private readonly configService: ConfigService,
-  ) {
+  constructor(dataSource: DataSource, private readonly configService: ConfigService) {
     dataSource.subscribers.push(this);
     this.bcryptSalt = configService.get<number>('bcryptSalt');
   }

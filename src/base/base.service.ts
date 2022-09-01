@@ -1,19 +1,11 @@
-import {
-  BaseEntity,
-  FindOptionsOrder,
-  FindOptionsWhere,
-  In,
-  Repository,
-} from 'typeorm';
+import { BaseEntity, FindOptionsOrder, FindOptionsWhere, In, Repository, EntityManager } from 'typeorm';
 import { LoggerService } from 'src/logger/custom.logger';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { PAGE_SIZE } from '@config/config';
 import { IBaseService } from './i.base.service';
 import { EntityId } from 'typeorm/repository/EntityId';
 
-export class BaseService<T extends BaseEntity, R extends Repository<T>>
-  implements IBaseService<T>
-{
+export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {
   protected readonly repository: R;
   protected readonly logger: LoggerService;
 
@@ -23,59 +15,49 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
   }
   // ADMIN
 
-  async _findByAdmin(
-    deleted: boolean,
-    orderValue: 'ASC' | 'DESC',
-    page: 0,
-  ): Promise<T[] | null> {
+  async _findByAdmin(deleted: boolean, sort: boolean, page: 0): Promise<T[] | null> {
     return await this.repository.find({
       where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
       skip: page * PAGE_SIZE,
-      order: { createdAt: orderValue } as unknown as FindOptionsOrder<T>,
+      order: { createdAt: sort ? 1 : -1 } as unknown as FindOptionsOrder<T>,
     });
   }
 
-  async _update(
-    id: EntityId,
-    data: QueryDeepPartialEntity<T>,
-  ): Promise<T[] | null> {
-    return await this.repository
-      .update((id as any).id, data)
-      .then(async (entity) => {
-        return await this.repository.find((entity as any).id);
-      })
-      .catch((error) => Promise.reject(error));
+  async _countByAdmin(deleted: boolean): Promise<number | null> {
+    return await this.repository.count({
+      where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
+    });
+  }
+
+  async _update(id: EntityId, data: QueryDeepPartialEntity<T>): Promise<T | null> {
+    await this.repository.update(id, data as QueryDeepPartialEntity<T>);
+    return await this.repository.findOne({
+      where: { id: id } as unknown as FindOptionsWhere<T>,
+    });
   }
 
   async _softDelete(id: EntityId): Promise<T | null> {
-    return await this.repository
-      .update(id, {
-        deleted: true,
-      } as unknown as QueryDeepPartialEntity<T>)
-      .then(async (entity) => {
-        return await this.repository.findOne({
-          where: { id: (entity as any).id } as unknown as FindOptionsWhere<T>,
-        });
-      });
+    await this.repository.update(id, {
+      deleted: true,
+    } as unknown as QueryDeepPartialEntity<T>);
+    return await this.repository.findOne({
+      where: { id: id } as unknown as FindOptionsWhere<T>,
+    });
   }
 
   async _restore(id: EntityId): Promise<T | null> {
-    return await this.repository
-      .update(id, {
-        deleted: false,
-      } as unknown as QueryDeepPartialEntity<T>)
-      .then(async (entity) => {
-        return await this.repository.findOne((entity as any).id);
-      });
+    await this.repository.update(id, {
+      deleted: false,
+    } as unknown as QueryDeepPartialEntity<T>);
+    return await this.repository.findOne({
+      where: { id: id } as unknown as FindOptionsWhere<T>,
+    });
   }
 
   async _destroy(id: EntityId): Promise<T | null> {
-    return await this.repository
-      .delete(id)
-      .then(async (entity) => {
-        return await this.repository.findOne((entity as any).id);
-      })
-      .catch((error) => Promise.reject(error));
+    const entity = await this._findById(id);
+    await this.repository.delete(id);
+    return entity;
   }
 
   // USER

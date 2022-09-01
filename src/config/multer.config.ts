@@ -5,6 +5,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { MAX_FILE_SIZE } from './index';
 import { UPLOAD_LOCATION } from './config';
+import { getFullDate } from 'src/util/util';
 
 // Multer configuration
 export const multerConfig = {
@@ -19,21 +20,12 @@ export const multerOptions: MulterOptions = {
   },
   // Check the mimetypes to allow for upload
   fileFilter: (req: any, file: any, cb: any) => {
-    if (
-      file.mimetype.match(/\/(jpg|jpeg|png|gif)$/) ||
-      file.originalname.match(/\.(jpg|jpeg|png|gif)$/)
-    ) {
+    if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/) || file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
       // Allow storage of file
       cb(null, true);
     } else {
       // Reject file
-      cb(
-        new HttpException(
-          `Unsupported file type ${extname(file.originalname)}`,
-          HttpStatus.BAD_REQUEST,
-        ),
-        false,
-      );
+      cb(new HttpException(`Unsupported file type ${extname(file.originalname)}`, HttpStatus.BAD_REQUEST), false);
     }
   },
   // Storage properties
@@ -50,7 +42,7 @@ export const multerOptions: MulterOptions = {
     // File modification details
     filename: (req: any, file: any, cb: any) => {
       // Calling the callback passing the random name generated with the original extension name
-      cb(null, `${Date.now()}-${file.originalname}`);
+      cb(null, `${getFullDate()}-${file.originalname}`);
     },
   }),
 };

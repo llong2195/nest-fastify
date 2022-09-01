@@ -6,19 +6,12 @@ import { LoggerService } from 'src/logger/custom.logger';
 import * as sharp from 'sharp';
 
 @Injectable()
-export class UploadFileService extends BaseService<
-  UploadFile,
-  UploadFileRepository
-> {
+export class UploadFileService extends BaseService<UploadFile, UploadFileRepository> {
   constructor(repository: UploadFileRepository, logger: LoggerService) {
     super(repository, logger);
   }
 
-  async uploadFile(
-    userId: number,
-    file: Express.Multer.File,
-    serverUrl: string,
-  ): Promise<UploadFile> {
+  async uploadFile(userId: number, file: Express.Multer.File, serverUrl: string): Promise<UploadFile> {
     if (!file) {
       throw new HttpException(`file is not null`, HttpStatus.BAD_REQUEST);
     }

@@ -25,14 +25,14 @@ export class UserController {
 
   @Get()
   async index(): Promise<BaseResponseDto<User[]>> {
-    const users = await this.userService._findByAdmin(false, 'ASC', 0);
-    return new BaseResponseDto<User[]>('success', users);
+    const users = await this.userService._findByAdmin(false, true, 0);
+    return new BaseResponseDto<User[]>(users);
   }
 
   @Get('/inactive')
   async getInactiveUser(): Promise<BaseResponseDto<User[]>> {
     const users = await this.userService.getInactiveUsers();
-    return new BaseResponseDto<User[]>('success', users);
+    return new BaseResponseDto<User[]>(users);
   }
 
   @Get('/:id')
@@ -41,37 +41,24 @@ export class UserController {
     if (!user) {
       throw new NotFoundException();
     }
-    return new BaseResponseDto<User>('success', user);
+    return new BaseResponseDto<User>(user);
   }
 
   @Post()
-  async create(
-    @Body() userData: CreateUserDto,
-  ): Promise<BaseResponseDto<User>> {
+  async create(@Body() userData: CreateUserDto): Promise<BaseResponseDto<User>> {
     const createdUser = await this.userService._store(userData);
-    return new BaseResponseDto<User>(
-      'success',
-      plainToClass(User, createdUser),
-    );
+    return new BaseResponseDto<User>(plainToClass(User, createdUser));
   }
 
   @Put('/:id')
-  async update(
-    @Param('id') id: number,
-    @Body() userData: UpdateUserDto,
-  ): Promise<BaseResponseDto<User>> {
+  async update(@Param('id') id: number, @Body() userData: UpdateUserDto): Promise<BaseResponseDto<User>> {
     const createdUser = this.userService._update(id, userData);
-    return new BaseResponseDto<User>(
-      'success',
-      plainToClass(User, createdUser),
-    );
+    return new BaseResponseDto<User>(plainToClass(User, createdUser));
   }
 
   @Delete('/:id')
-  async destroy(
-    @Param('id') id: number,
-  ): Promise<BaseResponseDto<DeleteResult>> {
+  async destroy(@Param('id') id: number): Promise<BaseResponseDto<DeleteResult>> {
     await this.userService._softDelete(id);
-    return new BaseResponseDto<DeleteResult>('success', null);
+    return new BaseResponseDto<DeleteResult>(null);
   }
 }

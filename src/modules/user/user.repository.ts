@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseRepository } from '../../base/base.repository';
 import { User } from './entities/user.entity';
-import { DataSource } from 'typeorm';
+import { DataSource, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class UserRepository extends BaseRepository<User> {
@@ -13,8 +13,6 @@ export class UserRepository extends BaseRepository<User> {
    * Add a basic where clause to the query and return the first result.
    */
   getInactiveUsers(): Promise<User[]> {
-    return this.createQueryBuilder()
-      .where('isActive = :active', { active: false })
-      .getMany();
+    return this.createQueryBuilder().where('isActive = :active', { active: false }).getMany();
   }
 }
