@@ -19,7 +19,9 @@ import { User } from '../user/entities/user.entity';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterRequestDto } from './dto/register-request.dto';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('v1/auth')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('v1/auth')
 export class AuthController {
@@ -33,6 +35,7 @@ export class AuthController {
     return new BaseResponseDto<any>(plainToClass(User, data));
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('/my-profile')
   async myProfile(@AuthUser() authUser: AuthUserDto): Promise<BaseResponseDto<User>> {

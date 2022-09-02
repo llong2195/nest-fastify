@@ -10,6 +10,7 @@ import { ResponseTransformInterceptor } from './interceptors/response.transform.
 import { ValidationConfig } from '@config/validation.config';
 import { ValidatorsModule } from '@validators/validators.module';
 import { runInCluster } from './util/runInCluster';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 declare const module: any;
 
@@ -32,6 +33,17 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.useGlobalPipes(new ValidationPipe(ValidationConfig));
   app.setGlobalPrefix(configService.get<string>('apiPrefix'));
+
+  //
+  const config = new DocumentBuilder()
+    .setTitle('API')
+    .setDescription('API docs')
+    .setVersion('1.0')
+    .addTag('Document For API')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   const port = configService.get<number>('port');
   await app.listen(port, () => {

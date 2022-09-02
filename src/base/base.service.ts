@@ -19,6 +19,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     return await this.repository.find({
       where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
       skip: page * PAGE_SIZE,
+      take: PAGE_SIZE,
       order: { createdAt: sort ? 1 : -1 } as unknown as FindOptionsOrder<T>,
     });
   }

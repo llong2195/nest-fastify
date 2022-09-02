@@ -8,7 +8,6 @@ import { APP_FILTER } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { REDIS_HOST, REDIS_PORT } from './config';
 import { DatabaseModule } from './database/database.module';
 import { LoggerModule } from './logger/logger.module';
 import { AllExceptionFilter } from './filter/exception.filter';

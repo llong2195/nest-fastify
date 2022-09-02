@@ -10,17 +10,20 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { BaseResponseDto } from '../../base/base.dto';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserService } from '../user.service';
+import { BaseResponseDto } from '../../../base/base.dto';
+import { User } from '../entities/user.entity';
+import { CreateUserDto } from '../dto/create-user.dto';
 import { plainToClass } from 'class-transformer';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { DeleteResult } from 'typeorm';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('/v1/admin')
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
-@Controller('v1/user')
-export class UserController {
+@Controller('v1/admin')
+export class AdminUserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()

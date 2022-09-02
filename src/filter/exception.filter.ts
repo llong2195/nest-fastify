@@ -14,7 +14,7 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       // responseBody = exception.getResponse()
-      statusCode = HttpStatus.BAD_REQUEST;
+      // statusCode = HttpStatus.BAD_REQUEST;
       statusCode = exception.getStatus();
       responseBody = {
         statusCode: statusCode,

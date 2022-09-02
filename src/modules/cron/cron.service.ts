@@ -30,9 +30,9 @@ export class CronService {
     );
   }
 
-  // @Cron(CronExpression.EVERY_10_MINUTES)
-  @Cron('0 */1 * * * *')
+  @Cron(CronExpression.EVERY_10_MINUTES)
+  // @Cron('0 */1 * * * *')
   handlerCronEvery1Minute() {
-    this.logger.log(`Cron run : 1 minute`);
+    this.logger.log(`Cron run : 10 minute`);
   }
 }
