@@ -2,10 +2,9 @@ import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@n
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../user/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginRequestDto } from './dto/login-request.dto';
-import authConfig from '@config/auth.config';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +13,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly configService: ConfigService, // private readonly nodemailerService: NodemailerService,
   ) {}
-  async validateUser(email: string, password: string): Promise<User | undefined> {
+  async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Username is incorrect');

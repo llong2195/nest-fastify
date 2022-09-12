@@ -1,4 +1,4 @@
-import { BaseEntity, FindOptionsOrder, FindOptionsWhere, In, Repository, EntityManager } from 'typeorm';
+import { BaseEntity, FindOptionsOrder, FindOptionsWhere, In, Repository } from 'typeorm';
 import { LoggerService } from 'src/logger/custom.logger';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { PAGE_SIZE } from '@config/config';
@@ -15,7 +15,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
   }
   // ADMIN
 
-  async _findByAdmin(deleted: boolean, sort: boolean, page: 0): Promise<T[] | null> {
+  async _findForDeleted(deleted: boolean, sort: boolean, page: 0): Promise<T[] | null> {
     return await this.repository.find({
       where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
       skip: page * PAGE_SIZE,
@@ -24,7 +24,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     });
   }
 
-  async _countByAdmin(deleted: boolean): Promise<number | null> {
+  async _countForDeleted(deleted: boolean): Promise<number | null> {
     return await this.repository.count({
       where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
     });

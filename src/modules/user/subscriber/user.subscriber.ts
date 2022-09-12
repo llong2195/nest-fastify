@@ -1,11 +1,11 @@
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 
 @EventSubscriber()
-export class UserSubscriber implements EntitySubscriberInterface<User> {
+export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   private readonly bcryptSalt: number;
 
   constructor(dataSource: DataSource, private readonly configService: ConfigService) {
@@ -14,16 +14,16 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   }
 
   listenTo() {
-    return User;
+    return UserEntity;
   }
 
-  async beforeInsert(event: InsertEvent<User>): Promise<void> {
+  async beforeInsert(event: InsertEvent<UserEntity>): Promise<void> {
     const { password } = event.entity;
     if (password) {
       event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
     }
   }
-  async beforeUpdate(event: UpdateEvent<User>): Promise<void> {
+  async beforeUpdate(event: UpdateEvent<UserEntity>): Promise<void> {
     const { password } = event.entity;
     if (password) {
       event.entity.password = await bcrypt.hash(password, this.bcryptSalt);

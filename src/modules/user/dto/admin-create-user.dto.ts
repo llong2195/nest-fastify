@@ -34,7 +34,7 @@ export class AdminCreateUserDto {
   })
   passwordConfirmation: string;
 
-  @ApiProperty({ example: 'true'})
+  @ApiProperty({ example: 'true' })
   @IsNotEmpty({ message: 'isActive is not empty' })
   @IsBoolean({ message: 'isActive invalid' })
   isActive: boolean;

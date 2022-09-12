@@ -12,10 +12,10 @@ import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { HttpStatus } from '@nestjs/common';
-import { BaseResponseDto, AuthUserDto } from '../../base/base.dto';
+import { BaseResponseDto, AuthUserDto } from '@base/base.dto';
 import { LoginRequestDto } from './dto/login-request.dto';
-import { plainToClass } from 'class-transformer';
-import { User } from '../user/entities/user.entity';
+import { plainToClass, plainToInstance } from 'class-transformer';
+import { UserEntity } from '../user/entities/user.entity';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterRequestDto } from './dto/register-request.dto';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
@@ -32,22 +32,22 @@ export class AuthController {
   @Post('/login')
   async login(@Body() request: LoginRequestDto): Promise<BaseResponseDto<any>> {
     const data = await this.authService.login(request);
-    return new BaseResponseDto<any>(plainToClass(User, data));
+    return new BaseResponseDto<any>(plainToInstance(UserEntity, data));
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('/my-profile')
-  async myProfile(@AuthUser() authUser: AuthUserDto): Promise<BaseResponseDto<User>> {
+  async myProfile(@AuthUser() authUser: AuthUserDto): Promise<BaseResponseDto<UserEntity>> {
     const user = await this.userService.findById(authUser.id);
-    return new BaseResponseDto<User>(plainToClass(User, user));
+    return new BaseResponseDto<UserEntity>(plainToClass(UserEntity, user));
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('/register')
-  async register(@Body() registerRequestDto: RegisterRequestDto): Promise<BaseResponseDto<User>> {
+  async register(@Body() registerRequestDto: RegisterRequestDto): Promise<BaseResponseDto<UserEntity>> {
     const user = await this.userService._store(registerRequestDto);
 
-    return new BaseResponseDto<User>(plainToClass(User, user));
+    return new BaseResponseDto<UserEntity>(plainToClass(UserEntity, user));
   }
 }

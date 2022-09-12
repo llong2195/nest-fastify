@@ -15,7 +15,7 @@ import { CronModule } from './modules/cron/cron.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { UploadFileModule } from './modules/upload-file/upload-file.module';
-import { ValidatorsModule } from './validators/validators.module';
+import { ValidatorsModule } from '@validators/validators.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';

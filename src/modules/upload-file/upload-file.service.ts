@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { BaseService } from '../../base/base.service';
+import { BaseService } from '@base/base.service';
 import { UploadFile } from './entities/upload-file.entity';
 import { UploadFileRepository } from './upload-file.repository';
 import { LoggerService } from 'src/logger/custom.logger';

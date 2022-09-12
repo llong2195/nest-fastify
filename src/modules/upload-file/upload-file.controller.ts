@@ -3,7 +3,7 @@ import { UploadFileService } from './upload-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '@config/multer.config';
 import { HttpStatus } from '@nestjs/common';
-import { BaseResponseDto, AuthUserDto } from '../../base/base.dto';
+import { BaseResponseDto, AuthUserDto } from '@base/base.dto';
 import { UploadFile } from './entities/upload-file.entity';
 import { plainToClass } from 'class-transformer';
 import { Request } from 'express';

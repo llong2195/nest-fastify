@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { DateAudit } from '../../../base/date_audit.entity';
+import { DateAudit } from '@base/date_audit.entity';
 
 @Entity({ name: 'upload_files' })
 export class UploadFile extends DateAudit {

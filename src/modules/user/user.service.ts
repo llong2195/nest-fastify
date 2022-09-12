@@ -1,31 +1,30 @@
 import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
-import { BaseService } from '../../base/base.service';
+import { BaseService } from '@base/base.service';
 import { UserRepository } from './user.repository';
-import { User } from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { LoggerService } from '../../logger/custom.logger';
-import { EntityId } from 'typeorm/repository/EntityId';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Hash } from 'src/util/hash';
 
 @Injectable()
-export class UserService extends BaseService<User, UserRepository> {
+export class UserService extends BaseService<UserEntity, UserRepository> {
   constructor(repository: UserRepository, logger: LoggerService) {
     super(repository, logger);
   }
 
-  findByEmail(email: string): Promise<User | null> {
+  findByEmail(email: string): Promise<UserEntity | null> {
     return this.repository.findOne({ where: { email: email } });
   }
 
-  findById(id: number): Promise<User> {
+  findById(id: number): Promise<UserEntity> {
     return this._findById(id);
   }
 
-  getInactiveUsers(): Promise<User[]> {
+  getInactiveUsers(): Promise<UserEntity[]> {
     return this.repository.getInactiveUsers();
   }
 
-  async changePassword(userId: number, changePass: ChangePasswordDto): Promise<User> {
+  async changePassword(userId: number, changePass: ChangePasswordDto): Promise<UserEntity> {
     const user = await this._findById(userId);
     if (!user) {
       throw new UnauthorizedException('Username is incorrect');

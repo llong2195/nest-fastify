@@ -9,12 +9,19 @@ import { InjectDataSource } from '@nestjs/typeorm';
 export class IsNotExist implements ValidatorConstraintInterface {
   constructor(
     @InjectDataSource()
-    private dataSource: DataSource,
+    private readonly dataSource: DataSource,
   ) {}
 
   async validate(value: string, validationArguments: ValidationArguments) {
     const repository = validationArguments.constraints[0] as EntityTarget<any>;
-    const entity = await this.dataSource.getRepository(repository).findOne({
+    if (!value || !repository) {
+      return false;
+    }
+    const repo = await this.dataSource.getRepository(repository);
+    if (!repo) {
+      return false;
+    }
+    const entity = await repo.findOne({
       where: {
         [validationArguments.property]: value,
       },
