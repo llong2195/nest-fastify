@@ -1,9 +1,9 @@
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export interface IBaseService<T> {
-  _findForDeleted(deleted: boolean, sort: boolean, page: number): Promise<T[] | T | unknown | null>;
+  _findByDeleted(deleted: boolean, sort: boolean, page: number): Promise<T[] | T | unknown | null>;
 
-  _countForDeleted(deleted: boolean): Promise<number | unknown | null>;
+  _countByDeleted(deleted: boolean): Promise<number | unknown | null>;
 
   _update(id: number, data: QueryDeepPartialEntity<T>): Promise<T | T[] | unknown | null>;
 
