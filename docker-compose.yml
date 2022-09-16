@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   workspace:
@@ -20,7 +20,7 @@ services:
     tty: true
     stdin_open: true
   mysql:
-    image: mysql:5.7.31
+    image: mysql:8.0
     restart: always
     container_name: nest-mysql
     environment:
