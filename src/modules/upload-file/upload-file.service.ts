@@ -4,6 +4,7 @@ import { UploadFile } from './entities/upload-file.entity';
 import { UploadFileRepository } from './upload-file.repository';
 import { LoggerService } from 'src/logger/custom.logger';
 import * as sharp from 'sharp';
+import { UPLOAD_LOCATION } from "@config/config";
 
 @Injectable()
 export class UploadFileService extends BaseService<UploadFile, UploadFileRepository> {
@@ -17,16 +18,16 @@ export class UploadFileService extends BaseService<UploadFile, UploadFileReposit
     }
     const createUploadFile = new UploadFile(null);
     createUploadFile.ownerId = userId;
-    createUploadFile.originUrl = `image/${file.filename}`;
+    createUploadFile.originUrl = `${file.filename}`;
 
     await sharp(file.path)
       .resize({
         width: 317,
         height: 262,
       })
-      .toFile('public/image/' + '262x317-' + file.filename)
+      .toFile(UPLOAD_LOCATION + '/262x317-' + file.filename)
       .then(() => {
-        createUploadFile.thumbUrl = 'image/262x317-' + file.filename;
+        createUploadFile.thumbUrl = '262x317-' + file.filename;
       })
       .catch((err) => {
         console.log(err);

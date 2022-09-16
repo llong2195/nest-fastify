@@ -1,4 +1,4 @@
-FROM node:14.7-slim AS builder
+FROM node:16.17-slim AS builder
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,7 @@ RUN rm -rf dist
 
 RUN npm run build
 
-FROM node:14.7-slim
+FROM node:16.17-slim
 
 WORKDIR /usr/src/app
 

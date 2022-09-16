@@ -19,7 +19,7 @@ services:
     tty: true
     stdin_open: true
   mysql:
-    image: mysql:5.7.31
+    image: mysql:8.0
     restart: always
     container_name: nest-mysql
     env_file:
