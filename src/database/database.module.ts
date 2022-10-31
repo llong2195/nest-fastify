@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
         type: configService.get<string>('DATABASE_CONNECTION') as any,
         host: configService.get<string>('DATABASE_HOST'),
         port: configService.get<number>('DATABASE_PORT'),
@@ -16,7 +16,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         entities: [__dirname + './../**/**/**.entity{.ts,.js}'],
         synchronize: true,
         autoLoadEntities: true,
-        logger: 'debug',
+        logging: 'all',
+        logger: 'advanced-console',
+        ssl: {
+          require: false,
+          rejectUnauthorized: false,
+        },
       }),
       inject: [ConfigService],
     }),

@@ -22,14 +22,17 @@ export class IsExist implements ValidatorConstraintInterface {
     if (!repo) {
       return false;
     }
+
     const entity: unknown = await repo.findOne({
       where: {
         [pathToProperty ? pathToProperty : validationArguments.property]: pathToProperty
-          ? value?.[pathToProperty]
+          ? value?.[pathToProperty] || value
           : value,
       },
     });
-
+    if (typeof entity === 'undefined') {
+      return false;
+    }
     return Boolean(entity);
   }
 

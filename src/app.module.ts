@@ -2,9 +2,9 @@ import appConfig from '@config/app.config';
 import authConfig from '@config/auth.config';
 import databaseConfig from '@config/database.config';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,9 +16,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { UploadFileModule } from './modules/upload-file/upload-file.module';
 import { ValidatorsModule } from '@validators/validators.module';
-import { TransactionModule } from './transaction/transaction.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -55,6 +56,33 @@ import { ServeStaticModule } from '@nestjs/serve-static';
           },
         } as BullRootModuleOptions),
     }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) =>
+        ({
+          transport: {
+            name: process.env.MAIL_HOST,
+            host: process.env.MAIL_HOST,
+            secure: true,
+            port: 465,
+            auth: {
+              user: process.env.MAIL_USER,
+              pass: process.env.MAIL_PASSWORD,
+            },
+          },
+          defaults: {
+            from: `"Nhi Le" <${process.env.MAIL_FROM}>`,
+          },
+          template: {
+            dir: join(__dirname, 'templates'),
+            adapter: new HandlebarsAdapter(),
+            options: {
+              strict: true,
+            },
+          },
+        } as MailerOptions),
+    }),
     LoggerModule,
     DatabaseModule,
     CronModule,
@@ -62,14 +90,16 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     UserModule,
     UploadFileModule,
     ValidatorsModule,
-    // Module DEV -> Not Use
-    TransactionModule,
   ],
   controllers: [AppController],
   providers: [
     {
       provide: APP_FILTER,
       useClass: AllExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
     AppService,
   ],

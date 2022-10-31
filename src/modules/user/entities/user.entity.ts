@@ -6,8 +6,8 @@ import { UploadFile } from '../../upload-file/entities/upload-file.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends DateAudit {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ unique: true, nullable: true })
   email: string;

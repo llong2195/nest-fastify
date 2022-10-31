@@ -22,7 +22,6 @@ import { AuthUser } from 'src/decorators/auth.user.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('v1/auth')
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly userService: UserService) {}

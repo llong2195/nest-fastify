@@ -64,6 +64,7 @@ export class UploadFileController {
   async readImage(@Param('path') path: string, @Res() res: Response): Promise<any> {
     const file = createReadStream(join(process.cwd(), UPLOAD_LOCATION, path));
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     file.pipe(res);
   }
