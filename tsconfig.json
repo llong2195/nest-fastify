@@ -20,7 +20,8 @@
     "paths": {
       "@config/*": ["src/config/*"],
       "@base/*": ["src/base/*"],
-      "@validators/*": ["src/validators/*"]
+      "@validators/*": ["src/validators/*"],
+      "@src/*": ["src/*"]
     }
   }
 }

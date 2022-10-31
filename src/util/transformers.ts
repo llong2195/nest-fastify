@@ -25,4 +25,9 @@ export const ConvertToBoolean = () =>
     }
   });
 
+export const ConvertToDate = () =>
+  Transform(({ value }) => {
+    return new Date(value);
+  });
+
 export const ConvertToNumber = () => Transform(({ value }) => Number(value));

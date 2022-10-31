@@ -1,5 +1,7 @@
 import { AuthGuard } from '@nestjs/passport';
 import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { ErrorCode } from '@src/constant/errorCode.enum';
+import { LoggerService } from '@src/logger/custom.logger';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -9,13 +11,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err, user, info) {
+  handleRequest(err: any, user: any, info: any, context: ExecutionContext, status?: any) {
     // You can throw an exception based on either "info" or "err" arguments
-    if (err || !user) {
+
+    if (err || !user || info) {
       console.warn(`JwtAuthGuard: ${info}`, info);
       console.warn(`JwtAuthGuard: ${err}`);
-      throw err || new UnauthorizedException();
+      // LoggerService.error(err, user, info, context.switchToHttp().getRequest().ip, status);
+      throw new UnauthorizedException(ErrorCode.INVALID_TOKEN);
     }
-    return user;
+    return super.handleRequest(err, user, info, context, status);
   }
 }

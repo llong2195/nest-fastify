@@ -3,8 +3,8 @@ import { DateAudit } from '@base/date_audit.entity';
 
 @Entity({ name: 'upload_files' })
 export class UploadFile extends DateAudit {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ nullable: true })
   originUrl: string;
@@ -13,7 +13,7 @@ export class UploadFile extends DateAudit {
   thumbUrl: string;
 
   @Column({ nullable: true })
-  ownerId: number;
+  ownerId: string;
 
   constructor(partial: Partial<UploadFile>) {
     super();

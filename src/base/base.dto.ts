@@ -1,27 +1,30 @@
+import { MessageCode } from '@src/constant/messageCode.enum';
+
 export class BaseResponseDto<T> {
   message: string;
-  data: T;
-  constructor(data: T | null = null, message = 'success') {
+  body: T;
+
+  constructor(body: T | null = null, message = MessageCode.SUCCESS) {
     this.message = message;
-    if (data instanceof String) {
-      this.data = { ...data };
+    if (body instanceof String) {
+      this.body = { ...body };
     } else {
-      this.data = data;
+      this.body = body;
     }
   }
 }
 
 export class AuthUserDto {
   email: string;
-  id: number;
+  id: string;
 }
 
 export class PaginationResponse<T> {
   message: string;
-  items: T[];
+  body: T[];
   total: number;
 
-  constructor(items: T[] = [], total = 0, message = 'success') {
-    return { message, items, total };
+  constructor(body: T[] = [], total = 0, message = MessageCode.SUCCESS) {
+    return { message, body, total };
   }
 }

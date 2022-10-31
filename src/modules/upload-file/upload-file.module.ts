@@ -20,5 +20,6 @@ import { UploadFile } from './entities/upload-file.entity';
   ],
   controllers: [UploadFileController],
   providers: [UploadFileService, UploadFileRepository],
+  exports: [UploadFileRepository, UploadFileService],
 })
 export class UploadFileModule {}
