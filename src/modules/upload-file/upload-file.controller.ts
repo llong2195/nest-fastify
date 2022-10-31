@@ -8,8 +8,9 @@ import {
   UseGuards,
   Get,
   Res,
-  StreamableFile, Param
-} from "@nestjs/common";
+  StreamableFile,
+  Param,
+} from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '@config/multer.config';
@@ -17,14 +18,14 @@ import { HttpStatus } from '@nestjs/common';
 import { BaseResponseDto, AuthUserDto } from '@base/base.dto';
 import { UploadFile } from './entities/upload-file.entity';
 import { plainToClass } from 'class-transformer';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateUploadFileDto } from './dto/create-upload-file.dto';
-import { createReadStream } from "fs";
-import { UPLOAD_LOCATION } from "@config/config";
-import { join } from "path";
+import { createReadStream } from 'fs';
+import { UPLOAD_LOCATION } from '@config/config';
+import { join } from 'path';
 
 @ApiTags('/v1/upload-file')
 @Controller('v1/upload-file')
@@ -65,5 +66,10 @@ export class UploadFileController {
 
     // @ts-ignore
     file.pipe(res);
+  }
+
+  @Get()
+  async getAll(): Promise<UploadFile[]> {
+    return this.uploadFileService._findByDeleted(false, true, 0);
   }
 }

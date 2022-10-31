@@ -29,7 +29,7 @@ services:
       MYSQL_USER: nest-base
       MYSQL_PASSWORD: secret
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - .mysql-data:/var/lib/mysql
     networks:

@@ -5,10 +5,18 @@ import { UserEntity } from './entities/user.entity';
 import { LoggerService } from '../../logger/custom.logger';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Hash } from 'src/util/hash';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { UploadFileRepository } from '../upload-file/upload-file.repository';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {
-  constructor(repository: UserRepository, logger: LoggerService) {
+  constructor(
+    @InjectDataSource() private readonly dataSource: DataSource,
+    repository: UserRepository,
+    logger: LoggerService,
+    private readonly upLoadRepo: UploadFileRepository,
+  ) {
     super(repository, logger);
   }
 
@@ -36,5 +44,27 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
     user.password = Hash.make(changePass.new_password);
     await user.save();
     return user;
+  }
+
+  async testTran(): Promise<any[]> {
+    console.log('test=-tran');
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    const userRepo = queryRunner.manager.withRepository(this.repository);
+    const uploadRepo = queryRunner.manager.withRepository(this.upLoadRepo);
+    try {
+      await queryRunner.commitTransaction();
+      return await userRepo.getA();
+    } catch (err) {
+      console.log(err);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async findaa(): Promise<UserEntity[]> {
+    return this.repository.getA();
   }
 }

@@ -28,7 +28,7 @@ export class AdminUserController {
 
   @Get()
   async index(): Promise<BaseResponseDto<UserEntity[]>> {
-    const users = await this.userService._findForDeleted(false, true, 0);
+    const users = await this.userService._findByDeleted(false, true, 0);
     return new BaseResponseDto<UserEntity[]>(users);
   }
 
@@ -63,5 +63,21 @@ export class AdminUserController {
   async destroy(@Param('id') id: number): Promise<BaseResponseDto<DeleteResult>> {
     await this.userService._softDelete(id);
     return new BaseResponseDto<DeleteResult>(null);
+  }
+
+  //
+
+  @Get('/test-tran/hehe')
+  async testTran(): Promise<BaseResponseDto<any[]>> {
+    console.log('test');
+    const users = await this.userService.testTran();
+    return new BaseResponseDto<any[]>(users);
+  }
+
+  @Get('/test-tran/ho')
+  async test2(): Promise<BaseResponseDto<any[]>> {
+    console.log('test');
+    const users = await this.userService.findaa();
+    return new BaseResponseDto<any[]>(users);
   }
 }

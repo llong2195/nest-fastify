@@ -66,6 +66,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof Error) {
       message = exception.stack.toString();
       if (message.includes('no such file or directory')) {
+        console.log(message);
         message = 'Not Found';
       }
     }

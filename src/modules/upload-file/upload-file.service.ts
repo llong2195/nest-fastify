@@ -4,7 +4,7 @@ import { UploadFile } from './entities/upload-file.entity';
 import { UploadFileRepository } from './upload-file.repository';
 import { LoggerService } from 'src/logger/custom.logger';
 import * as sharp from 'sharp';
-import { UPLOAD_LOCATION } from "@config/config";
+import { UPLOAD_LOCATION } from '@config/config';
 
 @Injectable()
 export class UploadFileService extends BaseService<UploadFile, UploadFileRepository> {
