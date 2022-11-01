@@ -6,6 +6,7 @@ import { UserEntity } from '../user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { ErrorCode } from '@src/constant/errorCode.enum';
+import { AuthUserDto } from '@base/base.dto';
 
 @Injectable()
 export class AuthService {
@@ -41,13 +42,26 @@ export class AuthService {
     if (user.deleted) {
       throw new HttpException(ErrorCode.DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
     }
-    const payload = {
+    const payload: AuthUserDto = {
       email: user.email,
       id: user.id,
       // role: user.role,
     };
-    const token = await this.jwtService.signAsync(payload);
+    const token = await this.createToken(payload);
 
     return { ...user, token };
+  }
+
+  async createToken(payload: AuthUserDto) {
+    return await this.jwtService.signAsync(payload);
+  }
+
+  public async getUserFromAuthenticationToken(token: string): Promise<UserEntity> {
+    const payload: any = this.jwtService.verify(token, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+    });
+    if (payload.userId) {
+      return this.userService.findById(payload.userId);
+    }
   }
 }
