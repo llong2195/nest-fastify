@@ -2,7 +2,7 @@ echo "Kill all the running PM2 actions"
 pm2 kill
 
 echo "Jump to app folder"
-cd /home/ubuntu/nhile-official-backend
+cd /home/ubuntu/nestjs-stater
 
 echo "Update app from Git"
 git add .

@@ -18,8 +18,7 @@ import { UploadFileModule } from './modules/upload-file/upload-file.module';
 import { ValidatorsModule } from '@validators/validators.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 
 @Module({
   imports: [
@@ -56,33 +55,6 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
           },
         } as BullRootModuleOptions),
     }),
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) =>
-        ({
-          transport: {
-            name: process.env.MAIL_HOST,
-            host: process.env.MAIL_HOST,
-            secure: true,
-            port: 465,
-            auth: {
-              user: process.env.MAIL_USER,
-              pass: process.env.MAIL_PASSWORD,
-            },
-          },
-          defaults: {
-            from: `"Nhi Le" <${process.env.MAIL_FROM}>`,
-          },
-          template: {
-            dir: join(__dirname, 'templates'),
-            adapter: new HandlebarsAdapter(),
-            options: {
-              strict: true,
-            },
-          },
-        } as MailerOptions),
-    }),
     LoggerModule,
     DatabaseModule,
     CronModule,
@@ -90,6 +62,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
     UserModule,
     UploadFileModule,
     ValidatorsModule,
+    NodemailerModule,
   ],
   controllers: [AppController],
   providers: [

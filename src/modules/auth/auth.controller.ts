@@ -1,16 +1,6 @@
-import {
-  Body,
-  ClassSerializerInterceptor,
-  Controller,
-  Get,
-  HttpCode,
-  Post,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
 import { HttpStatus } from '@nestjs/common';
 import { BaseResponseDto, AuthUserDto } from '@base/base.dto';
 import { LoginRequestDto } from './dto/login-request.dto';
