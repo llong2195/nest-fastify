@@ -52,3 +52,7 @@ export const REDIS_PORT = parseInt(process.env.REDIS_PORT, 10) || 6379;
 export const OTP_LENGTH = parseInt(process.env.OTP_LENGTH, 10) || 6;
 export const OTP_TTL = parseInt(process.env.OTP_TTL, 10) || 300;
 export const OTP_RESEND_TIME = parseInt(process.env.OTP_RESEND_TIME, 10) || 60;
+
+export const CLOUD_NAME = process.env.CLOUD_NAME;
+export const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
+export const CLOUD_API_SECRET = process.env.CLOUD_API_SECRET;
