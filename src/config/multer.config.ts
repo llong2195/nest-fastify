@@ -9,7 +9,7 @@ import { getFullDate } from 'src/util/util';
 
 // Multer configuration
 export const multerConfig = {
-  dest: UPLOAD_LOCATION || './public/image',
+  dest: UPLOAD_LOCATION || './public/upload',
 };
 
 // Multer upload options

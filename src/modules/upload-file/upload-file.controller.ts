@@ -10,6 +10,8 @@ import {
   Res,
   StreamableFile,
   Param,
+  BadRequestException,
+  HttpException,
 } from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -23,9 +25,12 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateUploadFileDto } from './dto/create-upload-file.dto';
-import { createReadStream } from 'fs';
+import fs, { createReadStream } from 'fs';
 import { UPLOAD_LOCATION } from '@config/config';
 import { join } from 'path';
+import { ErrorCode } from '@src/constant/errorCode.enum';
+import { diskStorage } from 'multer';
+import { cloudinary } from '@src/util/cloudinary';
 
 @ApiTags('/v1/upload-file')
 @Controller('v1/upload-file')
@@ -72,5 +77,30 @@ export class UploadFileController {
   @Get()
   async getAll(): Promise<UploadFile[]> {
     return this.uploadFileService._findByDeleted(false, true, 0);
+  }
+
+  @Post('/upload')
+  @UseInterceptors(FileInterceptor('file', multerOptions))
+  public async uploadImage(@Req() req: Request, @UploadedFile() file: any) {
+    try {
+      if (!file) {
+        throw new BadRequestException(ErrorCode.FILE_NOT_FOUND);
+      }
+      // Transaction avatar & user thumbnail
+      const path = process.cwd() + `/public/upload/${file.filename}`;
+      const uniqueFileName = Date.now() + '-' + file.originalname;
+      const imagePublicId = `file/${uniqueFileName}`;
+
+      const image = await cloudinary.uploader.upload(path, {
+        public_id: imagePublicId,
+        tags: `avatars`,
+        quality: 60,
+      });
+
+      fs.unlinkSync(path);
+      return image;
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 }
