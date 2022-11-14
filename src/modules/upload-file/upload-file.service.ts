@@ -3,7 +3,7 @@ import { BaseService } from '@base/base.service';
 import { UploadFile } from './entities/upload-file.entity';
 import { UploadFileRepository } from './upload-file.repository';
 import { LoggerService } from 'src/logger/custom.logger';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 import { UPLOAD_LOCATION } from '@config/config';
 import { EntityId } from 'typeorm/repository/EntityId';
 

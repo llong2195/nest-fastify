@@ -19,6 +19,7 @@ import { ValidatorsModule } from '@validators/validators.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
+import { CommanderModule } from './modules/commander/commander.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
     UploadFileModule,
     ValidatorsModule,
     NodemailerModule,
+    CommanderModule,
   ],
   controllers: [AppController],
   providers: [

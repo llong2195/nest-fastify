@@ -11,18 +11,22 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, BaseR
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<BaseResponseDto<T>> {
     this.i18nService = new I18nService(context?.switchToHttp()?.getRequest());
+    const request = context.switchToHttp().getRequest();
     const now = Date.now();
     return next.handle().pipe(
       tap(() => {
         LoggerService.log(
-          `[${context?.getClass().name}] : ${context?.switchToHttp()?.getRequest()?.route?.path} : ${new Date(
+          `[${context?.getClass().name}] : ${request?.route?.path} : ${request.method} : ${new Date(
             now,
           ).toISOString()} ........ : ${Date.now() - now} ms`,
         );
       }),
       map((response) => {
         // console.log(new I18nService(context?.switchToHttp()?.getRequest()).t(response.message));
-        return { ...response, message: this.i18nService.t(response.message) };
+        if (response.message) {
+          return { ...response, message: this.i18nService.t(response?.message) };
+        }
+        return response;
       }),
     );
   }
