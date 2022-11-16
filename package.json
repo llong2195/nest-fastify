@@ -23,13 +23,7 @@
     "typeorm:up": "npm run typeorm -- --dataSource=src/database/data-source.ts migration:run",
     "typeorm:down": "npm run typeorm -- --dataSource=src/database/data-source.ts migration:revert",
     "commander": "ts-node -r tsconfig-paths/register ./src/commander.ts",
-    "seed:role": "nestjs-command seed:role",
-    "seed:user": "nestjs-command seed:user",
-    "seed:permission": "nestjs-command seed:permission",
-    "rollback:role": "nestjs-command remove:role",
-    "rollback:user": "nestjs-command remove:user",
-    "seed": "npm run seed:permission && npm run seed:role && npm run seed:user",
-    "rollback": "npm run rollback:user && yarn rollback:role && yarn rollback:permission"
+    "seed:user": "npm run commander seed:user"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.209.0",

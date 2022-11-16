@@ -20,6 +20,8 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 import { CommanderModule } from './modules/commander/commander.module';
+import { QueueModule } from '@src/modules/queue/queue.module';
+import { RedisModule } from '@src/modules/redis/redis.module';
 
 @Module({
   imports: [
@@ -64,6 +66,8 @@ import { CommanderModule } from './modules/commander/commander.module';
     UploadFileModule,
     ValidatorsModule,
     NodemailerModule,
+    QueueModule,
+    // RedisModule,
     CommanderModule,
   ],
   controllers: [AppController],
