@@ -18,10 +18,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         autoLoadEntities: true,
         logging: 'all',
         logger: 'advanced-console',
-        ssl: {
-          require: false,
-          rejectUnauthorized: false,
-        },
+        // ssl: {
+        //   require: false,
+        //   rejectUnauthorized: false,
+        // },
       }),
       inject: [ConfigService],
     }),
