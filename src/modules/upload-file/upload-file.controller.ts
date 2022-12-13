@@ -38,7 +38,7 @@ export class UploadFileController {
   constructor(private readonly uploadFileService: UploadFileService) {}
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file', multerOptions))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -49,7 +49,8 @@ export class UploadFileController {
   @Post('/image')
   async create(@AuthUser() authUser: AuthUserDto, @UploadedFile() file: Express.Multer.File, @Req() req: Request) {
     const uploadfile = await this.uploadFileService.uploadFile(
-      authUser.id,
+      // authUser.id,
+      1,
       file,
       `${req.protocol}://${req.get('Host')}`,
     );
@@ -87,7 +88,7 @@ export class UploadFileController {
         throw new BadRequestException(ErrorCode.FILE_NOT_FOUND);
       }
       // Transaction avatar & user thumbnail
-      const path = process.cwd() + `/public/upload/${file.filename}`;
+      const path = process.cwd() + `${UPLOAD_LOCATION}/${file.filename}`;
       const uniqueFileName = Date.now() + '-' + file.originalname;
       const imagePublicId = `file/${uniqueFileName}`;
 

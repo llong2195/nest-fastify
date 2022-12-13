@@ -23,6 +23,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
       event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
     }
   }
+
   async beforeUpdate(event: UpdateEvent<UserEntity>): Promise<void> {
     const { password } = event.entity;
     if (password) {

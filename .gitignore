@@ -40,4 +40,4 @@ lerna-debug.log*
 
 #upload 
 /public/image
-/upload
+/public/upload
