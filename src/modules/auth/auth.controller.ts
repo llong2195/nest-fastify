@@ -10,6 +10,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterRequestDto } from './dto/register-request.dto';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 
 @ApiTags('v1/auth')
 @Controller('v1/auth')
@@ -18,6 +19,7 @@ export class AuthController {
 
   // @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @Throttle(3, 2)
   @Post('/login')
   async login(@Body() request: LoginRequestDto): Promise<BaseResponseDto<any>> {
     const data = await this.authService.login(request);
