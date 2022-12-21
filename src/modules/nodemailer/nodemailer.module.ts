@@ -1,10 +1,12 @@
 import { Global, Module } from '@nestjs/common';
-import { NodemailerService } from './nodemailer.service';
+import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
 import { NodemailerController } from './nodemailer.controller';
 import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { BullModule } from '@nestjs/bull';
+import { mailQueueProcessor } from '@src/modules/nodemailer/mailQueue.process';
 
 @Global()
 @Module({
@@ -15,21 +17,21 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
       useFactory: (config: ConfigService) =>
         ({
           transport: {
-            name: config.get<string>('MAIL_HOST'),
-            host: config.get<number>('MAIL_HOST'),
-            secure: true,
-            port: config.get<number>('MAIL_PORT') || 465,
+            // name: config.get<string>('NODEMAILER_HOST'),
+            host: config.get<string>('NODEMAILER_HOST'),
+            secure: config.get<boolean>('NODEMAILER_SECURE'),
+            port: config.get<number>('NODEMAILER_PORT') || 465,
             auth: {
-              user: config.get<string>('MAIL_USER'),
-              pass: config.get<string>('MAIL_PASSWORD'),
+              user: config.get<string>('NODEMAILER_USER'),
+              pass: config.get<string>('NODEMAILER_PASS'),
             },
           },
           defaults: {
-            from: `"No Reply" <no-reply@localhost>' <${config.get<string>('MAIL_FROM')}>`,
+            from: `"No Reply" <no-reply@localhost>' <${config.get<string>('NODEMAILER_FROM')}>`,
           },
-          preview: true,
+          preview: false, // true
           template: {
-            dir: join(__dirname, '../../templates'),
+            dir: join(__dirname, './../../../public/templates'),
             adapter: new HandlebarsAdapter(),
             options: {
               strict: true,
@@ -37,8 +39,11 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
           },
         } as MailerOptions),
     }),
+    BullModule.registerQueue({
+      name: QUEUE_EMAIL,
+    }),
   ],
   controllers: [NodemailerController],
-  providers: [NodemailerService],
+  providers: [NodemailerService, mailQueueProcessor],
 })
 export class NodemailerModule {}

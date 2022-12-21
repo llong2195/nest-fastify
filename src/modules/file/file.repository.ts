@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { UploadFile } from './entities/upload-file.entity';
+import { FileEntity } from './entities/file.entity';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class UploadFileRepository extends Repository<UploadFile> {
+export class FileRepository extends Repository<FileEntity> {
   constructor(
     private dataSource: DataSource,
-    @InjectRepository(UploadFile) private repository: Repository<UploadFile>,
+    @InjectRepository(FileEntity) private repository: Repository<FileEntity>,
   ) {
     super(repository.target, repository.manager, repository.queryRunner);
   }
