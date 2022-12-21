@@ -3,7 +3,7 @@ import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-
 import { Request, Response } from 'express';
 import { LoggerService } from 'src/logger/custom.logger';
 import { QueryFailedError } from 'typeorm';
-import { I18nService } from '@src/modules/i18n/i18n.service';
+import { I18nService } from '@src/i18n/i18n.service';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -77,6 +77,5 @@ export class AllExceptionFilter implements ExceptionFilter {
         message = 'Not Found';
       }
     }
-    this.logger.error(message);
   }
 }
