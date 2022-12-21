@@ -2,25 +2,17 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 import { Exclude, Expose } from 'class-transformer';
 import { DateAudit } from 'src/base/date_audit.entity';
 import { Role } from 'src/constant/role.enum';
-import { UploadFile } from '../../upload-file/entities/upload-file.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends DateAudit {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({ unique: true, nullable: true })
   email: string;
 
-  @Column({ name: 'avatarId', nullable: true })
-  avatarId: number;
-
-  @ManyToOne(() => UploadFile, (uploadfile) => uploadfile.id, {
-    onDelete: 'SET NULL',
-    eager: true,
-  })
-  @JoinColumn({ name: 'avatarId', referencedColumnName: 'id' })
-  avatar: UploadFile;
+  @JoinColumn({ name: 'avatar' })
+  avatar: string;
 
   @Column({ nullable: true })
   firstName: string;

@@ -1,5 +1,5 @@
 {
-  "name": "nest-starter",
+  "name": "backend_base",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -27,14 +27,12 @@
     "seed:user": "npm run commander seed:user"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.209.0",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/common": "^9.2.1",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.2.1",
     "@nestjs/jwt": "^9.0.0",
-    "@nestjs/mapped-types": "^1.1.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.2.1",
     "@nestjs/schedule": "^2.1.0",
@@ -42,7 +40,7 @@
     "@nestjs/swagger": "^6.1.4",
     "@nestjs/throttler": "^3.1.0",
     "@nestjs/typeorm": "^9.0.1",
-    "aws-sdk": "^2.1277.0",
+    "aws-sdk": "^2.1279.0",
     "bcrypt": "^5.1.0",
     "bull": "^4.10.2",
     "class-transformer": "^0.5.1",
@@ -53,7 +51,6 @@
     "i18n": "^0.15.1",
     "ioredis": "^5.2.4",
     "moment": "^2.29.4",
-    "morgan": "^1.10.0",
     "nest-commander": "^3.3.0",
     "nodemailer": "^6.8.0",
     "passport": "^0.6.0",
@@ -65,8 +62,9 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
     "sharp": "^0.31.2",
-    "typeorm": "^0.3.11",
-    "uuid": "^9.0.0"
+    "slug": "^8.2.2",
+    "stripe": "^11.4.0",
+    "typeorm": "^0.3.11"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.1.5",
@@ -86,8 +84,8 @@
     "@types/sharp": "^0.31.0",
     "@types/slug": "^5.0.3",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -98,7 +96,7 @@
     "ts-jest": "29.0.3",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "4.1.0",
+    "tsconfig-paths": "4.1.1",
     "typescript": "^4.9.4"
   },
   "jest": {

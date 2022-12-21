@@ -16,7 +16,8 @@ export class BaseResponseDto<T> {
 
 export class AuthUserDto {
   email: string;
-  id: string;
+  id: number;
+  role?: string;
 }
 
 export class PaginationResponse<T> {

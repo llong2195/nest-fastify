@@ -38,7 +38,6 @@ export class AuthController {
   @Post('/register')
   async register(@Body() registerRequestDto: RegisterRequestDto): Promise<BaseResponseDto<UserEntity>> {
     const user = await this.userService._store(registerRequestDto);
-
     return new BaseResponseDto<UserEntity>(plainToClass(UserEntity, user));
   }
 }

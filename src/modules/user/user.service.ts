@@ -7,8 +7,8 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { Hash } from 'src/util/hash';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { UploadFileRepository } from '../upload-file/upload-file.repository';
 import { EntityId } from 'typeorm/repository/EntityId';
+import { FileRepository } from '../file/file.repository';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {
@@ -16,7 +16,7 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
     @InjectDataSource() private readonly dataSource: DataSource,
     repository: UserRepository,
     logger: LoggerService,
-    private readonly upLoadRepo: UploadFileRepository,
+    private readonly upLoadRepo: FileRepository,
   ) {
     super(repository, logger);
   }

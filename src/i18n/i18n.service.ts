@@ -14,7 +14,7 @@ export enum LOCALES {
 export class I18nService {
   constructor(@Inject(REQUEST) private request: Request) {
     i18n.configure({
-      directory: join(__dirname, '../../../i18n/locales'),
+      directory: join(__dirname, '../../i18n/locales'),
       updateFiles: false,
       defaultLocale: DEFAULT_LOCALE,
     });
