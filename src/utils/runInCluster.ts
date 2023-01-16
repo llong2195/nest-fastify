@@ -2,6 +2,10 @@ import { cpus } from 'os';
 import * as notReallyCluster from 'cluster';
 const cluster = notReallyCluster as unknown as notReallyCluster.Cluster;
 
+/**
+ *
+ * @param bootstrap
+ */
 export function runInCluster(bootstrap: () => Promise<void>) {
     const numCPUs = cpus().length;
 

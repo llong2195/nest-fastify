@@ -8,7 +8,7 @@ import helmet from 'helmet';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { ValidationConfig } from '@config/validation.config';
 import { ValidatorsModule } from '@validators/validators.module';
-import { runInCluster } from './utils/runInCluster';
+// import { runInCluster } from './utils/runInCluster';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoggerService } from '@src/logger/custom.logger';
 
