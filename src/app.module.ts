@@ -22,6 +22,7 @@ import { CommanderModule } from './modules/commander/commander.module';
 import { QueueModule } from '@src/modules/queue/queue.module';
 import { RedisModule } from '@src/modules/redis/redis.module';
 import { FileModule } from './modules/file/file.module';
+import { I18nModule } from './i18n/i18n.module';
 
 @Module({
     imports: [
@@ -59,6 +60,7 @@ import { FileModule } from './modules/file/file.module';
                 } as BullRootModuleOptions),
         }),
         LoggerModule,
+        I18nModule,
         DatabaseModule,
         CronModule,
         AuthModule,
