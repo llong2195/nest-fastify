@@ -24,63 +24,63 @@ import { RedisModule } from '@src/modules/redis/redis.module';
 import { FileModule } from './modules/file/file.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: ['.env', '.env.development.local', '.env.development'],
-      load: [appConfig, databaseConfig, authConfig],
-    }),
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: ['.env', '.env.development.local', '.env.development'],
+            load: [appConfig, databaseConfig, authConfig],
+        }),
 
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../', '/public'),
-      serveRoot: '/',
-      exclude: ['/api/*', '/auth/*'],
-    }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '../../', '/public'),
+            serveRoot: '/',
+            exclude: ['/api/*', '/auth/*'],
+        }),
 
-    ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) =>
-        ({
-          ttl: config.get<number>('THROTTLE_TTL'),
-          limit: config.get<number>('THROTTLE_LIMIT'),
-        } as ThrottlerModuleOptions),
-    }),
+        ThrottlerModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) =>
+                ({
+                    ttl: config.get<number>('THROTTLE_TTL'),
+                    limit: config.get<number>('THROTTLE_LIMIT'),
+                } as ThrottlerModuleOptions),
+        }),
 
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) =>
-        ({
-          redis: {
-            host: config.get<string>('REDIS_HOST'),
-            port: config.get<number>('REDIS_PORT'),
-          },
-        } as BullRootModuleOptions),
-    }),
-    LoggerModule,
-    DatabaseModule,
-    CronModule,
-    AuthModule,
-    UserModule,
-    FileModule,
-    ValidatorsModule,
-    NodemailerModule,
-    QueueModule,
-    // RedisModule,
-    CommanderModule,
-  ],
-  controllers: [AppController],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionFilter,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ClassSerializerInterceptor,
-    },
-    AppService,
-  ],
+        BullModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) =>
+                ({
+                    redis: {
+                        host: config.get<string>('REDIS_HOST'),
+                        port: config.get<number>('REDIS_PORT'),
+                    },
+                } as BullRootModuleOptions),
+        }),
+        LoggerModule,
+        DatabaseModule,
+        CronModule,
+        AuthModule,
+        UserModule,
+        FileModule,
+        ValidatorsModule,
+        NodemailerModule,
+        QueueModule,
+        // RedisModule,
+        CommanderModule,
+    ],
+    controllers: [AppController],
+    providers: [
+        {
+            provide: APP_FILTER,
+            useClass: AllExceptionFilter,
+        },
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: ClassSerializerInterceptor,
+        },
+        AppService,
+    ],
 })
 export class AppModule {}

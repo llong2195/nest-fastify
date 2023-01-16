@@ -6,28 +6,28 @@ import { DataSource } from 'typeorm';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
-  private readonly bcryptSalt: number;
+    private readonly bcryptSalt: number;
 
-  constructor(dataSource: DataSource, private readonly configService: ConfigService) {
-    dataSource.subscribers.push(this);
-    this.bcryptSalt = configService.get<number>('bcryptSalt');
-  }
-
-  listenTo() {
-    return UserEntity;
-  }
-
-  async beforeInsert(event: InsertEvent<UserEntity>): Promise<void> {
-    const { password } = event.entity;
-    if (password) {
-      event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+    constructor(dataSource: DataSource, private readonly configService: ConfigService) {
+        dataSource.subscribers.push(this);
+        this.bcryptSalt = configService.get<number>('bcryptSalt');
     }
-  }
 
-  async beforeUpdate(event: UpdateEvent<UserEntity>): Promise<void> {
-    const { password } = event.entity;
-    if (password) {
-      event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+    listenTo() {
+        return UserEntity;
     }
-  }
+
+    async beforeInsert(event: InsertEvent<UserEntity>): Promise<void> {
+        const { password } = event.entity;
+        if (password) {
+            event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+        }
+    }
+
+    async beforeUpdate(event: UpdateEvent<UserEntity>): Promise<void> {
+        const { password } = event.entity;
+        if (password) {
+            event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+        }
+    }
 }

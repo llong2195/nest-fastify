@@ -9,9 +9,9 @@ import { AdminUserController } from './controller/admin.user.controller';
 import { FileModule } from '../file/file.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), FileModule],
-  controllers: [UserController, AdminUserController],
-  providers: [UserService, UserSubscriber, UserRepository],
-  exports: [UserService],
+    imports: [TypeOrmModule.forFeature([UserEntity]), FileModule],
+    controllers: [UserController, AdminUserController],
+    providers: [UserService, UserSubscriber, UserRepository],
+    exports: [UserService],
 })
 export class UserModule {}

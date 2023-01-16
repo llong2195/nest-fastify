@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '@src/database/database.module';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [],
-  providers: [UserCommander],
+    imports: [DatabaseModule],
+    controllers: [],
+    providers: [UserCommander],
 })
 export class CommanderModule {}

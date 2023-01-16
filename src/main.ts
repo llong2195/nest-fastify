@@ -8,56 +8,56 @@ import helmet from 'helmet';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { ValidationConfig } from '@config/validation.config';
 import { ValidatorsModule } from '@validators/validators.module';
-import { runInCluster } from './util/runInCluster';
+import { runInCluster } from './utils/runInCluster';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoggerService } from '@src/logger/custom.logger';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
+    const app = await NestFactory.create(AppModule);
+    const configService = app.get(ConfigService);
 
-  app.use(helmet());
+    app.use(helmet());
 
-  app.use(json({ limit: '50mb' }));
-  app.use(urlencoded({ extended: true, limit: '50mb' }));
+    app.use(json({ limit: '50mb' }));
+    app.use(urlencoded({ extended: true, limit: '50mb' }));
 
-  app.enableCors({
-    origin: '*',
-  });
+    app.enableCors({
+        origin: '*',
+    });
 
-  useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
+    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
 
-  app.useGlobalInterceptors(new ResponseTransformInterceptor());
-  app.useGlobalPipes(new ValidationPipe(ValidationConfig));
-  app.setGlobalPrefix(configService.get<string>('apiPrefix'));
+    app.useGlobalInterceptors(new ResponseTransformInterceptor());
+    app.useGlobalPipes(new ValidationPipe(ValidationConfig));
+    app.setGlobalPrefix(configService.get<string>('apiPrefix'));
 
-  await ConfigDocument(app);
+    await ConfigDocument(app);
 
-  const port = configService.get<number>('port');
-  await app.listen(port, () => {
-    console.log(`SERVER IS RUNNING ON PORT : ${port}`);
-  });
+    const port = configService.get<number>('port');
+    await app.listen(port, () => {
+        console.log(`SERVER IS RUNNING ON PORT : ${port}`);
+    });
 
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
+    if (module.hot) {
+        module.hot.accept();
+        module.hot.dispose(() => app.close());
+    }
 }
 
 async function ConfigDocument(app: INestApplication): Promise<void> {
-  //
-  const config = new DocumentBuilder()
-    .setTitle('API')
-    .setDescription('API docs')
-    .setVersion('1.0')
-    .addTag('Document For API')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
-  LoggerService.log(ConfigDocument.name);
+    //
+    const config = new DocumentBuilder()
+        .setTitle('API')
+        .setDescription('API docs')
+        .setVersion('1.0')
+        .addTag('Document For API')
+        .addBearerAuth()
+        .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document);
+    LoggerService.log(ConfigDocument.name);
 }
 
 bootstrap();

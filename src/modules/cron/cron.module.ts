@@ -3,8 +3,8 @@ import { CronService } from './cron.service';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [ScheduleModule.forRoot()],
-  controllers: [],
-  providers: [CronService],
+    imports: [ScheduleModule.forRoot()],
+    controllers: [],
+    providers: [CronService],
 })
 export class CronModule {}
