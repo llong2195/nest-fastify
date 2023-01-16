@@ -6,24 +6,24 @@ import { join } from 'path';
 import { DEFAULT_LOCALE } from '@src/config';
 
 export enum LOCALES {
-  EN = 'en',
-  VI = 'vi',
+    EN = 'en',
+    VI = 'vi',
 }
 
 @Injectable()
 export class I18nService {
-  constructor(@Inject(REQUEST) private request: Request) {
-    i18n.configure({
-      directory: join(__dirname, '../../i18n/locales'),
-      updateFiles: false,
-      defaultLocale: DEFAULT_LOCALE,
-    });
-  }
+    constructor(@Inject(REQUEST) private request: Request) {
+        i18n.configure({
+            directory: join(__dirname, '../../i18n/locales'),
+            updateFiles: false,
+            defaultLocale: DEFAULT_LOCALE,
+        });
+    }
 
-  t(phrase: string): string {
-    return i18n.__({
-      phrase,
-      locale: this.request.acceptsLanguages()[0] || DEFAULT_LOCALE,
-    });
-  }
+    t(phrase: string): string {
+        return i18n.__({
+            phrase,
+            locale: this.request.acceptsLanguages()[0] || DEFAULT_LOCALE,
+        });
+    }
 }

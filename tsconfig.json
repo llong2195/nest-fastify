@@ -22,7 +22,9 @@
       "@config/*": ["src/config/*"],
       "@base/*": ["src/base/*"],
       "@validators/*": ["src/validators/*"],
-      "@src/*": ["src/*"]
+      "@modules/*": ["src/modules/*"],
+      "@src/*": ["src/*"],
+      "@exceptions/*": ["src/exceptions/*"],
     }
   }
 }

@@ -9,10 +9,10 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
  **/
 @Injectable()
 export class TemplateRepository extends Repository<UserEntity> {
-  constructor(
-    @InjectDataSource() private dataSource: DataSource,
-    @InjectRepository(UserEntity) userRepo: Repository<UserEntity>,
-  ) {
-    super(userRepo.target, userRepo.manager, userRepo.queryRunner);
-  }
+    constructor(
+        @InjectDataSource() private dataSource: DataSource,
+        @InjectRepository(UserEntity) userRepo: Repository<UserEntity>,
+    ) {
+        super(userRepo.target, userRepo.manager, userRepo.queryRunner);
+    }
 }

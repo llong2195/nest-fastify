@@ -1,8 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class user1660491273187 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`
     CREATE TABLE users (
         deleted tinyint NOT NULL DEFAULT 0,
         createdAt datetime(6) DEFAULT CURRENT_TIMESTAMP(6),
@@ -23,10 +23,10 @@ export class user1660491273187 implements MigrationInterface {
       ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
       
       `);
-  }
+    }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP COLUMN users;
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`DROP COLUMN users;
     `);
-  }
+    }
 }
