@@ -13,14 +13,14 @@ import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 @UseGuards(JwtAuthGuard)
 @Controller('v1/user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+    constructor(private readonly userService: UserService) {}
 
-  @Post('/change-password')
-  async changePassword(
-    @AuthUser() authUser: AuthUserDto,
-    @Body() password: ChangePasswordDto,
-  ): Promise<BaseResponseDto<UserEntity>> {
-    const user = await this.userService.changePassword(authUser.id, password);
-    return new BaseResponseDto<UserEntity>(user);
-  }
+    @Post('/change-password')
+    async changePassword(
+        @AuthUser() authUser: AuthUserDto,
+        @Body() password: ChangePasswordDto,
+    ): Promise<BaseResponseDto<UserEntity>> {
+        const user = await this.userService.changePassword(authUser.id, password);
+        return new BaseResponseDto<UserEntity>(user);
+    }
 }

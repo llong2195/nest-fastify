@@ -6,8 +6,8 @@ import { IsExist } from './is-exist.validator';
 import { IsNotExist } from '@validators/is-not-exist.validator';
 
 @Module({
-  imports: [UserModule],
-  providers: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
-  exports: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
+    imports: [UserModule],
+    providers: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
+    exports: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
 })
 export class ValidatorsModule {}
