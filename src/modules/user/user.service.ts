@@ -46,26 +46,4 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         await user.save();
         return user;
     }
-
-    async testTran(): Promise<any[]> {
-        console.log('test=-tran');
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-        const userRepo = queryRunner.manager.withRepository(this.repository);
-        const uploadRepo = queryRunner.manager.withRepository(this.upLoadRepo);
-        try {
-            await queryRunner.commitTransaction();
-            return await userRepo.getA();
-        } catch (err) {
-            console.log(err);
-            await queryRunner.rollbackTransaction();
-        } finally {
-            await queryRunner.release();
-        }
-    }
-
-    async findaa(): Promise<UserEntity[]> {
-        return this.repository.getA();
-    }
 }

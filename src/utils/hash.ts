@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { BCRYPT_SALT } from '../config';
+import { BCRYPT_SALT } from '../configs';
 
 export class Hash {
     /**

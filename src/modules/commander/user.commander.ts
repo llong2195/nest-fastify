@@ -3,9 +3,9 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserEntity } from '@src/modules/user/entities/user.entity';
 import bcrypt from 'bcrypt';
-import { Role } from '@src/constant';
+import { Role } from '@src/enums';
 import { LoggerService } from '@src/logger/custom.logger';
-import { BCRYPT_SALT } from '@src/config';
+import { BCRYPT_SALT } from '@src/configs';
 
 @Command({ name: 'seed:user' })
 export class UserCommander extends CommandRunner {

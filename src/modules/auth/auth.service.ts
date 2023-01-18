@@ -5,8 +5,8 @@ import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '../user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginRequestDto } from './dto/login-request.dto';
-import { ErrorCode } from '@src/constant/errorCode.enum';
 import { AuthUserDto } from '@base/base.dto';
+import { ErrorMessageCode } from '@src/constants/errort-message-code';
 
 @Injectable()
 export class AuthService {
@@ -18,11 +18,11 @@ export class AuthService {
     async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
         const user = await this.userService.findByEmail(email);
         if (!user) {
-            throw new UnauthorizedException(ErrorCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
         }
         const compareResult = await bcrypt.compare(password, user.password);
         if (!compareResult) {
-            throw new UnauthorizedException(ErrorCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
         }
         return user;
     }
@@ -30,17 +30,17 @@ export class AuthService {
     async login(request: LoginRequestDto): Promise<any> {
         const user = await this.userService.findByEmail(request.email);
         if (!user) {
-            throw new UnauthorizedException(ErrorCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
         }
         const compareResult = await bcrypt.compare(request.password, user.password);
         if (!compareResult) {
-            throw new UnauthorizedException(ErrorCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
         }
         if (!user.isActive) {
-            throw new UnauthorizedException(ErrorCode.DISABLED_ACCOUNT);
+            throw new UnauthorizedException(ErrorMessageCode.DISABLED_ACCOUNT);
         }
         if (user.deleted) {
-            throw new HttpException(ErrorCode.DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
+            throw new HttpException(ErrorMessageCode.DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
         }
         const payload: AuthUserDto = {
             email: user.email,

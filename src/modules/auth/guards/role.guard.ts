@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from 'src/constant/role.enum';
+import { Role } from '@src/enums/role.enum';
 import { ROLES_KEY } from 'src/decorators/role.decorators';
 import { JwtAuthGuard } from './jwt-auth.guard';
 

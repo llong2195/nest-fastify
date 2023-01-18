@@ -5,6 +5,26 @@ import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
 
 /**
  *
+ * @returns
+ */
+export function isDev(): boolean {
+    const node_env = process.env.NODE_ENV || 'development';
+
+    return 'development' === node_env;
+}
+
+/**
+ *
+ * @param env
+ * @returns
+ */
+export function isEnv(env: string): boolean {
+    const envSystem = process.env.NODE_ENV || 'development';
+    return env === envSystem;
+}
+
+/**
+ *
  * @param length
  * @returns
  */

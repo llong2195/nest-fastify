@@ -7,7 +7,6 @@ import {
     NotFoundException,
     Param,
     Post,
-    Put,
     UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from '../user.service';
@@ -18,11 +17,12 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { DeleteResult } from 'typeorm';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from '../entities/user.entity';
+import { Patch } from '@nestjs/common/decorators';
 
-@ApiTags('/v1/admin')
+@ApiTags('/v1/admin/user')
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
-@Controller('v1/admin')
+@Controller('v1/admin/user')
 export class AdminUserController {
     constructor(private readonly userService: UserService) {}
 
@@ -53,7 +53,7 @@ export class AdminUserController {
         return new BaseResponseDto<UserEntity>(plainToClass(UserEntity, createdUser));
     }
 
-    @Put('/:id')
+    @Patch('/:id')
     async update(@Param('id') id: number, @Body() userData: UpdateUserDto): Promise<BaseResponseDto<UserEntity>> {
         const createdUser = this.userService._update(id, userData);
         return new BaseResponseDto<UserEntity>(plainToClass(UserEntity, createdUser));
@@ -63,21 +63,5 @@ export class AdminUserController {
     async destroy(@Param('id') id: number): Promise<BaseResponseDto<DeleteResult>> {
         await this.userService._softDelete(id);
         return new BaseResponseDto<DeleteResult>(null);
-    }
-
-    //
-
-    @Get('/test-tran/hehe')
-    async testTran(): Promise<BaseResponseDto<any[]>> {
-        console.log('test');
-        const users = await this.userService.testTran();
-        return new BaseResponseDto<any[]>(users);
-    }
-
-    @Get('/test-tran/ho')
-    async test2(): Promise<BaseResponseDto<any[]>> {
-        console.log('test');
-        const users = await this.userService.findaa();
-        return new BaseResponseDto<any[]>(users);
     }
 }

@@ -1,6 +1,6 @@
 import { AuthGuard } from '@nestjs/passport';
 import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { ErrorCode } from '@src/constant/errorCode.enum';
+import { ErrorMessageCode } from '@constants/errort-message-code';
 import { LoggerService } from '@src/logger/custom.logger';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class RefreshAuthGuard extends AuthGuard('refresh') {
             console.warn(`RefreshAuthGuard: ${info}`, info);
             console.warn(`RefreshAuthGuard: ${err}`);
             LoggerService.error(err, user, info, context.switchToHttp().getRequest().ip, status);
-            throw new UnauthorizedException(ErrorCode.INVALID_TOKEN);
+            throw new UnauthorizedException(ErrorMessageCode.INVALID_TOKEN);
         }
         return super.handleRequest(err, user, info, context, status);
     }
