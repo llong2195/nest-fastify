@@ -22,7 +22,7 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, BaseR
                     `{${request?.route?.path}, ${request?.method}} - ${response?.statusCode} : ${Date.now() - now} ms`,
                     context?.getClass().name,
                 );
-            }), 
+            }),
             map(response => {
                 if (response?.message) {
                     return { ...response, message: this.i18nService.t(response?.message) };

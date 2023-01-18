@@ -13,7 +13,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoggerService } from '@src/logger/custom.logger';
 import { isEnv } from './utils/util';
 import { Env } from './enums/app.enum';
-import { LISTEN_ON } from './configs';
 import { useRequestLogging } from './middlewares/request-logging.middlewares';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
