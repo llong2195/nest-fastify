@@ -1,156 +1,24 @@
-import {
-    BaseEntity,
-    EntityManager,
-    FindOptionsOrder,
-    FindOptionsWhere,
-    In,
-    Repository,
-    SelectQueryBuilder,
-} from 'typeorm';
-import { LoggerService } from 'src/logger/custom.logger';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { PAGE_SIZE } from '@src/configs/config';
-import { IBaseService } from './i.base.service';
-import { EntityId } from 'typeorm/repository/EntityId';
+import { BaseEntity, EntityManager, Repository, SelectQueryBuilder } from 'typeorm';
+import { PaginationResponse } from './base.dto';
 import { toSnakeCase } from '@src/utils/util';
 import qs from 'qs';
-import { PaginationResponse } from './base.dto';
 
-export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {
-    protected readonly repository: R;
-    protected readonly logger: LoggerService;
+export class BaseRepository<T extends BaseEntity> extends Repository<T> {
+    protected _repository: Repository<T>;
 
-    constructor(repository: R, logger: LoggerService) {
-        this.repository = repository;
-        this.logger = logger;
+    constructor(repository: Repository<T>) {
+        super(repository.target, repository.manager);
+        this._repository = repository;
     }
 
-    /**
-     *
-     * @param operation
-     * @param manager
-     * @returns
-     */
     async transactionWrap(operation: (...args) => unknown, manager?: EntityManager) {
-        if (manager != undefined) {
+        if (manager != undefined && manager != null) {
             return await operation(manager);
         } else {
-            return await this.repository.manager.transaction(async manager => {
+            return await this._repository.manager.transaction(async manager => {
                 return await operation(manager);
             });
         }
-    }
-
-    /**
-     *
-     * @param deleted
-     * @param sort
-     * @param page
-     * @returns
-     */
-    async _findByDeleted(deleted: boolean, sort: boolean, page: 0): Promise<T[] | null> {
-        return await this.repository.find({
-            where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
-            skip: page * PAGE_SIZE,
-            take: PAGE_SIZE,
-            order: { createdAt: sort ? 1 : -1 } as unknown as FindOptionsOrder<T>,
-        });
-    }
-
-    /**
-     *
-     * @param deleted
-     * @returns
-     */
-    async _countByDeleted(deleted: boolean): Promise<number | null> {
-        return await this.repository.count({
-            where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
-        });
-    }
-
-    /**
-     *
-     * @param id
-     * @param data
-     * @returns
-     */
-    async _update(id: EntityId, data: QueryDeepPartialEntity<T>): Promise<T | null> {
-        await this.repository.update(id, data as QueryDeepPartialEntity<T>);
-        return await this.repository.findOne({
-            where: { id: id } as unknown as FindOptionsWhere<T>,
-        });
-    }
-
-    /**
-     *
-     * @param id
-     * @returns
-     */
-    async _softDelete(id: EntityId): Promise<T | null> {
-        await this.repository.update(id, {
-            deleted: true,
-        } as unknown as QueryDeepPartialEntity<T>);
-        return await this.repository.findOne({
-            where: { id: id } as unknown as FindOptionsWhere<T>,
-        });
-    }
-
-    /**
-     *
-     * @param id
-     * @returns
-     */
-    async _restore(id: EntityId): Promise<T | null> {
-        await this.repository.update(id, {
-            deleted: false,
-        } as unknown as QueryDeepPartialEntity<T>);
-        return await this.repository.findOne({
-            where: { id: id } as unknown as FindOptionsWhere<T>,
-        });
-    }
-
-    /**
-     *
-     * @param id
-     * @returns
-     */
-    async _destroy(id: EntityId): Promise<T | null> {
-        const entity = await this._findById(id);
-        await this.repository.delete(id);
-        return entity;
-    }
-
-    // USER
-
-    /**
-     *
-     * @param data
-     * @returns
-     */
-    async _store(data: any): Promise<T | null> {
-        return this.repository.save(data, { transaction: true });
-    }
-
-    /**
-     *
-     * @param id
-     * @returns
-     */
-    async _findById(id: EntityId): Promise<T | null> {
-        return this.repository.findOne({
-            where: { id: id } as unknown as FindOptionsWhere<T>,
-        });
-    }
-
-    /**
-     *
-     * @param ids
-     * @returns
-     */
-    async _findByIds(ids: [EntityId]): Promise<T[] | null> {
-        return this.repository.find({
-            where: { id: In(ids) } as unknown as FindOptionsWhere<T>,
-        });
     }
 
     /**
@@ -159,8 +27,13 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * @param {string[]} fields
      * @returns Promise<PaginationResponse<T>>
      */
-    async paginate(page: number, limit: number, fields?: string[]): Promise<PaginationResponse<T>> {
-        const totalRecords = await this.repository.count({});
+    async paginate(
+        page: number,
+        limit: number,
+        fields?: string[],
+        repository: Repository<T> = null,
+    ): Promise<PaginationResponse<T>> {
+        const totalRecords = await this.count({});
         const totalPage = totalRecords % limit === 0 ? totalRecords / limit : Math.floor(totalRecords / limit) + 1;
 
         if (page > totalPage || page <= 0) {
@@ -182,7 +55,8 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         }
 
         const offset = page === 1 ? 0 : limit * (page - 1);
-        const data = await this.repository.find({
+        if (!repository) repository = this._repository;
+        const data = await repository.find({
             select: fields ? (fields as (keyof T)[]) : null,
             skip: offset,
             take: limit,
@@ -223,7 +97,8 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         orders?: Record<string, 'ASC' | 'DESC'>,
         repository: Repository<T> = null,
     ): Promise<PaginationResponse<T>> {
-        const jobTable = this.repository.metadata.tableName;
+        if (!repository) repository = this._repository;
+        const jobTable = repository.metadata.tableName;
 
         const query = repository.createQueryBuilder(jobTable);
 

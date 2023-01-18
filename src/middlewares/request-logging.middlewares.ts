@@ -6,7 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 export function useRequestLogging(app: NestExpressApplication, minTime = 150): void {
     const logger = new Logger('Request');
     app.use(
-        morgan('tiny', {
+        morgan('dev', {
             stream: {
                 write: message => {
                     const mes = message.split(' ');
@@ -14,7 +14,7 @@ export function useRequestLogging(app: NestExpressApplication, minTime = 150): v
                     const time = mes.length - 2 > 0 ? parseFloat(mes[mes.length - 2]) : 0;
                     if (time > minTime) {
                         switch (true) {
-                            case httpCode > 300:
+                            case httpCode > 400:
                                 logger.error(message.replace('\n', ''));
                                 break;
                             default:

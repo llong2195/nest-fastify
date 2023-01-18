@@ -19,12 +19,16 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@config/*": ["src/config/*"],
+      "@src/*": ["src/*"],
+      "@config/*": ["src/configs/*"],
       "@base/*": ["src/base/*"],
       "@validators/*": ["src/validators/*"],
       "@modules/*": ["src/modules/*"],
-      "@src/*": ["src/*"],
       "@exceptions/*": ["src/exceptions/*"],
+      "@decorators/*": ["src/decorators/*"],
+      "@enums/*": ["src/enums/*"],
+      "@constants/*": ["src/constants/*"],
+      "@entities/*": ["src/entities/*"],
     }
   }
 }

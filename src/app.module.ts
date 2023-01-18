@@ -1,6 +1,6 @@
-import appConfig from '@config/app.config';
-import authConfig from '@config/auth.config';
-import databaseConfig from '@config/database.config';
+import appConfig from '@src/configs/app.config';
+import authConfig from '@src/configs/auth.config';
+import databaseConfig from '@src/configs/database.config';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -23,6 +23,9 @@ import { QueueModule } from '@src/modules/queue/queue.module';
 import { RedisModule } from '@src/modules/redis/redis.module';
 import { FileModule } from './modules/file/file.module';
 import { I18nModule } from './i18n/i18n.module';
+import { HttpModule } from '@nestjs/axios';
+import { HealthModule } from './modules/health/health.module';
+import { SettingModule } from './modules/setting/setting.module';
 
 @Module({
     imports: [
@@ -59,14 +62,26 @@ import { I18nModule } from './i18n/i18n.module';
                     },
                 } as BullRootModuleOptions),
         }),
+
+        HttpModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                timeout: configService.get('HTTP_TIMEOUT'),
+                maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
+            }),
+            inject: [ConfigService],
+        }),
+
         LoggerModule,
         I18nModule,
         DatabaseModule,
+        HealthModule,
+        ValidatorsModule,
+        SettingModule,
         CronModule,
         AuthModule,
         UserModule,
         FileModule,
-        ValidatorsModule,
         NodemailerModule,
         QueueModule,
         // RedisModule,

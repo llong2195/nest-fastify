@@ -1,11 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { DateAudit } from '@base/date_audit.entity';
 
-@Entity({ name: 'files' })
+@Entity({ name: 'file' })
 export class FileEntity extends DateAudit {
-    @PrimaryGeneratedColumn({
-        type: 'bigint',
-    })
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
     @Column({ name: 'origin_url1', type: 'varchar', nullable: true })
@@ -32,7 +30,7 @@ export class FileEntity extends DateAudit {
     @Column({ name: 'user_id', type: 'int', nullable: true })
     userId: number;
 
-    @Column({ name: 'data', type: 'varchar', nullable: true })
+    @Column({ name: 'data', type: 'varchar', nullable: true, select: false })
     data: string;
 
     constructor(partial: Partial<FileEntity>) {

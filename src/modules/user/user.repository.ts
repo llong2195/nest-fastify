@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { UserEntity } from './entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BaseRepository } from '@base/base.repository';
 
 @Injectable()
-export class UserRepository extends Repository<UserEntity> {
+export class UserRepository extends BaseRepository<UserEntity> {
     constructor(@InjectRepository(UserEntity) private repository: Repository<UserEntity>) {
-        super(repository.target, repository.manager, repository.queryRunner);
+        super(repository);
     }
     // constructor(repository: Repository<T>) {
     //   super(repository.target, repository.manager, repository.queryRunner);
@@ -16,8 +17,5 @@ export class UserRepository extends Repository<UserEntity> {
      */
     getInactiveUsers(): Promise<UserEntity[]> {
         return this.repository.createQueryBuilder().where('isActive = :active', { active: true }).getMany();
-    }
-    getA(): Promise<UserEntity[]> {
-        return this.repository.find();
     }
 }

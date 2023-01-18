@@ -4,9 +4,9 @@ import { FileEntity } from './entities/file.entity';
 import { FileRepository } from './file.repository';
 import { LoggerService } from 'src/logger/custom.logger';
 import sharp from 'sharp';
-import { UPLOAD_LOCATION } from '@config/config';
+import { UPLOAD_LOCATION } from '@src/configs/config';
 import { cloudinary } from '@src/utils/cloudinary.util';
-import { ErrorCode } from '@src/constant';
+import { ErrorMessageCode } from '@src/constants';
 import * as fs from 'fs';
 
 @Injectable()
@@ -38,10 +38,10 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
         return await this._store(createFile);
     }
 
-    async uploadImageToCloudinary(file: Express.Multer.File, userId: number): Promise<FileEntity> {
+    async uploadImageToCloudinary(file: Express.Multer.File, userId: number, tags?: string): Promise<FileEntity> {
         try {
             if (!file) {
-                throw new BadRequestException(ErrorCode.FILE_NOT_FOUND);
+                throw new BadRequestException(ErrorMessageCode.FILE_NOT_FOUND);
             }
             console.log(file);
             const path = process.cwd() + `/${UPLOAD_LOCATION}/${file.filename}`;
@@ -50,7 +50,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
 
             const image = await cloudinary.uploader.upload(path, {
                 public_id: imagePublicId,
-                tags: `avatars`,
+                tags: tags ? tags : `avatars`,
                 quality: 60,
             });
 
@@ -63,7 +63,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
             createFile.publicId = image.public_id;
             createFile.userId = userId || null;
             createFile.data = JSON.stringify(image);
-            await createFile.save();
+            await this._store(createFile);
             fs.unlinkSync(path);
             return createFile;
         } catch (e) {

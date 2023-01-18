@@ -4,16 +4,37 @@ import { Request, Response } from 'express';
 import { LoggerService } from 'src/logger/custom.logger';
 import { QueryFailedError } from 'typeorm';
 import { I18nService } from '@src/i18n/i18n.service';
-
+import * as Sentry from '@sentry/node';
+import { setExtras, captureException } from '@sentry/node';
+import '@sentry/tracing';
+import { SENTRY_DSN } from '@src/configs';
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-    constructor(private logger: LoggerService) {}
+    constructor(private logger: LoggerService) {
+        Sentry.init({
+            dsn: SENTRY_DSN,
+            normalizeDepth: 10,
+        });
+    }
 
     private static handleResponse(
         request: Request,
         response: Response,
         exception: HttpException | QueryFailedError | Error,
     ): void {
+        const { body, headers, ip, method, originalUrl, params, query, user } = request;
+        setExtras({
+            authorization: headers.authorization,
+            body,
+            ip,
+            method,
+            params,
+            query,
+            url: headers.origin + originalUrl,
+            user,
+        });
+        captureException(exception);
+
         let responseBody: any = { message: 'Internal server error' };
         let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         if (exception instanceof HttpException) {

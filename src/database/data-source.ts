@@ -5,7 +5,7 @@ import {
     DATABASE_PASSWORD,
     DATABASE_DB_NAME,
     DATABASE_CONNECTION,
-} from '@config/config';
+} from '@src/configs/config';
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 

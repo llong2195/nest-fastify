@@ -5,8 +5,8 @@ import {
     PayloadTooLargeException,
     PipeTransform,
 } from '@nestjs/common';
-import { FILE, FileType } from '@src/constant/file.enum';
-import { ErrorCode } from '@src/constant/errorCode.enum';
+import { FILE, FileType } from '@src/enums';
+import { ErrorMessageCode } from '@src/constants';
 
 interface ValidatorOptions {
     allowedMimetypes: FileType[];
@@ -35,13 +35,13 @@ export class FileValidationPipe implements PipeTransform {
 
     private validateFile(file: Express.Multer.File) {
         if (!file) {
-            throw new NotFoundException(ErrorCode.FILE_NOT_FOUND);
+            throw new NotFoundException(ErrorMessageCode.FILE_NOT_FOUND);
         }
         if (!Object.values(this.options.allowedMimetypes).includes(file.mimetype as FileType)) {
-            throw new BadRequestException(ErrorCode.INVALID_FILE_FORMAT);
+            throw new BadRequestException(ErrorMessageCode.INVALID_FILE_FORMAT);
         }
         if (file.size > this.options.maxSize) {
-            throw new PayloadTooLargeException(ErrorCode.FILE_TOO_LARGE);
+            throw new PayloadTooLargeException(ErrorMessageCode.FILE_TOO_LARGE);
         }
         return file;
     }
