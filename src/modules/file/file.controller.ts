@@ -7,6 +7,7 @@ import {
     NotFoundException,
     Param,
     Post,
+    Query,
     Res,
     StreamableFile,
     UploadedFile,
@@ -16,7 +17,7 @@ import {
 import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '@src/configs/multer.config';
-import { AuthUserDto, BaseResponseDto } from '@base/base.dto';
+import { AuthUserDto, BaseResponseDto, iPaginationOption } from '@base/base.dto';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
@@ -24,8 +25,8 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileEntity } from '@src/modules/file/entities/file.entity';
 import { Roles } from '@src/decorators/role.decorators';
-import { Role } from '@src/enums';
-import { PaginationResponse } from '../../base/base.dto';
+import { RoleEnum } from '@src/enums';
+import { PaginationResponse } from '@base/base.dto';
 import { UPLOAD_LOCATION } from '@src/configs/config';
 import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
@@ -75,20 +76,11 @@ export class FileController {
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    @Roles(Role.ADMIN)
+    @Roles(RoleEnum.ADMIN)
     @Get('/get-all')
-    async getAll(): Promise<PaginationResponse<FileEntity>> {
-        const data = await this.uploadFileService._findByDeleted(false, true, 0);
-        const total = await this.uploadFileService._countByDeleted(false);
-        return new PaginationResponse<FileEntity>(plainToInstance(FileEntity, data), {
-            pagination: {
-                currentPage: 0,
-                limit: 20,
-                links: { next: '', prev: '' },
-                total: data.length,
-                totalPages: 0,
-            },
-        });
+    async getAll(@Query() filter: iPaginationOption): Promise<PaginationResponse<FileEntity>> {
+        const data = await this.uploadFileService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
+        return new PaginationResponse<FileEntity>(data.body, data.meta);
     }
 
     @Get('/image/download/:path')

@@ -3,6 +3,8 @@ import { UserEntity } from './entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseRepository } from '@base/base.repository';
+import { PaginationResponse } from '@base/base.dto';
+import { PAGE_SIZE } from '@config/index';
 
 @Injectable()
 export class UserRepository extends BaseRepository<UserEntity> {
@@ -15,7 +17,8 @@ export class UserRepository extends BaseRepository<UserEntity> {
     /**
      * Add a basic where clause to the query and return the first result.
      */
-    getInactiveUsers(): Promise<UserEntity[]> {
-        return this.repository.createQueryBuilder().where('isActive = :active', { active: true }).getMany();
+    getInactiveUsers(page: number, limit: number = PAGE_SIZE): Promise<PaginationResponse<UserEntity>> {
+        const qb = this.repository.createQueryBuilder().where('isActive = :active', { active: true });
+        return this._iPaginate(qb, page, limit);
     }
 }

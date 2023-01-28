@@ -4,11 +4,12 @@ import { UserRepository } from './user.repository';
 import { UserEntity } from './entities/user.entity';
 import { LoggerService } from '@src/logger/custom.logger';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { Hash } from '@src/utils/hash';
+import { Hash } from '@src/utils/hash.util';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';
 import { FileRepository } from '../file/file.repository';
+import { PaginationResponse, iPaginationOption } from '@base/base.dto';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {
@@ -29,8 +30,8 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         return this._findById(id);
     }
 
-    getInactiveUsers(): Promise<UserEntity[]> {
-        return this.repository.getInactiveUsers();
+    getInactiveUsers(filter: iPaginationOption): Promise<PaginationResponse<UserEntity>> {
+        return this.repository.getInactiveUsers(filter.page, filter.limit);
     }
 
     async changePassword(userId: EntityId, changePass: ChangePasswordDto): Promise<UserEntity> {

@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { BaseResponseDto } from '@base/base.dto';
 import { LoggerService } from '@src/logger/custom.logger';
 import { I18nService } from '@src/i18n/i18n.service';
+import { isDev } from '@src/utils/util';
 
 @Injectable()
 export class ResponseTransformInterceptor<T> implements NestInterceptor<T, BaseResponseDto<T>> {
@@ -15,12 +16,16 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, BaseR
         const now = Date.now();
         this.i18nService = new I18nService(request);
         return next.handle().pipe(
-            tap(() => {
-                LoggerService.log(
-                    `{${request?.route?.path}, ${request?.method}} - ${response?.statusCode} : ${Date.now() - now} ms`,
-                    context?.getClass().name,
-                );
-            }),
+            isDev()
+                ? tap(() => {
+                      LoggerService.log(
+                          `{${request?.route?.path}, ${request?.method}} - ${response?.statusCode} : ${
+                              Date.now() - now
+                          } ms`,
+                          context?.getClass().name,
+                      );
+                  })
+                : tap(),
             map(response => {
                 if (response?.message) {
                     return { ...response, message: this.i18nService.t(response?.message) };

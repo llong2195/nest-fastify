@@ -1,13 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MessageCode } from '@src/constants/message-code';
+import { ConvertToBoolean, ConvertToNumber } from '@src/utils';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Min, Max, IsString } from 'class-validator';
+import { IsInt, IsOptional, Min, Max, IsBoolean } from 'class-validator';
 
 export class BaseResponseDto<T> {
     message: string;
-    body: T;
+    body: T | T[] | unknown | any;
 
-    constructor(body: T | null = null, message = MessageCode.SUCCESS) {
+    constructor(body: T | T[] | null = null, message = MessageCode.SUCCESS) {
         this.message = message;
         if (body instanceof String) {
             this.body = { ...body };
@@ -24,29 +25,22 @@ export class AuthUserDto {
 }
 
 export class PaginationResponse<T> {
+    message: string;
     body: T | T[] | unknown | any;
     meta: {
         pagination: {
             currentPage: number;
-            links: {
-                next: string;
-                prev: string;
-            };
             limit: number;
             total: number;
             totalPages: number;
         };
     };
-    [x: string]: any;
+
     constructor(
-        body: T[] = [],
+        body: T[] | T | null = [],
         meta = {
             pagination: {
                 currentPage: 0,
-                links: {
-                    next: '',
-                    prev: '',
-                },
                 limit: 0,
                 total: 0,
                 totalPages: 0,
@@ -54,7 +48,9 @@ export class PaginationResponse<T> {
         },
         message = MessageCode.SUCCESS,
     ) {
-        return { message, body, meta };
+        this.message = message;
+        this.body = body;
+        this.meta = meta;
     }
 }
 
@@ -66,6 +62,7 @@ export class iPaginationOption {
     })
     @IsInt()
     @Type(() => Number)
+    @ConvertToNumber()
     @IsOptional()
     @Min(0)
     page: number;
@@ -77,6 +74,7 @@ export class iPaginationOption {
     })
     @IsInt()
     @Type(() => Number)
+    @ConvertToNumber()
     @IsOptional()
     @Min(1)
     @Max(1000)
@@ -87,5 +85,9 @@ export class iPaginationOption {
         required: false,
         description: 'deleted',
     })
+    @IsBoolean()
+    @IsOptional()
+    @Type(() => Boolean)
+    @ConvertToBoolean()
     deleted: boolean;
 }
