@@ -8,12 +8,18 @@ import * as Sentry from '@sentry/node';
 import { setExtras, captureException } from '@sentry/node';
 import '@sentry/tracing';
 import { SENTRY_DSN } from '@src/configs';
+import { isDev, isEnv } from '../utils/util';
+import { IResponseBody } from '@src/interface';
+import { ErrorCode } from '../constants/error-code';
+import { EnvEnum } from '@enums/app.enum';
+
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
     constructor(private logger: LoggerService) {
         Sentry.init({
             dsn: SENTRY_DSN,
             normalizeDepth: 10,
+            tracesSampleRate: 1.0,
         });
     }
 
@@ -34,33 +40,46 @@ export class AllExceptionFilter implements ExceptionFilter {
             user,
         });
         captureException(exception);
-
-        let responseBody: any = { message: 'Internal server error' };
+        const i18nService = new I18nService(request);
         let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        let errorCode = ErrorCode.UNKNOWN;
+        let message = 'Internal server error';
+        let responseBody: IResponseBody = {
+            statusCode: statusCode,
+            errorCode: errorCode,
+            message: message,
+        };
         if (exception instanceof HttpException) {
             // responseBody = exception.getResponse()
             // statusCode = HttpStatus.BAD_REQUEST;
             statusCode = exception.getStatus();
+            errorCode = ErrorCode.UNKNOWN;
+            message =
+                typeof exception.getResponse() == 'string'
+                    ? exception.getResponse()
+                    : JSON.parse(JSON.stringify(exception.getResponse())).message;
             responseBody = {
                 statusCode: statusCode,
-                message:
-                    typeof exception.getResponse() == 'string'
-                        ? exception.getResponse()
-                        : JSON.parse(JSON.stringify(exception.getResponse())).message,
+                errorCode: errorCode,
+                message: message,
             };
         } else if (exception instanceof QueryFailedError) {
-            console.log('exception.driverError');
-            console.log(exception.driverError);
             statusCode = HttpStatus.BAD_REQUEST;
+            errorCode = ErrorCode.UNKNOWN;
+            message = isDev() ? exception.message : 'Invalid data or query error';
             responseBody = {
                 statusCode: statusCode,
-                message: exception.message,
-                // message: 'Invalid data or query error',
+                errorCode: errorCode,
+                message: message,
             };
         } else if (exception instanceof Error) {
+            statusCode = HttpStatus.BAD_REQUEST;
+            errorCode = ErrorCode.UNKNOWN;
+            message = exception.stack;
             responseBody = {
                 statusCode: statusCode,
-                message: exception.stack,
+                errorCode: errorCode,
+                message: message,
             };
         }
 
@@ -69,7 +88,8 @@ export class AllExceptionFilter implements ExceptionFilter {
             // responseBody.message = responseBody.message;
         }
         // responseBody['timestamp'] = new Date();
-        responseBody.message = new I18nService(request).t(responseBody.message);
+        responseBody.message =
+            typeof responseBody.message === 'string' ? i18nService.t(responseBody.message) : responseBody.message;
         response.status(statusCode).json(responseBody);
     }
 

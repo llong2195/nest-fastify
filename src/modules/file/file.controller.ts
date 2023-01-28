@@ -24,7 +24,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileEntity } from '@src/modules/file/entities/file.entity';
 import { Roles } from '@src/decorators/role.decorators';
-import { Role } from '@src/enums';
+import { RoleEnum } from '@src/enums';
 import { PaginationResponse } from '../../base/base.dto';
 import { UPLOAD_LOCATION } from '@src/configs/config';
 import { createReadStream, existsSync } from 'fs';
@@ -75,7 +75,7 @@ export class FileController {
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    @Roles(Role.ADMIN)
+    @Roles(RoleEnum.ADMIN)
     @Get('/get-all')
     async getAll(): Promise<PaginationResponse<FileEntity>> {
         const data = await this.uploadFileService._findByDeleted(false, true, 0);

@@ -1,7 +1,7 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
 import { DateAudit } from 'src/base/date_audit.entity';
-import { Role } from '@src/enums/role.enum';
+import { RoleEnum } from '@src/enums/role.enum';
 
 // @Index()
 @Entity({ name: 'user' })
@@ -25,7 +25,7 @@ export class UserEntity extends DateAudit {
     @Column({ name: 'password', type: 'varchar', nullable: true })
     password: string;
 
-    @Column({ name: 'role', type: 'varchar', default: Role.USER })
+    @Column({ name: 'role', type: 'varchar', default: RoleEnum.USER })
     role: string;
 
     @Column({ name: 'is_active', type: 'boolean', default: true })

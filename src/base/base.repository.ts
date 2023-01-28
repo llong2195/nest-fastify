@@ -7,7 +7,7 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
     protected _repository: Repository<T>;
 
     constructor(repository: Repository<T>) {
-        super(repository.target, repository.manager);
+        super(repository.target, repository.manager, repository.queryRunner);
         this._repository = repository;
     }
 

@@ -159,7 +159,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * @param {string[]} fields
      * @returns Promise<PaginationResponse<T>>
      */
-    async paginate(page: number, limit: number, fields?: string[]): Promise<PaginationResponse<T>> {
+    async _paginate(page: number, limit: number, fields?: string[]): Promise<PaginationResponse<T>> {
         const totalRecords = await this.repository.count({});
         const totalPage = totalRecords % limit === 0 ? totalRecords / limit : Math.floor(totalRecords / limit) + 1;
 
@@ -215,7 +215,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * @param fields
      * @returns
      */
-    async iPaginateSelect(
+    async _iPaginateSelect(
         filters: T | unknown | any,
         page: number,
         limit: number,
@@ -240,7 +240,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
 
         //this.logger.debug(query.getSql())
 
-        return await this.iPaginate(query, page, limit, qs.stringify(filters));
+        return await this._iPaginate(query, page, limit, qs.stringify(filters));
     }
 
     /**
@@ -250,7 +250,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * @param queryString
      * @returns
      */
-    async iPaginate<T>(
+    async _iPaginate<T>(
         queryBuilder: SelectQueryBuilder<T>,
         page: number,
         limit: number,
@@ -313,7 +313,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     ): Promise<PaginationResponse<T>> {
         const skip = (page - 1) * limit;
         const total = await queryBuilder.getCount();
-        const data = await queryBuilder.limit(limit).offset(skip).getMany();
+        const data = await queryBuilder.limit(limit).offset(skip).getManyAndCount();
         if (total <= 0) {
             return {
                 body: [],
