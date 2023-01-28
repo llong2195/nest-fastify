@@ -12,8 +12,7 @@ import { ValidatorsModule } from '@validators/validators.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { LoggerService } from '@src/logger/custom.logger';
 import { isEnv } from './utils/util';
-import { Env } from './enums/app.enum';
-import { LISTEN_ON } from './configs';
+import { EnvEnum } from './enums/app.enum';
 import { useRequestLogging } from './middlewares/request-logging.middlewares';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -22,7 +21,7 @@ declare const module: any;
 async function bootstrap() {
     let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
 
-    if (isEnv(Env.Production) || isEnv(Env.Staging)) {
+    if (isEnv(EnvEnum.Production) || isEnv(EnvEnum.Staging)) {
         logLevelsDefault = ['error', 'warn'];
     }
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -32,6 +31,7 @@ async function bootstrap() {
     const configService = app.get(ConfigService);
     const port = configService.get<number>('port');
     const LISTEN_ON = configService.get<string>('LISTEN_ON') || '0.0.0.0';
+    const ORIGIN = JSON.parse(configService.get<string>('ORIGIN') || '[]');
 
     // Middleware
     app.use(helmet());
@@ -44,15 +44,22 @@ async function bootstrap() {
     app.useGlobalInterceptors(new ResponseTransformInterceptor());
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.setGlobalPrefix(configService.get<string>('apiPrefix'));
-    if (isEnv(Env.Dev)) {
+    if (isEnv(EnvEnum.Dev)) {
         app.enableCors({
             origin: '*',
         });
         await ConfigDocument(app);
         useRequestLogging(app, 0);
     } else {
+        const whitelist = ORIGIN;
         app.enableCors({
-            origin: '*',
+            origin: (origin, callback) => {
+                if (whitelist.indexOf(origin) !== -1) {
+                    callback(null, true);
+                } else {
+                    callback(new Error());
+                }
+            },
         });
     }
 
@@ -81,7 +88,7 @@ async function ConfigDocument(app: INestApplication): Promise<void> {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
     LoggerService.log(`==========================================================`);
-    LoggerService.log(`Swagger Init`, ConfigDocument.name);
+    LoggerService.log(`Swagger Init :`, ConfigDocument.name);
     LoggerService.log(`==========================================================`);
 }
 

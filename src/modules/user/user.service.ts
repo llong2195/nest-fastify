@@ -4,7 +4,7 @@ import { UserRepository } from './user.repository';
 import { UserEntity } from './entities/user.entity';
 import { LoggerService } from '@src/logger/custom.logger';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { Hash } from '@src/utils/hash';
+import { Hash } from '@src/utils/hash.util';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';

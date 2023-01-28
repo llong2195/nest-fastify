@@ -1,6 +1,6 @@
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
 import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
-import { Role } from '@src/enums/role.enum';
+import { RoleEnum } from '@src/enums/role.enum';
 
 export class AdminUpdateUserDto {
     @IsOptional()
@@ -24,8 +24,8 @@ export class AdminUpdateUserDto {
     password_confirmation: string;
 
     @IsOptional()
-    @IsEnum(Role)
-    role: Role;
+    @IsEnum(RoleEnum)
+    role: RoleEnum;
 
     @IsOptional()
     @IsBoolean()

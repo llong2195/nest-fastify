@@ -3,7 +3,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserEntity } from '@src/modules/user/entities/user.entity';
 import bcrypt from 'bcrypt';
-import { Role } from '@src/enums';
+import { RoleEnum } from '@src/enums';
 import { LoggerService } from '@src/logger/custom.logger';
 import { BCRYPT_SALT } from '@src/configs';
 
@@ -26,14 +26,14 @@ export class UserCommander extends CommandRunner {
                         ...user,
                         password: bcrypt.hashSync('12345678', BCRYPT_SALT),
                         isActive: true,
-                        role: Role.ADMIN,
+                        role: RoleEnum.ADMIN,
                     });
                 } else {
                     await userRepository.save({
                         email: 'nduylong9501@gmail.com',
                         password: bcrypt.hashSync('12345678', BCRYPT_SALT),
                         isActive: true,
-                        role: Role.ADMIN,
+                        role: RoleEnum.ADMIN,
                     });
                 }
             });

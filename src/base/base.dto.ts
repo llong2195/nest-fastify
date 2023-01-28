@@ -38,6 +38,7 @@ export class PaginationResponse<T> {
         };
     };
     [x: string]: any;
+
     constructor(
         body: T[] = [],
         meta = {
