@@ -4,7 +4,6 @@ import {
     FindManyOptions,
     FindOptionsOrder,
     FindOptionsSelect,
-    FindOptionsSelectByString,
     FindOptionsWhere,
     In,
     Repository,
