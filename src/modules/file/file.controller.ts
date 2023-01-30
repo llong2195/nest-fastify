@@ -32,12 +32,12 @@ import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
 import { Response } from 'express';
 
+@ApiBearerAuth()
 @ApiTags('/v1/file')
 @Controller('v1/file')
 export class FileController {
     constructor(private readonly uploadFileService: FileService) {}
 
-    // @ApiBearerAuth()
     // @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('file', multerOptions))
     @ApiConsumes('multipart/form-data')
@@ -52,7 +52,6 @@ export class FileController {
         return new BaseResponseDto<FileEntity>(plainToClass(FileEntity, uploadfile));
     }
 
-    // @ApiBearerAuth()
     // @UseGuards(JwtAuthGuard)
     @ApiConsumes('multipart/form-data')
     @ApiBody({
@@ -74,7 +73,6 @@ export class FileController {
         }
     }
 
-    @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Roles(RoleEnum.ADMIN)
     @Get('/get-all')
