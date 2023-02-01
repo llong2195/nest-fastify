@@ -83,12 +83,12 @@ async function ConfigDocument(app: INestApplication): Promise<void> {
         .setDescription('API docs')
         .setVersion('1.0')
         .addTag('Document For API')
-        .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'accessToken')
+        .addBearerAuth({ type: 'http', in: 'header', scheme: 'bearer', bearerFormat: 'JWT' })
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
     LoggerService.log(`==========================================================`);
-    LoggerService.log(`Swagger Init :`, ConfigDocument.name);
+    LoggerService.log(`Swagger Init: /docs`, ConfigDocument.name);
     LoggerService.log(`==========================================================`);
 }
 

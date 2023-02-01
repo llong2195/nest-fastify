@@ -12,6 +12,7 @@ import { isDev, isEnv } from '../utils/util';
 import { IResponseBody } from '@src/interface';
 import { ErrorCode } from '../constants/error-code';
 import { EnvEnum } from '@enums/app.enum';
+import { BaseError } from '@exceptions/errors';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -49,7 +50,21 @@ export class AllExceptionFilter implements ExceptionFilter {
             errorCode: errorCode,
             message: message,
         };
-        if (exception instanceof HttpException) {
+        if (exception instanceof BaseError) {
+            // responseBody = exception.getResponse()
+            // statusCode = HttpStatus.BAD_REQUEST;
+            statusCode = exception.getStatus();
+            errorCode = exception.getErrorCode();
+            message =
+                typeof exception.getResponse() == 'string'
+                    ? exception.getResponse()
+                    : JSON.parse(JSON.stringify(exception.getResponse())).message;
+            responseBody = {
+                statusCode: statusCode,
+                errorCode: errorCode,
+                message: message,
+            };
+        } else if (exception instanceof HttpException) {
             // responseBody = exception.getResponse()
             // statusCode = HttpStatus.BAD_REQUEST;
             statusCode = exception.getStatus();

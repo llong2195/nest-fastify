@@ -28,11 +28,9 @@ export class AppController {
     }
 
     @Get('exceptions')
-    @Post('exceptions')
-    TestException(@Req() request: Request): string {
+    TestException(@Req() request: Request): any {
         try {
-            throw new ValidateError('validate', 'errort', 400);
-            // throwError<ValidateError>("database", "fdf", 400)
+            throw new ValidateError('validate', 400, 9000);
         } catch (e) {
             if (e instanceof ValidateError) {
                 this.logger.error('ValidateError', e.stack);
@@ -41,9 +39,8 @@ export class AppController {
             } else if (e instanceof BaseError) {
                 this.logger.error('BaseError', e.stack);
             }
+            throw new ValidateError('validate', 400, 9000);
         }
-
-        throw new ValidateError('validate', 'fdf', 400);
     }
 
     @Get('healthz')

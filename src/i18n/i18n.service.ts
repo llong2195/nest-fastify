@@ -16,6 +16,7 @@ export class I18nService {
         i18n.configure({
             directory: join(__dirname, '../../i18n/locales'),
             defaultLocale: DEFAULT_LOCALE,
+            updateFiles: false,
         });
     }
 

@@ -1,7 +1,9 @@
 import {
     BaseEntity,
     EntityManager,
+    FindManyOptions,
     FindOptionsOrder,
+    FindOptionsSelect,
     FindOptionsWhere,
     In,
     Repository,
@@ -156,91 +158,52 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     /**
      * @param {number} page
      * @param {number} limit
+     * @param {FindOptionsWhere<T> | FindOptionsWhere<T>[]} options
      * @param {string[]} fields
+     * @param {FindManyOptions<T>} manyOptions
      * @returns Promise<PaginationResponse<T>>
      */
-    async _paginate(page: number, limit: number, fields?: string[]): Promise<PaginationResponse<T>> {
-        const totalRecords = await this.repository.count({});
+    async _paginate(
+        page: number,
+        limit: number = PAGE_SIZE,
+        options?: FindOptionsWhere<T> | FindOptionsWhere<T>[],
+        fields?: FindOptionsSelect<T>,
+        manyOptions?: FindManyOptions<T>,
+    ): Promise<PaginationResponse<T>> {
+        const totalRecords = await this.repository.count({ where: options });
         const totalPage = totalRecords % limit === 0 ? totalRecords / limit : Math.floor(totalRecords / limit) + 1;
 
         if (page > totalPage || page <= 0) {
-            return {
-                body: [],
-                meta: {
-                    pagination: {
-                        currentPage: 0,
-                        links: {
-                            next: '',
-                            prev: '',
-                        },
-                        limit: limit,
-                        total: 0,
-                        totalPages: 0,
-                    },
+            return new PaginationResponse([], {
+                pagination: {
+                    currentPage: 0,
+                    limit: limit,
+                    total: 0,
+                    totalPages: 0,
                 },
-            };
+            });
         }
 
         const offset = page === 1 ? 0 : limit * (page - 1);
         const data = await this.repository.find({
-            select: fields ? (fields as (keyof T)[]) : null,
+            where: options,
+            select: fields,
             skip: offset,
             take: limit,
+            ...manyOptions,
         });
 
-        const next = page < totalPage ? `page=${page - -1}&limit=${limit}` : '';
-        const prev = page > 1 ? `page=${page - 1}&limit=${limit}` : '';
-
-        return {
+        return new PaginationResponse({
             body: data,
             meta: {
                 pagination: {
                     currentPage: Number(page),
-
-                    links: {
-                        next: next,
-                        prev: prev,
-                    },
                     limit: limit,
                     total: totalRecords,
                     totalPages: totalPage,
                 },
             },
-        };
-    }
-
-    /**
-     * @param page
-     * @param limit
-     * @param fields
-     * @returns
-     */
-    async _iPaginateSelect(
-        filters: T | unknown | any,
-        page: number,
-        limit: number,
-        fields?: string[],
-        orders?: Record<string, 'ASC' | 'DESC'>,
-        repository: Repository<T> = null,
-    ): Promise<PaginationResponse<T>> {
-        const jobTable = this.repository.metadata.tableName;
-
-        const query = repository.createQueryBuilder(jobTable);
-
-        Object.keys(filters).forEach((key: string) => {
-            const obj: Record<string, unknown> = {};
-            obj[key] = filters[key];
-
-            query.andWhere(`${jobTable}.${toSnakeCase(key)}=:${key}`, obj);
         });
-
-        if (orders) {
-            query.orderBy(orders);
-        }
-
-        //this.logger.debug(query.getSql())
-
-        return await this._iPaginate(query, page, limit, qs.stringify(filters));
     }
 
     /**
@@ -254,107 +217,30 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         queryBuilder: SelectQueryBuilder<T>,
         page: number,
         limit: number,
-        queryString?: string,
     ): Promise<PaginationResponse<T>> {
         const skip = (page - 1) * limit;
         const [items, total] = await queryBuilder.take(limit).skip(skip).getManyAndCount();
 
         if (total <= 0) {
-            return {
-                body: [],
-                meta: {
-                    pagination: {
-                        currentPage: 0,
-                        links: {
-                            next: '',
-                            prev: '',
-                        },
-                        limit: limit,
-                        total: 0,
-                        totalPages: 0,
-                    },
+            return new PaginationResponse<T>([], {
+                pagination: {
+                    currentPage: 0,
+                    limit: limit,
+                    total: 0,
+                    totalPages: 0,
                 },
-            };
+            });
         }
 
         const totalPage = Math.ceil(total / limit);
-        const next = page < totalPage ? `${queryString ? queryString + '&' : ''}page=${page - -1}&limit=${limit}` : '';
-        const prev = page > 1 ? `${queryString ? queryString + '&' : ''}page=${page - 1}&limit=${limit}` : '';
-
-        return {
-            body: items,
-            meta: {
-                pagination: {
-                    currentPage: Number(page),
-                    links: {
-                        next: next,
-                        prev: prev,
-                    },
-                    limit: limit,
-                    total: total,
-                    totalPages: totalPage,
-                },
+        return new PaginationResponse(items, {
+            pagination: {
+                currentPage: Number(page),
+                limit: limit,
+                total: total,
+                totalPages: totalPage,
             },
-        };
-    }
-
-    /**
-     * @param queryBuilder
-     * @param page
-     * @param limit
-     * @param queryString
-     * @returns
-     */
-    async iPaginateCustom<T>(
-        queryBuilder: SelectQueryBuilder<T>,
-        page: number,
-        limit: number,
-        queryString?: string,
-    ): Promise<PaginationResponse<T>> {
-        const skip = (page - 1) * limit;
-        const total = await queryBuilder.getCount();
-        const data = await queryBuilder.limit(limit).offset(skip).getManyAndCount();
-        if (total <= 0) {
-            return {
-                body: [],
-                meta: {
-                    pagination: {
-                        currentPage: 0,
-                        links: {
-                            next: '',
-                            prev: '',
-                        },
-                        limit: limit,
-                        total: 0,
-                        totalPages: 0,
-                    },
-                },
-            };
-        }
-
-        const totalPage = Math.ceil(total / limit);
-        const next =
-            page < totalPage
-                ? `${queryString ? queryString + '&' : ''}page=${page - -1}&limit=${limit}`
-                : queryString ?? '';
-        const prev =
-            page > 1 ? `${queryString ? queryString + '&' : ''}page=${page - 1}&limit=${limit}` : queryString ?? '';
-
-        return {
-            body: data,
-            meta: {
-                pagination: {
-                    currentPage: Number(page),
-                    links: {
-                        next: next,
-                        prev: prev,
-                    },
-                    limit: limit,
-                    total: total,
-                    totalPages: totalPage,
-                },
-            },
-        };
+        });
     }
 
     /**

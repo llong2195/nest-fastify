@@ -6,18 +6,19 @@ import {
     Get,
     NotFoundException,
     Param,
+    Patch,
     Post,
+    Query,
     UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from '../user.service';
-import { BaseResponseDto } from '@base/base.dto';
+import { BaseResponseDto, PaginationResponse, iPaginationOption } from '@base/base.dto';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { plainToClass } from 'class-transformer';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { DeleteResult } from 'typeorm';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from '../entities/user.entity';
-import { Patch } from '@nestjs/common/decorators';
 
 @ApiTags('/v1/admin/user')
 @ApiBearerAuth()
@@ -27,15 +28,15 @@ export class AdminUserController {
     constructor(private readonly userService: UserService) {}
 
     @Get()
-    async index(): Promise<BaseResponseDto<UserEntity[]>> {
-        const users = await this.userService._findByDeleted(false, true, 0);
-        return new BaseResponseDto<UserEntity[]>(users);
+    async index(@Query() filter: iPaginationOption): Promise<PaginationResponse<UserEntity>> {
+        const data = await this.userService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
+        return new PaginationResponse<UserEntity>(data.body, data.meta);
     }
 
     @Get('/inactive')
-    async getInactiveUser(): Promise<BaseResponseDto<UserEntity[]>> {
-        const users = await this.userService.getInactiveUsers();
-        return new BaseResponseDto<UserEntity[]>(users);
+    async getInactiveUser(@Query() filter: iPaginationOption): Promise<PaginationResponse<UserEntity>> {
+        const data = await this.userService.getInactiveUsers(filter);
+        return new PaginationResponse<UserEntity>(data.body, data.meta);
     }
 
     @Get('/:id')
