@@ -1,5 +1,3 @@
-// HttpException error
-
 import {
     BadGatewayException,
     BadRequestException,
