@@ -13,6 +13,9 @@ export class RedisService {
                 host: REDIS_HOST,
                 port: REDIS_PORT,
             });
+            this.redis.on('ready', () => {
+                this.logger.log('Redis connected');
+            });
         } catch (error) {
             this.logger.error(error);
         }
