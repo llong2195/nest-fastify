@@ -4,6 +4,5 @@
     "tabWidth": 4,
     "semi": true,
     "arrowParens": "avoid",
-    "singleQuote": true,
-    "endOfLine": "lf"
+    "singleQuote": true
 }
