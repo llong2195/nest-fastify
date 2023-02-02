@@ -213,7 +213,7 @@ export class RedisService {
      * @param  {string|number} value
      * @returns Promise
      */
-    async sAdd(key: string, value): Promise<number> {
+    async sAdd(key: string, value: (string | Buffer | number)[]): Promise<number> {
         if (value !== null) {
             return this.redis.sadd(key, value);
         }
@@ -226,7 +226,7 @@ export class RedisService {
      * @param  {string} value
      * @returns Promise
      */
-    async sisMember(key: string, value: string): Promise<boolean> {
+    async sisMember(key: string, value: string | number | Buffer): Promise<boolean> {
         if (value !== null) {
             const ret = await this.redis.sismember(key, value);
 

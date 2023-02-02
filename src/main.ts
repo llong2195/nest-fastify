@@ -1,65 +1,70 @@
+import { useContainer } from 'class-validator';
+import { json, urlencoded } from 'express';
+import helmet from 'helmet';
+
 import { INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { useContainer } from 'class-validator';
-import { json, urlencoded } from 'express';
-import { AppModule } from './app.module';
-import helmet from 'helmet';
-import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
-import { ValidationConfig } from '@src/configs/validation.config';
-import { ValidatorsModule } from '@validators/validators.module';
+import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 // import { runInCluster } from './utils/runInCluster';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationConfig } from '@src/configs/validation.config';
 import { LoggerService } from '@src/logger/custom.logger';
-import { isEnv } from './utils/util';
-import { EnvEnum } from './enums/app.enum';
-import { useRequestLogging } from './middlewares/request-logging.middlewares';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { ValidatorsModule } from '@validators/validators.module';
 
+import { AppModule } from './app.module';
+import { EnvEnum } from './enums/app.enum';
+import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
+import { useRequestLogging } from './middlewares/request-logging.middleware';
+import { isEnv } from './utils/util';
+// import bodyParser from 'body-parser';
 declare const module: any;
 
 async function bootstrap() {
     let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
 
     if (isEnv(EnvEnum.Production) || isEnv(EnvEnum.Staging)) {
-        logLevelsDefault = ['error', 'warn'];
+        const logLevel = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
+        logLevelsDefault = logLevel.split(',') as LogLevel[];
     }
-    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
         logger: logLevelsDefault,
     });
     // Config
     const configService = app.get(ConfigService);
-    const port = configService.get<number>('port');
-    const LISTEN_ON = configService.get<string>('LISTEN_ON') || '0.0.0.0';
-    const ORIGIN = JSON.parse(configService.get<string>('ORIGIN') || '[]');
+    const port: number = configService.get<number>('port');
+    const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
+    const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
 
     // Middleware
     app.use(helmet());
 
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
-
+    // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
     useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
 
     app.useGlobalInterceptors(new ResponseTransformInterceptor());
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.setGlobalPrefix(configService.get<string>('apiPrefix'));
+
     if (isEnv(EnvEnum.Dev)) {
         app.enableCors({
             origin: '*',
+            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
         await ConfigDocument(app);
         useRequestLogging(app, 0);
     } else {
-        const whitelist = ORIGIN;
         app.enableCors({
             origin: (origin, callback) => {
-                if (whitelist.indexOf(origin) !== -1) {
+                if (DOMAIN_WHITELIST.indexOf(origin) !== -1) {
                     callback(null, true);
                 } else {
                     callback(new Error());
                 }
             },
+            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
     }
 
