@@ -3,9 +3,11 @@ export class BaseError extends HttpException {
     protected errorCode: number;
 
     /**
-     * @param {string} message
-     * @param {string | Record<string, unknown>} cause
-     * @param {number} errorCode
+     *
+     * @param message
+     * @param status
+     * @param errorCode
+     * @param cause
      */
     constructor(message: string | Record<string, any>, status: HttpStatus, errorCode: number, cause?: Error) {
         super(message, status, {

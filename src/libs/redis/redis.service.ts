@@ -1,21 +1,22 @@
-import { Injectable, Logger } from '@nestjs/common';
-import Redis from 'ioredis';
-import { REDIS_HOST, REDIS_PORT } from '@src/configs';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Redis } from 'ioredis';
+import { IORedisKey } from './redis.module';
 
 @Injectable()
 export class RedisService {
-    private redis: Redis;
     private logger = new Logger(RedisService.name);
+    constructor(@Inject(IORedisKey) private readonly redis: Redis) {
+        this.redis.on('ready', () => {
+            this.logger.log('Redis connected');
+        });
+    }
 
-    constructor() {
-        try {
-            this.redis = new Redis({
-                host: REDIS_HOST,
-                port: REDIS_PORT,
-            });
-        } catch (error) {
-            this.logger.error(error);
-        }
+    /**
+     *
+     * @returns {Redis} redis
+     */
+    getClient() {
+        return this.redis;
     }
 
     /**
@@ -213,7 +214,7 @@ export class RedisService {
      * @param  {string|number} value
      * @returns Promise
      */
-    async sAdd(key: string, value): Promise<number> {
+    async sAdd(key: string, value: (string | Buffer | number)[]): Promise<number> {
         if (value !== null) {
             return this.redis.sadd(key, value);
         }
@@ -226,7 +227,7 @@ export class RedisService {
      * @param  {string} value
      * @returns Promise
      */
-    async sisMember(key: string, value: string): Promise<boolean> {
+    async sisMember(key: string, value: string | number | Buffer): Promise<boolean> {
         if (value !== null) {
             const ret = await this.redis.sismember(key, value);
 

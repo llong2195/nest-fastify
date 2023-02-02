@@ -14,8 +14,6 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { PAGE_SIZE } from '@src/configs/config';
 import { IBaseService } from './i.base.service';
 import { EntityId } from 'typeorm/repository/EntityId';
-import { toSnakeCase } from '@src/utils/util';
-import qs from 'qs';
 import { PaginationResponse } from './base.dto';
 
 export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {

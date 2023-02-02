@@ -13,7 +13,7 @@ export class HealthController {
 
     @Get()
     @HealthCheck()
-    async check() {
+    check() {
         return this.health.check([
             () => this.typeormHealthIndicator.pingCheck('database'),
             () => this.memory.checkHeap('memory_heap', 200 * 1024 * 1024),
