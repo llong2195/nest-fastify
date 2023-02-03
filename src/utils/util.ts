@@ -2,6 +2,7 @@ import { createCanvas, loadImage } from 'canvas';
 import moment from 'moment';
 import { PassThrough } from 'stream';
 import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
+import CryptoJS from 'crypto-js';
 
 /**
  *
@@ -298,11 +299,17 @@ export const getDaysDiff = (fromTime: number, toTime: number, tzOffset = -7): nu
     return Math.floor((toTime - fromTime) / OneDay);
 };
 
-// export const encryptObj = (obj: any, secretKey: string): string => {
-//     return CryptoJS.AES.encrypt(JSON.stringify(obj), secretKey).toString();
-// };
+export const encryptObj = (obj: any, secretKey: string): string => {
+    // return CryptoJS.AES.encrypt(JSON.stringify(obj), secretKey).toString();
+    const encJson = CryptoJS.AES.encrypt(JSON.stringify(obj), secretKey).toString();
+    const encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson));
+    return encData;
+};
 
-// export const decryptObj = (encryptText: string, secretKey: string): unknown => {
-//     const bytes = CryptoJS.AES.decrypt(encryptText, secretKey);
-//     return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-// };
+export const decryptObj = (encryptText: string, secretKey: string): unknown => {
+    // const bytes = CryptoJS.AES.decrypt(encryptText, secretKey);
+    // return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    const decData = CryptoJS.enc.Base64.parse(encryptText).toString(CryptoJS.enc.Utf8);
+    const bytes = CryptoJS.AES.decrypt(decData, secretKey).toString(CryptoJS.enc.Utf8);
+    return JSON.parse(bytes);
+};
