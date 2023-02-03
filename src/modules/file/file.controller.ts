@@ -39,14 +39,14 @@ export class FileController {
     constructor(private readonly uploadFileService: FileService) {}
 
     // @UseGuards(JwtAuthGuard)
-    @UseInterceptors(FileInterceptor('file', multerOptions))
     @ApiConsumes('multipart/form-data')
     @ApiBody({
         description: 'file image',
         type: CreateFileDto,
     })
     @HttpCode(HttpStatus.OK)
-    @Post('/upload-local')
+    @UseInterceptors(FileInterceptor('file', multerOptions))
+    @Post('/upload-image-local')
     async local(@UploadedFile() file: Express.Multer.File, @AuthUser() authUser?: AuthUserDto) {
         const uploadfile = await this.uploadFileService.uploadFile(authUser?.id, file);
         return new BaseResponseDto<FileEntity>(plainToClass(FileEntity, uploadfile));
@@ -59,7 +59,7 @@ export class FileController {
         type: CreateFileDto,
     })
     @HttpCode(HttpStatus.OK)
-    @Post('/upload-cloud')
+    @Post('/upload-image-cloud')
     @UseInterceptors(FileInterceptor('file', multerOptions))
     async cloud(
         @UploadedFile() file: Express.Multer.File,

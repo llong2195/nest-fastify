@@ -4,10 +4,11 @@ import { FileEntity } from './entities/file.entity';
 import { FileRepository } from './file.repository';
 import { LoggerService } from 'src/logger/custom.logger';
 import sharp from 'sharp';
-import { UPLOAD_LOCATION } from '@src/configs/config';
+import { SERVER_URL, UPLOAD_LOCATION } from '@src/configs/config';
 import { cloudinary } from '@src/utils/cloudinary.util';
 import { ErrorMessageCode } from '@src/constants';
 import * as fs from 'fs';
+import { FileType } from '@enums/file.enum';
 
 @Injectable()
 export class FileService extends BaseService<FileEntity, FileRepository> {
@@ -21,7 +22,8 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
         }
         const createFile = new FileEntity(null);
         createFile.userId = userId;
-        createFile.originUrl1 = `${file.filename}`;
+        createFile.originUrl = `${SERVER_URL}/image/${file.filename}`;
+        createFile.type = FileType.IMAGE;
         await sharp(file.path)
             .resize({
                 width: 317,
@@ -55,8 +57,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
             });
 
             const createFile = new FileEntity({});
-            createFile.originUrl1 = image.url;
-            createFile.originUrl2 = image.secure_url;
+            createFile.originUrl = image.url;
             createFile.width = image.width;
             createFile.height = image.height;
             createFile.size = image.bytes;

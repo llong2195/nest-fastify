@@ -1,16 +1,14 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { DateAudit } from '@base/date_audit.entity';
+import { FileType } from '@enums/file.enum';
 
 @Entity({ name: 'file' })
 export class FileEntity extends DateAudit {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
-    @Column({ name: 'origin_url1', type: 'varchar', nullable: true })
-    originUrl1: string;
-
-    @Column({ name: 'origin_url2', type: 'varchar', nullable: true })
-    originUrl2: string;
+    @Column({ name: 'origin_url', type: 'varchar', nullable: true })
+    originUrl: string;
 
     @Column({ name: 'thumb_url', type: 'varchar', nullable: true })
     thumbUrl: string;
@@ -29,6 +27,9 @@ export class FileEntity extends DateAudit {
 
     @Column({ name: 'user_id', type: 'int', nullable: true })
     userId: number;
+
+    @Column({ name: 'type', type: 'int', nullable: true, default: FileType.IMAGE })
+    type: number;
 
     @Column({ name: 'data', type: 'varchar', nullable: true, select: false })
     data: string;
