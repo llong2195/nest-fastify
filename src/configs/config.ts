@@ -4,11 +4,13 @@ dotenv.config();
 // App
 export const NODE_ENV = process.env.NODE_ENV || 'development';
 export const PORT = parseInt(process.env.PORT, 10) || 4000;
+export const LOG_LEVEL = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
 export const SERVER_URL = process.env.SERVER_URL;
 export const LISTEN_ON = process.env.LISTEN_ON || '0.0.0.0';
 export const TIMEZONE = process.env.TIMEZONE || 'Asia/Ho_Chi_Minh';
 export const API_PREFIX = process.env.API_PREFIX || 'api';
 export const PAGE_SIZE = parseInt(process.env.PAGE_SIZE, 10) || 20;
+export const DOMAIN_WHITELIST = process.env.DOMAIN_WHITELIST || '*';
 
 // THROTTLE
 export const THROTTLE_TTL = parseInt(process.env.THROTTLE_TTL) || 300;

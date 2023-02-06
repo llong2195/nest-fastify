@@ -1,6 +1,3 @@
-import appConfig from '@src/configs/app.config';
-import authConfig from '@src/configs/auth.config';
-import databaseConfig from '@src/configs/database.config';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -28,6 +25,7 @@ import { SettingModule } from './modules/setting/setting.module';
 import { IORedisModule, IRedisModuleOptions } from '@libs/redis';
 import { LoggerService } from './logger/custom.logger';
 import { Redis } from 'ioredis';
+import { appConfig, databaseConfig, authConfig } from '@config/index';
 
 @Module({
     imports: [
