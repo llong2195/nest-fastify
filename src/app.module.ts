@@ -96,9 +96,6 @@ import { appConfig, databaseConfig, authConfig } from '@config/index';
                         password: configService.get('REDIS_PASS'),
                     },
                     onClientReady: (client: Redis) => {
-                        client.on('error', err => {
-                            LoggerService.error(err, IORedisModule.name);
-                        });
                         client.on('connect', () => {
                             LoggerService.log(
                                 `Connected to redis on ${client.options.host}:${client.options.port}`,

@@ -1,4 +1,4 @@
-import { DynamicModule, Global } from '@nestjs/common';
+import { DynamicModule, Global, Logger } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import IORedis from 'ioredis';
 
@@ -16,9 +16,15 @@ export class IORedisModule {
                 const { connectionOptions, onClientReady } = await useFactory(...args);
 
                 const client = new IORedis(connectionOptions);
-
                 onClientReady(client);
-
+                let count = 0;
+                client.on('error', err => {
+                    if (count > 10) {
+                        throw new Error('Redis err :' + err);
+                    }
+                    count++;
+                    Logger.error(err, IORedisModule.name);
+                });
                 return client;
             },
             inject,

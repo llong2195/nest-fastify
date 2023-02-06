@@ -36,7 +36,9 @@ export const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD || 'password';
 export const DATABASE_DB_NAME = process.env.DATABASE_DB_NAME || 'nest-starter';
 
 // FILE
-export const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE, 10);
+export const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE, 10) || 5 * 1024 * 1024;
+export const MAX_FILE_SIZE_IMAGE = parseInt(process.env.MAX_FILE_SIZE_IMAGE, 10)  || 5 * 1024 * 1024;
+export const MAX_FILE_SIZE_VIDEO = parseInt(process.env.MAX_FILE_SIZE_VIDEO, 10)  || 5 * 1024 * 1024;
 export const UPLOAD_LOCATION = process.env.UPLOAD_LOCATION;
 
 // MAILER
@@ -49,6 +51,8 @@ export const NODEMAILER_PASS = process.env.NODEMAILER_PASS;
 //  REDIS_HOST=redis
 export const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
 export const REDIS_PORT = parseInt(process.env.REDIS_PORT, 10) || 6379;
+export const REDIS_PASSWORD = process.env.REDIS_PASSWORD || '';
+export const REDIS_DB = process.env.REDIS_DB || '';
 
 //  CONFIG OTP
 export const OTP_LENGTH = parseInt(process.env.OTP_LENGTH, 10) || 6;
