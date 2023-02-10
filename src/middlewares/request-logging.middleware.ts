@@ -3,6 +3,11 @@ import morgan from 'morgan';
 import { Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
+/**
+ * It logs all requests to the console, but only if they take longer than 150ms
+ * @param {NestExpressApplication} app - NestExpressApplication - the Nest application instance
+ * @param [minTime=150] - The minimum time in milliseconds that a request should take to be logged.
+ */
 export function useRequestLogging(app: NestExpressApplication, minTime = 150): void {
     const logger = new Logger('Request');
     app.use(

@@ -11,6 +11,11 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
         });
     }
 
+    /**
+     * It takes a payload, and returns a payload
+     * @param {any} payload - The payload to validate.
+     * @returns The payload is being returned.
+     */
     async validate(payload: any) {
         return payload;
     }

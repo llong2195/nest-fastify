@@ -15,8 +15,6 @@ export class RefreshAuthGuard extends AuthGuard('refresh') {
         // You can throw an exception based on either "info" or "err" arguments
 
         if (err || !user || info) {
-            console.warn(`RefreshAuthGuard: ${info}`, info);
-            console.warn(`RefreshAuthGuard: ${err}`);
             LoggerService.error(err, user, info, context.switchToHttp().getRequest().ip, status);
             throw new UnauthorizedException(ErrorMessageCode.INVALID_TOKEN);
         }

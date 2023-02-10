@@ -25,6 +25,10 @@ class MultiStream extends Readable {
             encoding: options.encoding,
         });
     }
+    /**
+     * _read() is a function that pushes the object to the stream and then sets the object to
+     * undefined.
+     */
     _read() {
         this.push(this._object);
         this._object = undefined;
@@ -48,10 +52,11 @@ export class CloudinaryService {
     }
 
     /**
-     *
-     * @param buffer
-     * @param folder
-     * @returns
+     * It takes a buffer or string and uploads it to Cloudinary
+     * @param {Buffer | string} buffer - This is the file that you want to upload. It can be a Buffer
+     * or a string.
+     * @param {string} folder - The folder in which the image will be stored.
+     * @returns A promise that resolves to an UploadApiResponse object.
      */
     upload(buffer: Buffer | string, folder: string): Promise<UploadApiResponse> {
         return new Promise((resolve, reject) => {

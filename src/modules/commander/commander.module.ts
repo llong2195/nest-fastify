@@ -8,7 +8,7 @@ import { appConfig, authConfig, databaseConfig } from '@config/index';
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env', '.env.development.local', '.env.development'],
+            envFilePath: ['.env'],
             load: [appConfig, databaseConfig, authConfig],
         }),
         DatabaseModule,

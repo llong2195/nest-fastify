@@ -1,10 +1,10 @@
-import { DynamicModule, Global, Logger } from '@nestjs/common';
-import { Module } from '@nestjs/common';
 import IORedis from 'ioredis';
 
-export const IORedisKey = 'IOREDIS_MODULES_KEY';
+import { DynamicModule, Global, Logger, Module } from '@nestjs/common';
+
 import type { RedisAsyncModuleOptions } from './redis.interface';
-import { RedisService } from './redis.service';
+
+export const IORedisKey = 'IOREDIS_MODULES_KEY';
 
 @Global()
 @Module({})
@@ -33,8 +33,8 @@ export class IORedisModule {
         return {
             module: IORedisModule,
             imports,
-            providers: [redisProvider, RedisService],
-            exports: [redisProvider, RedisService],
+            providers: [redisProvider],
+            exports: [redisProvider],
         };
     }
 }

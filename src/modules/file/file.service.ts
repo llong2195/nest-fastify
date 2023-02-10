@@ -16,6 +16,12 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
         super(repository, logger);
     }
 
+    /**
+     * It uploads a file, resizes it, and saves it to the database
+     * @param {number} userId - number, file: Express.Multer.File
+     * @param file - Express.Multer.File
+     * @returns The file entity
+     */
     async uploadFile(userId: number, file: Express.Multer.File): Promise<FileEntity> {
         if (!file) {
             throw new HttpException(`file is not null`, HttpStatus.BAD_REQUEST);
@@ -40,6 +46,14 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
         return await this._store(createFile);
     }
 
+    /**
+     * It uploads a file to cloudinary, creates a file entity in the database, and returns the file
+     * entity
+     * @param file - Express.Multer.File - The file object that Multer has created for us.
+     * @param {number} userId - The userId of the user who uploaded the image.
+     * @param {string} [tags] - tags ? tags : `avatars`,
+     * @returns The file entity
+     */
     async uploadImageToCloudinary(file: Express.Multer.File, userId: number, tags?: string): Promise<FileEntity> {
         try {
             if (!file) {

@@ -17,7 +17,6 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         @InjectDataSource() private readonly dataSource: DataSource,
         repository: UserRepository,
         logger: LoggerService,
-        private readonly upLoadRepo: FileRepository,
     ) {
         super(repository, logger);
     }

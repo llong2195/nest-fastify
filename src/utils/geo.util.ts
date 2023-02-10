@@ -12,6 +12,13 @@ export class Point {
     }
 }
 
+/**
+ * It takes a point and a distance and returns the rate of change of latitude and longitude for that
+ * distance
+ * @param {Point} point - The point you want to get the rate for.
+ * @param {number} distance - The distance in meters from the point to the edge of the circle.
+ * @returns an object with two properties: rLat and rLon.
+ */
 export const getRateLatLon = (point: Point, distance: number): { rLat: number; rLon: number } => {
     const pos1 = computeDestinationPoint({ latitude: point.latitude, longitude: point.longitude }, distance, 180);
 
@@ -24,9 +31,11 @@ export const getRateLatLon = (point: Point, distance: number): { rLat: number; r
 };
 
 /**
- * @param  {Point} point
- * @param  {number} distance
- * @returns Point
+ * It takes a point and a distance and returns a start and end point that represents a square around
+ * the point
+ * @param {Point} point - The point to find the bounds of.
+ * @param {number} distance - The distance in meters from the point to search around.
+ * @returns A point object with a start and end property.
  */
 export const findARound = (point: Point, distance: number): { start: Point; end: Point } => {
     const lo = getBoundsOfDistance(point, distance);
@@ -38,24 +47,27 @@ export const findARound = (point: Point, distance: number): { start: Point; end:
 };
 
 /**
- * @param  {number} no
- * @returns number
+ * It takes a number, rounds it to 4 decimal places, and returns the result
+ * @param {number} no - The number to round.
+ * @returns A function that takes a number and returns a rounded number.
  */
 export const roundLatLon = (no: number): number => {
     return Math.round(no * 10000) / 10000;
 };
 
 /**
- * @param  {string} lat
- * @returns boolean
+ * Check if the given number is a valid latitude.
+ * @param {number} lat - number - The latitude to check.
+ * @returns A function that takes a number and returns a boolean.
  */
 export const checkLatitude = (lat: number): boolean => {
     return isFinite(lat) && Math.abs(lat) <= 90;
 };
 
 /**
- * @param  {string} lat
- * @returns boolean
+ * Check if the given longitude is valid.
+ * @param {number} long - number - The longitude to check.
+ * @returns A function that takes a number and returns a boolean.
  */
 export const checkLongitude = (long: number): boolean => {
     return isFinite(long) && Math.abs(long) <= 180;

@@ -1,10 +1,8 @@
-import { Controller, Get, Post, Req } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Request } from 'express';
-import { ValidateError } from '@exceptions/errors/validate.error';
-import { BaseError } from '@exceptions/errors/base.error';
-import { DatabaseError } from '@exceptions/errors/database.error';
+import { ValidateError, BaseError, DatabaseError } from '@exceptions/errors/index';
 import { LoggerService } from './logger/custom.logger';
 
 @ApiTags('/')

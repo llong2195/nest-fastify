@@ -15,8 +15,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         // You can throw an exception based on either "info" or "err" arguments
 
         if (err || !user || info) {
-            console.warn(`JwtAuthGuard: ${info}`, info);
-            console.warn(`JwtAuthGuard: ${err}`);
             LoggerService.error(err, user, info, context.switchToHttp().getRequest().ip, status);
             throw new UnauthorizedException(ErrorMessageCode.INVALID_TOKEN);
         }

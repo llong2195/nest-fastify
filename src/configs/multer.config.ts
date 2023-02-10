@@ -16,7 +16,7 @@ export const multerConfig = {
 export const multerOptions: MulterOptions = {
     // Enable file size limits
     limits: {
-        fileSize: MAX_FILE_SIZE || 50 * 8 * 1024 * 1024,
+        fileSize: MAX_FILE_SIZE || 10 * 1024 * 1024,
     },
     // Check the mimetypes to allow for upload
     fileFilter: (req: any, file: any, cb: any) => {
@@ -51,7 +51,7 @@ export const multerOptions: MulterOptions = {
 export const multerVideoOptions: MulterOptions = {
     // Enable file size limits
     limits: {
-        fileSize: MAX_FILE_SIZE || 50000 * 8 * 1024 * 1024,
+        fileSize: MAX_FILE_SIZE || 500 * 1024 * 1024,
     },
     // Check the mimetypes to allow for upload
     fileFilter: (req: any, file: any, cb: any) => {
