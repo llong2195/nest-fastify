@@ -13,6 +13,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         });
     }
 
+    /**
+     * The validate function takes in an email and password, and returns a promise of a UserEntity
+     * @param {string} email - string - The email of the user
+     * @param {string} password - The password that the user entered.
+     * @returns A promise of a UserEntity
+     */
     validate(email: string, password: string): Promise<UserEntity> {
         return this.authService.validateUser(email, password);
     }

@@ -33,5 +33,7 @@
             "@libs/*": ["src/libs/*"],
             "@src/*": ["src/*"]
         }
-    }
+    },
+    "include": [".eslintrc.js", "src/**/*", "test/**/*"],
+    "exclude": ["node_modules"]
 }

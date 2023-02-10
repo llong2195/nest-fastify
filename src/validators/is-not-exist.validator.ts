@@ -12,22 +12,28 @@ export class IsNotExist implements ValidatorConstraintInterface {
         private readonly dataSource: DataSource,
     ) {}
 
+    /**
+     * It checks if the value of the property being validated is unique in the database
+     * @param {string} value - the value of the field being validated
+     * @param {ValidationArguments} validationArguments - ValidationArguments
+     * @returns A boolean value.
+     */
     async validate(value: string, validationArguments: ValidationArguments) {
-        const repository = validationArguments.constraints[0] as EntityTarget<any>;
-        if (!value || !repository) {
+        const entity = validationArguments.constraints[0] as EntityTarget<any>;
+        if (!value || !entity) {
             return false;
         }
-        const repo = await this.dataSource.getRepository(repository);
+        const repo = await this.dataSource.getRepository(entity);
         if (!repo) {
             return false;
         }
-        const entity = await repo.findOne({
+        const rs = await repo.findOne({
             where: {
                 [validationArguments.property]: value,
             },
         });
 
-        return !Boolean(entity);
+        return !Boolean(rs);
     }
 
     defaultMessage(validationArguments?: ValidationArguments): string {

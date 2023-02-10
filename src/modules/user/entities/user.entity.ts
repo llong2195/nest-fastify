@@ -1,5 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { Exclude, Expose } from 'class-transformer';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Expose } from 'class-transformer';
 import { DateAudit } from 'src/base/date_audit.entity';
 import { RoleEnum } from '@src/enums/role.enum';
 

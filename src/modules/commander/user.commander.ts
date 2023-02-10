@@ -12,6 +12,11 @@ export class UserCommander extends CommandRunner {
     constructor(@InjectDataSource() private readonly dataSource: DataSource) {
         super();
     }
+    /**
+     * It creates a new user with email and password.
+     * @param {string[]} passedParams - string[]
+     * @param [options] - The options passed to the command.
+     */
     async run(passedParams: string[], options?: Record<string, any>): Promise<void> {
         try {
             await this.dataSource.transaction(async tran => {

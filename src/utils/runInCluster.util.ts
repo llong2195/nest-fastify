@@ -3,8 +3,12 @@ import * as notReallyCluster from 'cluster';
 const cluster = notReallyCluster as unknown as notReallyCluster.Cluster;
 
 /**
+ * "If we're the primary process, fork a new process for each CPU core, otherwise run the bootstrap
+ * function."
  *
- * @param bootstrap
+ * The bootstrap function is the function that will be run in each process. It's the function that will
+ * start the server
+ * @param bootstrap - () => Promise<void>
  */
 export function runInCluster(bootstrap: () => Promise<void>) {
     const numCPUs = cpus().length;

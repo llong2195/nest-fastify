@@ -22,16 +22,13 @@ import { I18nModule } from './i18n/i18n.module';
 import { HttpModule } from '@nestjs/axios';
 import { HealthModule } from './modules/health/health.module';
 import { SettingModule } from './modules/setting/setting.module';
-import { IORedisModule, IRedisModuleOptions } from '@libs/redis';
-import { LoggerService } from './logger/custom.logger';
-import { Redis } from 'ioredis';
 import { appConfig, databaseConfig, authConfig } from '@config/index';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env', '.env.development.local', '.env.development'],
+            envFilePath: ['.env'],
             load: [appConfig, databaseConfig, authConfig],
         }),
 
@@ -84,29 +81,28 @@ import { appConfig, databaseConfig, authConfig } from '@config/index';
         FileModule,
         NodemailerModule,
         QueueModule,
-        // RedisModule,
         CommanderModule,
-        IORedisModule.registerAsync({
-            imports: [ConfigModule],
-            useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
-                return {
-                    connectionOptions: {
-                        host: configService.get('REDIS_HOST'),
-                        port: configService.get('REDIS_PORT'),
-                        password: configService.get('REDIS_PASS'),
-                    },
-                    onClientReady: (client: Redis) => {
-                        client.on('connect', () => {
-                            LoggerService.log(
-                                `Connected to redis on ${client.options.host}:${client.options.port}`,
-                                IORedisModule.name,
-                            );
-                        });
-                    },
-                };
-            },
-            inject: [ConfigService],
-        }),
+        // IORedisModule.registerAsync({
+        //     imports: [ConfigModule],
+        //     useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
+        //         return {
+        //             connectionOptions: {
+        //                 host: configService.get('REDIS_HOST'),
+        //                 port: configService.get('REDIS_PORT'),
+        //                 password: configService.get('REDIS_PASS'),
+        //             },
+        //             onClientReady: (client: Redis) => {
+        //                 client.on('connect', () => {
+        //                     LoggerService.log(
+        //                         `Connected to redis on ${client.options.host}:${client.options.port}`,
+        //                         IORedisModule.name,
+        //                     );
+        //                 });
+        //             },
+        //         };
+        //     },
+        //     inject: [ConfigService],
+        // }),
     ],
     controllers: [AppController],
     providers: [
