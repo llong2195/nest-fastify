@@ -20,9 +20,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "typeorm:create": "npm run typeorm -- migration:create",
-    "typeorm:up": "npm run typeorm -- -d ./data-source.ts migration:run",
-    "typeorm:down": "npm run typeorm -- -d ./data-source.ts migration:revert",
-    "typeorm:show": "npm run typeorm -- -d ./data-source.ts migration:show",
+    "typeorm:up": "npm run typeorm -- --dataSource=./data-source.ts migration:run",
+    "typeorm:down": "npm run typeorm -- --dataSource=./data-source.ts migration:revert",
+    "typeorm:show": "npm run typeorm -- --dataSource=./data-source.ts migration:show",
     "commander": "ts-node -r tsconfig-paths/register ./src/commander.ts",
     "seed:user": "npm run commander seed:user"
   },
