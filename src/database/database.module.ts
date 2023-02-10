@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { isDev } from '@utils/util';
 import { LoggerService } from '@src/logger/custom.logger';
 import { DbCustomLogger } from '@src/logger/db-cusstom.logger';
+import { isDev } from '@utils/util';
 
 @Module({
     imports: [

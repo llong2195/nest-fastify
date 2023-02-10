@@ -19,6 +19,8 @@ export class UserRepository extends BaseRepository<UserEntity> {
      */
     getInactiveUsers(page: number, limit: number = PAGE_SIZE): Promise<PaginationResponse<UserEntity>> {
         const qb = this.repository.createQueryBuilder().where('is_active = :active', { active: true });
+        // const repo = this.repository.manager.getRepository(UserEntity);
+        // const qb2 = repo.createQueryBuilder().where('is_active = :active', { active: true });
         return this._iPaginate(qb, page, limit);
     }
 }
