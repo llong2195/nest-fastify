@@ -2,9 +2,8 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
 
 /**
- * @Description: Get the ip address from the request header, you need to configure nginx to get the ip
- * @param {*} createParamDecorator
- * @return {*}
+ *  A decorator that can be used to get the ip address from the request header, you need to configure
+    nginx to get the ip.
  */
 export const IpAddress = createParamDecorator((_data: string, ctx: ExecutionContext) => {
     const req: Request = ctx.switchToHttp().getRequest();

@@ -12,25 +12,32 @@ export class IsExist implements ValidatorConstraintInterface {
         private dataSource: DataSource,
     ) {}
 
+    /**
+     * It takes a value, a validationArguments object, and a repository, and returns true if the value
+     * exists in the repository
+     * @param {string} value - the value of the field being validated
+     * @param {ValidationArguments} validationArguments - ValidationArguments
+     * @returns A boolean value.
+     */
     async validate(value: string, validationArguments: ValidationArguments) {
-        const repository = validationArguments.constraints[0] as EntityTarget<any>;
+        const entity = validationArguments.constraints[0] as EntityTarget<any>;
         const pathToProperty = validationArguments.constraints[1];
-        const repo = await this.dataSource.getRepository(repository);
-        if (!value || !repository || !pathToProperty || !repo) {
+        const repo = await this.dataSource.getRepository(entity);
+        if (!value || !entity || !pathToProperty || !repo) {
             return false;
         }
 
-        const entity: unknown = await repo.findOne({
+        const rs: unknown = await repo.findOne({
             where: {
                 [pathToProperty ? pathToProperty : validationArguments.property]: pathToProperty
                     ? value?.[pathToProperty] || value
                     : value,
             },
         });
-        if (typeof entity === 'undefined') {
+        if (typeof rs === 'undefined') {
             return false;
         }
-        return Boolean(entity);
+        return Boolean(rs);
     }
 
     defaultMessage(validationArguments?: ValidationArguments): string {

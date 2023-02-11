@@ -37,8 +37,8 @@ export const DATABASE_DB_NAME = process.env.DATABASE_DB_NAME || 'nest-starter';
 
 // FILE
 export const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE, 10) || 5 * 1024 * 1024;
-export const MAX_FILE_SIZE_IMAGE = parseInt(process.env.MAX_FILE_SIZE_IMAGE, 10)  || 5 * 1024 * 1024;
-export const MAX_FILE_SIZE_VIDEO = parseInt(process.env.MAX_FILE_SIZE_VIDEO, 10)  || 5 * 1024 * 1024;
+export const MAX_FILE_SIZE_IMAGE = parseInt(process.env.MAX_FILE_SIZE_IMAGE, 10) || 5 * 1024 * 1024;
+export const MAX_FILE_SIZE_VIDEO = parseInt(process.env.MAX_FILE_SIZE_VIDEO, 10) || 5 * 1024 * 1024;
 export const UPLOAD_LOCATION = process.env.UPLOAD_LOCATION;
 
 // MAILER

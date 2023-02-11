@@ -8,7 +8,6 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { BullModule } from '@nestjs/bull';
 import { mailQueueProcessor } from '@src/modules/nodemailer/mailQueue.process';
 
-@Global()
 @Module({
     imports: [
         MailerModule.forRootAsync({
@@ -17,7 +16,6 @@ import { mailQueueProcessor } from '@src/modules/nodemailer/mailQueue.process';
             useFactory: (config: ConfigService) =>
                 ({
                     transport: {
-                        // name: config.get<string>('NODEMAILER_HOST'),
                         host: config.get<string>('NODEMAILER_HOST'),
                         secure: config.get<boolean>('NODEMAILER_SECURE'),
                         port: config.get<number>('NODEMAILER_PORT') || 465,

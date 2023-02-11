@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { LoggerService } from '@src/logger/custom.logger';
+import { DbCustomLogger } from '@src/logger/db-cusstom.logger';
+import { isDev } from '@utils/util';
 
 @Module({
     imports: [
@@ -14,10 +17,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 password: configService.get<string>('DATABASE_PASSWORD'),
                 database: configService.get<string>('DATABASE_DB_NAME'),
                 entities: [__dirname + './../**/**/**.entity{.ts,.js}'],
+                timezone: configService.get<string>('TIMEZONE'),
                 synchronize: true,
                 autoLoadEntities: true,
                 logging: 'all',
-                logger: 'advanced-console',
+                logger: isDev() ? 'advanced-console' : new DbCustomLogger(new LoggerService()),
                 // ssl: {
                 //   require: false,
                 //   rejectUnauthorized: false,

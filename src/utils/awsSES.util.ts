@@ -1,3 +1,4 @@
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY } from '@config/config';
 import * as AWS from 'aws-sdk';
 
 const singletonEnforcer = Symbol();
@@ -22,9 +23,9 @@ class AwsSesSever {
 
     config() {
         AWS.config.update({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-            region: process.env.AWS_REGION,
+            accessKeyId: AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: AWS_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY,
+            region: AWS_REGION || process.env.AWS_REGION,
         });
 
         this.awsSesServer = new AWS.SES();

@@ -20,6 +20,13 @@ export class I18nService {
         });
     }
 
+    /**
+     * It takes a phrase and a language, and returns the translated phrase in the specified language
+     * @param {string} phrase - The phrase to translate.
+     * @param {string} [lang] - The language to translate to. If not provided, the first language in
+     * the request's Accept-Language header will be used.
+     * @returns The translated phrase.
+     */
     t(phrase: string, lang?: string): string {
         return i18n.__({
             phrase,
