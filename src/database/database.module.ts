@@ -17,6 +17,7 @@ import { isDev } from '@utils/util';
                 password: configService.get<string>('DATABASE_PASSWORD'),
                 database: configService.get<string>('DATABASE_DB_NAME'),
                 entities: [__dirname + './../**/**/**.entity{.ts,.js}'],
+                timezone: configService.get<string>('TIMEZONE'),
                 synchronize: true,
                 autoLoadEntities: true,
                 logging: 'all',
