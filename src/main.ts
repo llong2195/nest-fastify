@@ -31,30 +31,36 @@ async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
         logger: logLevelsDefault,
     });
-    // Config
+    // ------------- Config ---------------
     const configService = app.get(ConfigService);
     const port: number = configService.get<number>('port');
     const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
     const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
+    // -------------------------------------------
 
-    // Middleware
+    // -------------- Middleware --------------
     app.use(helmet());
-
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
     // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
+    // -------------------------------------------
     useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
 
+    // -------------- Global filter --------------
     app.useGlobalInterceptors(new ResponseTransformInterceptor());
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.setGlobalPrefix(configService.get<string>('apiPrefix'));
+    // -------------------------------------------
 
+    // -------------- Setup Cors --------------
     if (isEnv(EnvEnum.Dev)) {
         app.enableCors({
             origin: '*',
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
+        // -----------Setup Swagger-------------
         await ConfigDocument(app);
+        // -------------------------------------------
         useRequestLogging(app, 0);
     } else {
         app.enableCors({
@@ -68,6 +74,9 @@ async function bootstrap() {
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
     }
+
+    // -----------Setup Redis Adapter-------------
+    // await initAdapters(app);
 
     await app.listen(port, LISTEN_ON, async () => {
         LoggerService.log(`==========================================================`);
@@ -83,7 +92,6 @@ async function bootstrap() {
 }
 
 async function ConfigDocument(app: INestApplication): Promise<void> {
-    //
     const config = new DocumentBuilder()
         .setTitle('API')
         .setDescription('API docs')
