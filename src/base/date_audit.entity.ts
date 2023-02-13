@@ -6,11 +6,13 @@ export class DateAudit extends BaseEntity {
 
     @CreateDateColumn({
         nullable: true,
+        name: 'created_at',
     })
     createdAt: Date;
 
     @UpdateDateColumn({
         nullable: true,
+        name: 'updated_at',
     })
     updatedAt: Date;
 }
