@@ -1,12 +1,14 @@
-import { Global, Module } from '@nestjs/common';
-import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
-import { NodemailerController } from './nodemailer.controller';
-import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
+
+import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
+import { Global, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { mailQueueProcessor } from '@src/modules/nodemailer/mailQueue.process';
+
+import { NodemailerController } from './nodemailer.controller';
+import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
 
 @Module({
     imports: [

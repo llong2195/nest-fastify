@@ -1,16 +1,17 @@
-import { Body, Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { UserService } from '../user/user.service';
-import { HttpStatus } from '@nestjs/common';
-import { BaseResponseDto, AuthUserDto } from '@base/base.dto';
-import { LoginRequestDto } from './dto/login-request.dto';
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { UserEntity } from '../user/entities/user.entity';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { RegisterRequestDto } from './dto/register-request.dto';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
+
+import { AuthUserDto, BaseResponseDto } from '@base/base.dto';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
+
+import { UserEntity } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
+import { AuthService } from './auth.service';
+import { LoginRequestDto } from './dto/login-request.dto';
+import { RegisterRequestDto } from './dto/register-request.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('v1/auth')
 @Controller('v1/auth')

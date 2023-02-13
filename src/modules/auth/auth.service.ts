@@ -1,12 +1,15 @@
-import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
-import { ConfigService } from '@nestjs/config';
-import { UserEntity } from '../user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { LoginRequestDto } from './dto/login-request.dto';
+import * as jwt from 'jsonwebtoken';
+
 import { AuthUserDto } from '@base/base.dto';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { ErrorMessageCode } from '@src/constants/errort-message-code';
+
+import { UserEntity } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
+import { LoginRequestDto } from './dto/login-request.dto';
 
 @Injectable()
 export class AuthService {
@@ -85,5 +88,40 @@ export class AuthService {
         if (payload.id) {
             return this.userService.findById(payload.id);
         }
+    }
+
+    /**
+     * This function takes a payload and signOptions as arguments and returns a Promise that resolves
+     * to a string.
+     * @param payload - The data you want to sign.
+     * @param signOptions - jwt.SignOptions = {}
+     * @returns A string
+     */
+    async generateToken(payload: Record<string, unknown>, signOptions: jwt.SignOptions = {}): Promise<string> {
+        return this.jwtService.sign(payload, signOptions);
+    }
+
+    /**
+     * This function decodes a token and returns a promise that resolves to either null, a string, or
+     * an object.
+     * @param {string} token - string - The token to decode.
+     * @param decodeOptions - jwt.DecodeOptions = {}
+     * @returns The return type is a Promise of a null, string, or object.
+     */
+    async decodeToken(
+        token: string,
+        decodeOptions: jwt.DecodeOptions = {},
+    ): Promise<null | string | { [key: string]: unknown }> {
+        return this.jwtService.decode(token, decodeOptions);
+    }
+
+    /**
+     * This function verifies a token and returns a promise that resolves to a record of unknowns.
+     * @param {string} token - The token to verify.
+     * @param {JwtVerifyOptions} verifyOptions - JwtVerifyOptions = {}
+     * @returns A promise that resolves to a record of unknowns.
+     */
+    async verifyToken(token: string, verifyOptions: JwtVerifyOptions = {}): Promise<Record<string, unknown>> {
+        return this.jwtService.verifyAsync(token, verifyOptions);
     }
 }

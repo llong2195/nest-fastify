@@ -1,8 +1,9 @@
+import { Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsOptional, Max, Min } from 'class-validator';
+
 import { ApiProperty } from '@nestjs/swagger';
 import { MessageCode } from '@src/constants/message-code';
 import { ConvertToBoolean, ConvertToNumber } from '@src/utils';
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Min, Max, IsBoolean } from 'class-validator';
 
 export class BaseResponseDto<T> {
     message: string;

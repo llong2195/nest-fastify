@@ -1,5 +1,6 @@
-import { cpus } from 'os';
 import * as notReallyCluster from 'cluster';
+import { cpus } from 'os';
+
 const cluster = notReallyCluster as unknown as notReallyCluster.Cluster;
 
 /**

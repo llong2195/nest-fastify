@@ -1,7 +1,8 @@
 import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
+
+import { ApiProperty } from '@nestjs/swagger';
 import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
 import { UniqueEmailValidator } from '@validators/unique-email.validator';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
     @ApiProperty({ example: 'test1@example.com' })

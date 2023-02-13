@@ -1,3 +1,10 @@
+import { plainToClass, plainToInstance } from 'class-transformer';
+import { Response } from 'express';
+import { createReadStream, existsSync } from 'fs';
+import { join } from 'path';
+import { AuthUser } from 'src/decorators/auth.user.decorator';
+
+import { AuthUserDto, BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
 import {
     Controller,
     Get,
@@ -14,23 +21,17 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from '@src/configs/multer.config';
-import { AuthUserDto, BaseResponseDto, iPaginationOption } from '@base/base.dto';
-import { plainToClass, plainToInstance } from 'class-transformer';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { AuthUser } from 'src/decorators/auth.user.decorator';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { CreateFileDto } from './dto/create-file.dto';
-import { FileEntity } from '@src/modules/file/entities/file.entity';
+import { UPLOAD_LOCATION } from '@src/configs/config';
+import { multerOptions } from '@src/configs/multer.config';
 import { Roles } from '@src/decorators/role.decorators';
 import { RoleEnum } from '@src/enums';
-import { PaginationResponse } from '@base/base.dto';
-import { UPLOAD_LOCATION } from '@src/configs/config';
-import { createReadStream, existsSync } from 'fs';
-import { join } from 'path';
-import { Response } from 'express';
+import { FileEntity } from '@src/modules/file/entities/file.entity';
+
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CreateFileDto } from './dto/create-file.dto';
+import { FileService } from './file.service';
 
 @ApiBearerAuth()
 @ApiTags('/v1/file')

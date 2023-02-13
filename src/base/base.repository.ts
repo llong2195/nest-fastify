@@ -6,8 +6,10 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
-import { PaginationResponse } from './base.dto';
+
 import { PAGE_SIZE } from '@config/index';
+
+import { PaginationResponse } from './base.dto';
 
 export class BaseRepository<T extends BaseEntity> extends Repository<T> {
     protected _repository: Repository<T>;

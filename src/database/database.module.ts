@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { LoggerService } from '@src/logger/custom.logger';
 import { DbCustomLogger } from '@src/logger/db-cusstom.logger';
 import { isDev } from '@utils/util';
