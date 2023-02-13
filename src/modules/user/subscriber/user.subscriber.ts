@@ -1,8 +1,9 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
+
 import { ConfigService } from '@nestjs/config';
-import { DataSource } from 'typeorm';
+
+import { UserEntity } from '../entities/user.entity';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {

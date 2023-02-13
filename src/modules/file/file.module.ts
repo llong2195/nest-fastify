@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { FileService } from './file.service';
-import { FileController } from './file.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FileRepository } from './file.repository';
+
 import { FileEntity } from './entities/file.entity';
+import { FileController } from './file.controller';
+import { FileRepository } from './file.repository';
+import { FileService } from './file.service';
 
 @Module({
     imports: [

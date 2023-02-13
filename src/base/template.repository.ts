@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { UserEntity } from '@src/modules/user/entities/user.entity';
+
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from '@src/modules/user/entities/user.entity';
 
 /**
  * Template Custom Repository: TemplateRepository extends Repository<Entity>

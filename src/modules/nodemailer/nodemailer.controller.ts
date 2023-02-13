@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
-import { NodemailerService } from './nodemailer.service';
 import { BaseResponseDto } from '@base/base.dto';
+import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+
+import { NodemailerService } from './nodemailer.service';
 
 @ApiTags('nodemailer')
 @Controller('nodemailer')

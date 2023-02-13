@@ -1,6 +1,7 @@
 import { IsBoolean, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
-import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
+
 import { ApiProperty } from '@nestjs/swagger';
+import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
 
 export class UpdateUserDto {
     @ApiProperty()

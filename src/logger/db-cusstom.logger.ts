@@ -1,4 +1,5 @@
 import { Logger, QueryRunner } from 'typeorm';
+
 import { LoggerService } from './custom.logger';
 
 export class DbCustomLogger implements Logger {

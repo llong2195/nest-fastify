@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
-import { UserCommander } from './user.commander';
-import { DatabaseModule } from '@src/database/database.module';
-import { ConfigModule } from '@nestjs/config';
 import { appConfig, authConfig, databaseConfig } from '@config/index';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from '@src/database/database.module';
+
+import { UserCommander } from './user.commander';
 
 @Module({
     imports: [

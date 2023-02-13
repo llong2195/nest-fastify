@@ -1,11 +1,13 @@
-import { extname } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
+import { extname } from 'path';
+
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import { MAX_FILE_SIZE } from './index';
-import { UPLOAD_LOCATION } from './config';
 import { getFullDate } from '@src/utils/util';
+
+import { UPLOAD_LOCATION } from './config';
+import { MAX_FILE_SIZE } from './index';
 
 // Multer configuration
 export const multerConfig = {

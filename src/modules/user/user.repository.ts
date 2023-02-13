@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { BaseRepository } from '@base/base.repository';
+
 import { PaginationResponse } from '@base/base.dto';
+import { BaseRepository } from '@base/base.repository';
 import { PAGE_SIZE } from '@config/index';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserRepository extends BaseRepository<UserEntity> {

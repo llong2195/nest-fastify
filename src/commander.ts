@@ -1,6 +1,8 @@
 import { CommandFactory } from 'nest-commander';
-import { CommanderModule } from '@src/modules/commander/commander.module';
+
 import { LogLevel } from '@nestjs/common';
+import { CommanderModule } from '@src/modules/commander/commander.module';
+
 // import { AppModule } from './app.module';
 
 async function bootstrap() {

@@ -1,11 +1,13 @@
-import { Body, ClassSerializerInterceptor, Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
-import { UserService } from '../user.service';
-import { AuthUserDto, BaseResponseDto } from '@base/base.dto';
-import { UserEntity } from '../entities/user.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
-import { ChangePasswordDto } from '../dto/change-password.dto';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+
+import { AuthUserDto, BaseResponseDto } from '@base/base.dto';
+import { Body, ClassSerializerInterceptor, Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { ChangePasswordDto } from '../dto/change-password.dto';
+import { UserEntity } from '../entities/user.entity';
+import { UserService } from '../user.service';
 
 @ApiTags('/v1/user')
 @ApiBearerAuth()

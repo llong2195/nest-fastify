@@ -1,10 +1,11 @@
+import { BaseService } from '@base/base.service';
 import { Injectable } from '@nestjs/common';
+import { LoggerService } from '@src/logger/custom.logger';
+
 import { CreateSettingDto } from './dto/create-setting.dto';
 import { UpdateSettingDto } from './dto/update-setting.dto';
-import { BaseService } from '@base/base.service';
 import { SettingEntity } from './entities/setting.entity';
 import { SettingRepository } from './setting.repository';
-import { LoggerService } from '@src/logger/custom.logger';
 
 @Injectable()
 export class SettingService extends BaseService<SettingEntity, SettingRepository> {
