@@ -3,7 +3,7 @@ import { join } from 'path';
 import { appConfig, authConfig, databaseConfig } from '@config/index';
 import { HttpModule } from '@nestjs/axios';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -119,4 +119,11 @@ import { UserModule } from './modules/user/user.module';
         AppService,
     ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer): void {
+        // consumer.apply(RawBodyMiddleware).forRoutes({
+        //     path: 'webhook/stripe',
+        //     method: RequestMethod.POST,
+        // });
+    }
+}
