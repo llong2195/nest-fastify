@@ -100,7 +100,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         AllExceptionFilter.handleResponse(request, response, exception);
 
         const { body, headers, ip, method, originalUrl, params, query, user } = request;
-        setExtras({
+        Sentry.setExtras({
             authorization: headers.authorization,
             body,
             ip,
@@ -110,7 +110,7 @@ export class AllExceptionFilter implements ExceptionFilter {
             url: headers.origin + originalUrl,
             user,
         });
-        captureException(exception);
+        Sentry.captureException(exception);
     }
 
     private handleMessage(exception: HttpException | QueryFailedError | Error): void {
