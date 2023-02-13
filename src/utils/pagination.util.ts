@@ -1,0 +1,34 @@
+import { PaginationResponse } from '@base/base.dto';
+import { PAGE_SIZE } from '@config/config';
+
+/**
+ * It takes an array of items, a total number of items, a page number, and a page size, and returns a
+ * pagination response object
+ * @param {any} items - The items to be paginated.
+ * @param {number} total - The total number of items in the database.
+ * @param [page=1] - The current page number
+ * @param limit - The number of items per page.
+ * @returns {PaginationResponse} A function that takes in 4 parameters and returns a PaginationResponse object.
+ */
+export const pagination = (items: any, total: number, page = 1, limit = PAGE_SIZE): PaginationResponse<any> => {
+    if (total <= 0) {
+        return new PaginationResponse([], {
+            pagination: {
+                currentPage: 0,
+                limit: limit,
+                total: 0,
+                totalPages: 0,
+            },
+        });
+    }
+
+    const totalPage = Math.ceil(total / limit);
+    return new PaginationResponse(items, {
+        pagination: {
+            currentPage: Number(page),
+            limit: limit,
+            total: total,
+            totalPages: totalPage,
+        },
+    });
+};

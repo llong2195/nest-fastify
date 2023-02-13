@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import * as i18n from 'i18n';
 import { join } from 'path';
+
+import { Inject, Injectable } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { DEFAULT_LOCALE } from '@src/configs';
 
 export enum LOCALES {

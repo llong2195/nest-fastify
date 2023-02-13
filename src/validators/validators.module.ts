@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
+import { IsNotExist } from '@validators/is-not-exist.validator';
+
 import { UserModule } from '../modules/user/user.module';
+import { IsExist } from './is-exist.validator';
 import { PasswordConfirmValidator } from './password-confirm.validator';
 import { UniqueEmailValidator } from './unique-email.validator';
-import { IsExist } from './is-exist.validator';
-import { IsNotExist } from '@validators/is-not-exist.validator';
 
 @Module({
     imports: [UserModule],

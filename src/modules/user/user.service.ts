@@ -1,15 +1,17 @@
-import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
-import { BaseService } from '@base/base.service';
-import { UserRepository } from './user.repository';
-import { UserEntity } from './entities/user.entity';
-import { LoggerService } from '@src/logger/custom.logger';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { Hash } from '@src/utils/hash.util';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';
+
+import { iPaginationOption, PaginationResponse } from '@base/base.dto';
+import { BaseService } from '@base/base.service';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { LoggerService } from '@src/logger/custom.logger';
+import { Hash } from '@src/utils/hash.util';
+
 import { FileRepository } from '../file/file.repository';
-import { PaginationResponse, iPaginationOption } from '@base/base.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { UserEntity } from './entities/user.entity';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {

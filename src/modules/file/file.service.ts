@@ -1,14 +1,16 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as fs from 'fs';
+import sharp from 'sharp';
+import { LoggerService } from 'src/logger/custom.logger';
+
 import { BaseService } from '@base/base.service';
+import { FileType } from '@enums/file.enum';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { SERVER_URL, UPLOAD_LOCATION } from '@src/configs/config';
+import { ErrorMessageCode } from '@src/constants';
+import { cloudinary } from '@src/utils/cloudinary.util';
+
 import { FileEntity } from './entities/file.entity';
 import { FileRepository } from './file.repository';
-import { LoggerService } from 'src/logger/custom.logger';
-import sharp from 'sharp';
-import { SERVER_URL, UPLOAD_LOCATION } from '@src/configs/config';
-import { cloudinary } from '@src/utils/cloudinary.util';
-import { ErrorMessageCode } from '@src/constants';
-import * as fs from 'fs';
-import { FileType } from '@enums/file.enum';
 
 @Injectable()
 export class FileService extends BaseService<FileEntity, FileRepository> {

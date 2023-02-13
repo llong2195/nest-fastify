@@ -1,8 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { UniqueEmailValidator } from '@validators/unique-email.validator';
 import { Type } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
+
+import { ApiProperty } from '@nestjs/swagger';
 import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
+import { UniqueEmailValidator } from '@validators/unique-email.validator';
 
 export class RegisterRequestDto {
     @ApiProperty({ example: 'email@gmail.com' })

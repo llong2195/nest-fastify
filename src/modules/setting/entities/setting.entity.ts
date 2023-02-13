@@ -1,5 +1,6 @@
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
 import { DateAudit } from '@base/date_audit.entity';
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
 @Entity({ name: 'setting' })
 export class SettingEntity extends DateAudit {

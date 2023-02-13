@@ -1,16 +1,18 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
-import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
+import '@sentry/tracing';
+
 import { Request, Response } from 'express';
 import { LoggerService } from 'src/logger/custom.logger';
 import { QueryFailedError } from 'typeorm';
-import * as Sentry from '@sentry/node';
-import { setExtras, captureException } from '@sentry/node';
-import '@sentry/tracing';
-import { SENTRY_DSN } from '@src/configs';
-import { isDev } from '../utils/util';
-import { IResponseBody } from '@src/interface';
-import { ErrorCode } from '../constants/error-code';
+
 import { BaseError } from '@exceptions/errors';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
+import * as Sentry from '@sentry/node';
+import { SENTRY_DSN } from '@src/configs';
+import { IResponseBody } from '@src/interface';
+
+import { ErrorCode } from '../constants/error-code';
+import { isDev } from '../utils/util';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -98,7 +100,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         AllExceptionFilter.handleResponse(request, response, exception);
 
         const { body, headers, ip, method, originalUrl, params, query, user } = request;
-        setExtras({
+        Sentry.setExtras({
             authorization: headers.authorization,
             body,
             ip,
@@ -108,7 +110,7 @@ export class AllExceptionFilter implements ExceptionFilter {
             url: headers.origin + originalUrl,
             user,
         });
-        captureException(exception);
+        Sentry.captureException(exception);
     }
 
     private handleMessage(exception: HttpException | QueryFailedError | Error): void {

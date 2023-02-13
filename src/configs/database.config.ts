@@ -6,6 +6,7 @@ import {
     DATABASE_PORT,
     DATABASE_USERNAME,
 } from './config';
+
 export const databaseConfig = (): Record<string, any> => ({
     databaseConnection: DATABASE_CONNECTION,
     databaseHost: DATABASE_HOST,

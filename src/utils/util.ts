@@ -1,8 +1,8 @@
 import { createCanvas, loadImage } from 'canvas';
-import moment from 'moment';
-import { PassThrough } from 'stream';
-import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
 import CryptoJS from 'crypto-js';
+import moment from 'moment';
+import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
+import { PassThrough } from 'stream';
 
 /**
  *

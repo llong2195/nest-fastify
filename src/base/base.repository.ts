@@ -6,8 +6,10 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
-import { PaginationResponse } from './base.dto';
+
 import { PAGE_SIZE } from '@config/index';
+
+import { PaginationResponse } from './base.dto';
 
 export class BaseRepository<T extends BaseEntity> extends Repository<T> {
     protected _repository: Repository<T>;
@@ -17,6 +19,14 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
         this._repository = repository;
     }
 
+    /**
+     * It wraps a function in a transaction, and if a transaction manager is passed in, it uses that,
+     * otherwise it creates a new one
+     * @param operation - (...args) => unknown
+     * @param {EntityManager} [manager] - The entity manager that is passed in from the transactionWrap
+     * function.
+     * @returns The return value of the operation function.
+     */
     async transactionWrap(operation: (...args) => unknown, manager?: EntityManager) {
         if (manager != undefined && manager != null) {
             return await operation(manager);
@@ -28,10 +38,13 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
     }
 
     /**
-     * @param {number} page
-     * @param {number} limit
-     * @param {string[]} fields
-     * @returns Promise<PaginationResponse<T>>
+     * It returns a paginated response of the data from the database
+     * @param {number} page - number - The page number to return
+     * @param {number} limit - number = PAGE_SIZE,
+     * @param {FindOptionsWhere<T> | FindOptionsWhere<T>[]} [options] - This is the where clause. It
+     * can be a single object or an array of objects.
+     * @param [fields] - The fields you want to select from the database.
+     * @returns A pagination response object.
      */
     async _paginate(
         page: number,
@@ -78,11 +91,11 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
     }
 
     /**
-     * @param queryBuilder
-     * @param page
-     * @param limit
-     * @param queryString
-     * @returns
+     * It takes a query builder, a page number, and a limit, and returns a paginated response
+     * @param queryBuilder - SelectQueryBuilder<T>
+     * @param {number} page - The current page number
+     * @param {number} limit - number = PAGE_SIZE,
+     * @returns A pagination response object
      */
     async _iPaginate<T>(
         queryBuilder: SelectQueryBuilder<T>,
@@ -115,9 +128,10 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
     }
 
     /**
-     *
-     * @param second
-     * @returns
+     * It returns the current timestamp in seconds or milliseconds.
+     * @param [second=true] - boolean - If true, the timestamp will be in seconds. If false, the
+     * timestamp will be in milliseconds.
+     * @returns A promise that resolves to a number.
      */
     async currentTimestamp(second = true): Promise<number> {
         const date = new Date();

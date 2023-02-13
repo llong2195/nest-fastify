@@ -1,6 +1,7 @@
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
-import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
+
 import { RoleEnum } from '@src/enums/role.enum';
+import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
 
 export class AdminUpdateUserDto {
     @IsOptional()

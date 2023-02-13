@@ -1,5 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { computeDestinationPoint, getBoundsOfDistance } from 'geolib';
+
+import { ApiProperty } from '@nestjs/swagger';
+
 export class Point {
     @ApiProperty({})
     latitude: number;
