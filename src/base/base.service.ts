@@ -28,10 +28,12 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param operation
-     * @param manager
-     * @returns
+     * It wraps a function in a transaction, and if a manager is passed in, it uses that manager,
+     * otherwise it creates a new one
+     * @param operation - (...args) => unknown
+     * @param {EntityManager} [manager] - The entity manager to use. If not provided, a new transaction
+     * will be created.
+     * @returns The return value of the operation function.
      */
     async transactionWrap(operation: (...args) => unknown, manager?: EntityManager) {
         if (manager != undefined) {
@@ -44,11 +46,12 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param deleted
-     * @param sort
-     * @param page
-     * @returns
+     * It returns a list of entities that are deleted or not deleted.
+     * @param {boolean} deleted - boolean - this is the deleted flag that we want to search for.
+     * @param {boolean} sort - boolean - if true, sort by ascending order, else sort by descending
+     * order
+     * @param page - 0 - The page number to return.
+     * @returns An array of objects of type T.
      */
     async _findByDeleted(deleted: boolean, sort: boolean, page: 0): Promise<T[] | null> {
         return await this.repository.find({
@@ -60,9 +63,10 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param deleted
-     * @returns
+     * It counts the number of entities in the database that have a deleted property equal to the deleted
+     * parameter.
+     * @param {boolean} deleted - boolean - This is the value of the deleted column that we want to count.
+     * @returns The number of entities that match the given criteria.
      */
     async _countByDeleted(deleted: boolean): Promise<number | null> {
         return await this.repository.count({
@@ -71,10 +75,10 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param id
-     * @param data
-     * @returns
+     * It updates the entity with the given id and returns the updated entity.
+     * @param {EntityId} id - EntityId - The id of the entity to update
+     * @param data - QueryDeepPartialEntity<T>
+     * @returns The updated entity.
      */
     async _update(id: EntityId, data: QueryDeepPartialEntity<T>): Promise<T | null> {
         await this.repository.update(id, data as QueryDeepPartialEntity<T>);
@@ -84,9 +88,10 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param id
-     * @returns
+     * It updates the deleted field of the entity with the given id to true, and then returns the
+     * updated entity
+     * @param {EntityId} id - EntityId - The id of the entity to be deleted.
+     * @returns The updated entity.
      */
     async _softDelete(id: EntityId): Promise<T | null> {
         await this.repository.update(id, {
@@ -98,9 +103,9 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param id
-     * @returns
+     * It restores a deleted entity
+     * @param {EntityId} id - EntityId - The id of the entity to restore
+     * @returns The updated entity.
      */
     async _restore(id: EntityId): Promise<T | null> {
         await this.repository.update(id, {
@@ -112,9 +117,9 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param id
-     * @returns
+     * It deletes the entity with the given id and returns the deleted entity
+     * @param {EntityId} id - EntityId - The id of the entity to be deleted.
+     * @returns The entity that was deleted.
      */
     async _destroy(id: EntityId): Promise<T | null> {
         const entity = await this._findById(id);
@@ -122,21 +127,19 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         return entity;
     }
 
-    // USER
-
     /**
-     *
-     * @param data
-     * @returns
+     * It takes in a data object, saves it to the database, and returns the saved object
+     * @param {any} data - any - This is the data that will be stored in the database.
+     * @returns The data that was saved to the database.
      */
     async _store(data: any): Promise<T | null> {
         return this.repository.save(data, { transaction: true });
     }
 
     /**
-     *
-     * @param id
-     * @returns
+     * > Finds a single entity by its id
+     * @param {EntityId} id - EntityId - The id of the entity to find.
+     * @returns A promise of a single entity or null.
      */
     async _findById(id: EntityId): Promise<T | null> {
         return this.repository.findOne({
@@ -145,9 +148,9 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param ids
-     * @returns
+     * > It returns a promise of an array of entities, or null if the array is empty
+     * @param ids - [EntityId] - an array of entity ids
+     * @returns An array of entities or null.
      */
     async _findByIds(ids: [EntityId]): Promise<T[] | null> {
         return this.repository.find({
@@ -244,9 +247,10 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     *
-     * @param second
-     * @returns
+     * It returns the current timestamp in seconds or milliseconds
+     * @param [second=true] - boolean - If true, the timestamp will be in seconds. If false, the
+     * timestamp will be in milliseconds.
+     * @returns A timestamp in seconds or milliseconds.
      */
     async currentTimestamp(second = true): Promise<number> {
         const date = new Date();
