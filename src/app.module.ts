@@ -35,7 +35,7 @@ import { UserModule } from './modules/user/user.module';
         }),
 
         ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '../../', '/public'),
+            rootPath: join(__dirname, '../', '/public'),
             serveRoot: '/',
             exclude: ['/api/*', '/auth/*'],
         }),
