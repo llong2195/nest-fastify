@@ -17,7 +17,6 @@ export class UserRepository extends Repository<UserEntity> {
      * Add a basic where clause to the query and return the first result.
      */
     getInactiveUsers(page: number, limit: number = PAGE_SIZE): Promise<UserEntity[]> {
-        const qb = this.createQueryBuilder().where('is_active = :active', { active: true });
-        return qb.getMany();
+        return this.createQueryBuilder().where('is_active = :active', { active: true }).getMany();
     }
 }
