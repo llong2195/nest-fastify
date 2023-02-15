@@ -88,7 +88,6 @@ export class iPaginationOption {
     })
     @IsBoolean()
     @IsOptional()
-    @Type(() => Boolean)
     @ConvertToBoolean()
     deleted: boolean;
 }
