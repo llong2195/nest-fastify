@@ -1,4 +1,3 @@
-import { createCanvas, loadImage } from 'canvas';
 import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
@@ -250,47 +249,6 @@ export const generateQR = async (text: string, size = 108, qualityLevel = 'M') =
     } as QRCodeToFileStreamOptions);
     // console.log(text, url, qrStream)
     return qrStream;
-};
-
-/**
- *
- * @param text
- * @param size
- * @param icon
- * @returns
- */
-export const generateQRWithIcon = async (text: string, size = 400, icon = 'icon.png') => {
-    try {
-        size = parseInt('' + size);
-        const cwidth = Math.floor(0.2 * size);
-        const canvas = createCanvas(size, size);
-        QRCode.toCanvas(canvas, text, {
-            errorCorrectionLevel: 'H',
-            margin: 1,
-            width: size,
-            color: {
-                dark: '#000000',
-                light: '#ffffff',
-            },
-        });
-
-        const ctx = canvas.getContext('2d');
-        const img = await loadImage(icon);
-        const center = (size - cwidth) / 2;
-        ctx.drawImage(img, center, center, cwidth, cwidth);
-        // const qrStream = await canvas.createJPEGStream({
-        //     quality: 0.95,
-        //     chromaSubsampling: false
-        // })
-
-        const qrStream = new PassThrough();
-        qrStream.write(canvas.toBuffer('image/png'));
-        qrStream.end();
-        return qrStream;
-    } catch (e) {
-        console.error(e);
-        return null;
-    }
 };
 
 /**
