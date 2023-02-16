@@ -37,7 +37,11 @@ async function bootstrap() {
     // -------------------------------------------
 
     // -------------- Middleware --------------
-    app.use(helmet());
+    app.use(
+        helmet({
+            crossOriginResourcePolicy: false,
+        }),
+    );
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
     // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
