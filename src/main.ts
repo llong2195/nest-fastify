@@ -46,8 +46,7 @@ async function bootstrap() {
     // -------------------------------------------
     useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
 
-    // -------------- Global filter --------------
-    app.useGlobalInterceptors(new ResponseTransformInterceptor());
+    // -------------- Global filter/pipes --------------
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.setGlobalPrefix(configService.get<string>('apiPrefix'));
     // -------------------------------------------
@@ -61,7 +60,6 @@ async function bootstrap() {
         // -----------Setup Swagger-------------
         await ConfigDocument(app);
         // -------------------------------------------
-        useRequestLogging(app, 0);
     } else {
         app.enableCors({
             origin: (origin, callback) => {
@@ -74,9 +72,11 @@ async function bootstrap() {
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
     }
+    // -------------------------------------------
 
     // -----------Setup Redis Adapter-------------
     // await initAdapters(app);
+    // -------------------------------------------
 
     await app.listen(port, LISTEN_ON, async () => {
         LoggerService.log(`==========================================================`);

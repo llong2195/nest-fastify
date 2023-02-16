@@ -1,4 +1,6 @@
 export const ErrorMessageCode = {
+    // invalid
+    INVALID: 'INVALID',
     // AUTH
     LOGIN_FAIL: 'LOGIN_FAIL',
     INVALID_TOKEN: 'INVALID_TOKEN',

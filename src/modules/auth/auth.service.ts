@@ -5,7 +5,7 @@ import { AuthUserDto } from '@base/base.dto';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import { ErrorMessageCode } from '@src/constants/errort-message-code';
+import { ErrorMessageCode } from '@constants/error-message-code';
 
 import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';

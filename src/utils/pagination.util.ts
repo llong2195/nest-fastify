@@ -31,4 +31,4 @@ export function pagination<T>(items: T[], total: number, page = 1, limit = PAGE_
             totalPages: totalPage,
         },
     });
-};
+}

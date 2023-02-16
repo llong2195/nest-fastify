@@ -1,11 +1,12 @@
 import { Request } from 'express';
 
-import { BaseError, DatabaseError, ValidateError } from '@exceptions/errors/index';
+import { ValidateError } from '@exceptions/errors/index';
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
 import { LoggerService } from './logger/custom.logger';
+import { ErrorMessageCode } from './constants';
 
 @ApiTags('/')
 @Controller()
@@ -28,19 +29,8 @@ export class AppController {
     }
 
     @Get('exceptions')
-    TestException(@Req() request: Request): any {
-        try {
-            throw new ValidateError('validate', 400, 9000);
-        } catch (e) {
-            if (e instanceof ValidateError) {
-                this.logger.error('ValidateError', e.stack);
-            } else if (e instanceof DatabaseError) {
-                this.logger.error('DatabaseError', e.stack);
-            } else if (e instanceof BaseError) {
-                this.logger.error('BaseError', e.stack);
-            }
-            throw new ValidateError('validate', 400, 9000);
-        }
+    TestException(): any {
+        throw new ValidateError(ErrorMessageCode.INVALID, 400, 9000);
     }
 
     @Get('healthz')
