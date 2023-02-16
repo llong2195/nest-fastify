@@ -17,7 +17,7 @@ import { PAGE_SIZE } from '@src/configs/config';
 
 import { PaginationResponse } from './base.dto';
 import { IBaseService } from './i.base.service';
-import { trim } from '@utils/util';
+import { trim, pagination } from '@utils/index';
 
 export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {
     protected readonly repository: R;
@@ -160,14 +160,14 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     * It takes in a page number, a limit, and some options, and returns a paginated response
-     * @param {number} page - number - The current page number
+     * It takes a page number, a limit, and some options, and returns a paginated response
+     * @param {number} page - number - The page number to return
      * @param {number} limit - number = PAGE_SIZE,
-     * @param {FindOptionsWhere<T> | FindOptionsWhere<T>[]} [options] - This is the where clause. It
-     * can be a single object or an array of objects.
+     * @param {FindOptionsWhere<T> | FindOptionsWhere<T>[]} [options] - This is the where clause for
+     * the query.
      * @param [fields] - The fields you want to select from the database.
      * @param [manyOptions] - FindManyOptions<T>
-     * @returns A pagination response object.
+     * @returns A pagination response object
      */
     async _paginate(
         page: number,
@@ -176,22 +176,9 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         fields?: FindOptionsSelect<T>,
         manyOptions?: FindManyOptions<T>,
     ): Promise<PaginationResponse<T>> {
-        const totalRecords = await this.repository.count({ where: options });
-        const totalPage = totalRecords % limit === 0 ? totalRecords / limit : Math.floor(totalRecords / limit) + 1;
-
-        if (page > totalPage || page <= 0) {
-            return new PaginationResponse([], {
-                pagination: {
-                    currentPage: page,
-                    limit: limit,
-                    total: 0,
-                    totalPages: 0,
-                },
-            });
-        }
-
+        const total = await this.repository.count({ where: options });
         const offset = page === 1 ? 0 : limit * (page - 1);
-        const data = await this.repository.find({
+        const items = await this.repository.find({
             where: options,
             select: fields,
             skip: offset,
@@ -199,25 +186,15 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
             ...manyOptions,
         });
 
-        return new PaginationResponse({
-            body: data,
-            meta: {
-                pagination: {
-                    currentPage: Number(page),
-                    limit: limit,
-                    total: totalRecords,
-                    totalPages: totalPage,
-                },
-            },
-        });
+        return this.pagination<T>(items, total, page, limit);
     }
 
     /**
-     * It takes a query builder, a page number, and a limit, and returns a paginated response
-     * @param queryBuilder - SelectQueryBuilder<T>
-     * @param {number} page - The current page number
+     * It takes a query builder, a page number, and a limit, and returns a pagination response
+     * @param queryBuilder - SelectQueryBuilder<T> - The query builder that you want to paginate.
+     * @param {number} page - The page number to return.
      * @param {number} limit - The number of items to return per page.
-     * @returns A pagination response object.
+     * @returns A pagination response object
      */
     async _iPaginate<T>(
         queryBuilder: SelectQueryBuilder<T>,
@@ -227,26 +204,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         const skip = (page - 1) * limit;
         const [items, total] = await queryBuilder.take(limit).skip(skip).getManyAndCount();
 
-        if (total <= 0) {
-            return new PaginationResponse<T>([], {
-                pagination: {
-                    currentPage: page,
-                    limit: limit,
-                    total: 0,
-                    totalPages: 0,
-                },
-            });
-        }
-
-        const totalPage = Math.ceil(total / limit);
-        return new PaginationResponse(items, {
-            pagination: {
-                currentPage: Number(page),
-                limit: limit,
-                total: total,
-                totalPages: totalPage,
-            },
-        });
+        return this.pagination<T>(items, total, page, limit);
     }
 
     /**
@@ -257,7 +215,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
      * @param {number} limit - The number of items to return per page.
      * @param [customTable=null] - This is the table name that you want to use for the query. If you
      * don't pass this, it will use the table name of the repository.
-     * @returns A pagination response object
+     * @returns {PaginationResponse} A pagination response object
      */
     async iPaginateCustom<T>(
         queryBuilder: SelectQueryBuilder<T>,
@@ -284,20 +242,31 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
             return a as T;
         });
 
-        if (total <= 0) {
+        return this.pagination<T>(results, total, page, limit);
+    }
+
+    /**
+     * It takes an array of items, a total number of items, a page number, and a page size, and returns
+     * a paginated response object
+     * @param {T[]} items - The items to be paginated.
+     * @param {number} total - The total number of items in the database.
+     * @param {number} [page=1] - The current page number
+     * @param {number} limit - The number of items per page.
+     * @returns {PaginationResponse} A new instance of the PaginationResponse class.
+     */
+    pagination<T>(items: T[], total: number, page = 1, limit = PAGE_SIZE): PaginationResponse<T> {
+        const totalPage = Math.ceil(total / limit);
+        if (total <= 0 || page > totalPage) {
             return new PaginationResponse([], {
                 pagination: {
-                    currentPage: Number(page),
+                    currentPage: page,
                     limit: limit,
                     total: 0,
                     totalPages: 0,
                 },
             });
         }
-
-        const totalPage = total % limit === 0 ? 0 : Math.ceil(total / limit);
-
-        return new PaginationResponse(results, {
+        return new PaginationResponse(items, {
             pagination: {
                 currentPage: Number(page),
                 limit: limit,

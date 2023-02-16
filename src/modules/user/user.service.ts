@@ -11,7 +11,6 @@ import { Hash } from '@src/utils/hash.util';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './user.repository';
-import { pagination } from '@utils/pagination.util';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {
@@ -37,9 +36,10 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         // const repo = this.repository.manager.getRepository(UserEntity);
         // const qb2 = repo.createQueryBuilder().where('is_active = :active', { active: true });
         // return this._iPaginate(qb2, filter.page, filter.limit);
-        const { page, limit } = filter;
-        const result = await this.repository.getInactiveUsers(page, limit);
-        return pagination(result, result.length, filter.page, filter.limit);
+        const { page, limit, deleted } = filter;
+        const result = await this.repository.getInactiveUsers(deleted, page, limit);
+        const total = await this.repository.countInactiveUsers(deleted);
+        return this.pagination<UserEntity>(result, total, page, limit);
     }
 
     async changePassword(userId: EntityId, changePass: ChangePasswordDto): Promise<UserEntity> {
