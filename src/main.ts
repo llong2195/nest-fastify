@@ -14,8 +14,6 @@ import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
-import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
-import { useRequestLogging } from './middlewares/request-logging.middleware';
 import { isEnv } from './utils/util';
 
 // import bodyParser from 'body-parser';
