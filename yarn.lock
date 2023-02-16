@@ -935,10 +935,10 @@
     path-to-regexp "3.2.0"
     swagger-ui-dist "4.15.5"
 
-"@nestjs/terminus@^9.2.0":
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/terminus/-/terminus-9.2.0.tgz#4fe350c4ed2106bf6d9ab9fa0b694e1879e962fe"
-  integrity sha512-U3UR3qv3qY1i47JLxGQZfV8qkS4jlCtMWf/BJrUowSjNkBV/EkwOL9sUTHOROHPsEBZKjR6Ekwh9ymFARNhrfg==
+"@nestjs/terminus@^9.2.1":
+  version "9.2.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/terminus/-/terminus-9.2.1.tgz#f173ba807bbab6ed2ee892e859455553274a725e"
+  integrity sha512-bPJsxKzqLl1BIs1YFIji20h42VG4ElGqc+lyw7nW+as0DkfjpRYUdyEBQJo6dTAcqRrVxSN2m3wKweBknK3Nxw==
   dependencies:
     boxen "5.1.2"
     check-disk-space "3.3.1"
