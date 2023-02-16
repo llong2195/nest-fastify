@@ -10,11 +10,12 @@ export class UserRepository extends Repository<UserEntity> {
     constructor(private readonly dataSource: DataSource) {
         super(UserEntity, dataSource.manager);
     }
-    // constructor(repository: Repository<T>) {
-    //   super(repository.target, repository.manager, repository.queryRunner);
-    // }
+
     /**
-     * Add a basic where clause to the query and return the first result.
+     * Get all inactive users, with a default page size of 10.
+     * @param {number} page - The page number to return.
+     * @param {number} limit - number = PAGE_SIZE
+     * @returns An array of UserEntity objects.
      */
     getInactiveUsers(page: number, limit: number = PAGE_SIZE): Promise<UserEntity[]> {
         return this.createQueryBuilder().where('is_active = :active', { active: true }).getMany();
