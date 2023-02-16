@@ -10,11 +10,12 @@ import { PAGE_SIZE } from '@config/config';
  * @param limit - The number of items per page.
  * @returns {PaginationResponse} A function that takes in 4 parameters and returns a PaginationResponse object.
  */
-export const pagination = (items: any, total: number, page = 1, limit = PAGE_SIZE): PaginationResponse<any> => {
-    if (total <= 0) {
+export function pagination<T>(items: T[], total: number, page = 1, limit = PAGE_SIZE): PaginationResponse<T> {
+    const totalPage = Math.ceil(total / limit);
+    if (total <= 0 || page > totalPage) {
         return new PaginationResponse([], {
             pagination: {
-                currentPage: 0,
+                currentPage: page,
                 limit: limit,
                 total: 0,
                 totalPages: 0,
@@ -22,7 +23,6 @@ export const pagination = (items: any, total: number, page = 1, limit = PAGE_SIZ
         });
     }
 
-    const totalPage = Math.ceil(total / limit);
     return new PaginationResponse(items, {
         pagination: {
             currentPage: Number(page),
@@ -31,4 +31,4 @@ export const pagination = (items: any, total: number, page = 1, limit = PAGE_SIZ
             totalPages: totalPage,
         },
     });
-};
+}

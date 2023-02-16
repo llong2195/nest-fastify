@@ -17,7 +17,17 @@ export class UserRepository extends Repository<UserEntity> {
      * @param {number} limit - number = PAGE_SIZE
      * @returns An array of UserEntity objects.
      */
-    getInactiveUsers(page: number, limit: number = PAGE_SIZE): Promise<UserEntity[]> {
-        return this.createQueryBuilder().where('is_active = :active', { active: true }).getMany();
+    getInactiveUsers(deleted: boolean, page: number, limit: number = PAGE_SIZE): Promise<UserEntity[]> {
+        return this.createQueryBuilder()
+            .where('is_active = :active', { active: true })
+            .andWhere('deleted =:deleted', { deleted: deleted })
+            .getMany();
+    }
+
+    countInactiveUsers(deleted: boolean): Promise<number> {
+        return this.createQueryBuilder()
+            .where('is_active = :active', { active: true })
+            .andWhere('deleted =:deleted', { deleted: deleted })
+            .getCount();
     }
 }

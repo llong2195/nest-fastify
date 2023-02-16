@@ -11,9 +11,6 @@ export class FileEntity extends DateAudit {
     @Column({ name: 'origin_url', type: 'varchar', nullable: true })
     originUrl: string;
 
-    @Column({ name: 'thumb_url', type: 'varchar', nullable: true })
-    thumbUrl: string;
-
     @Column({ name: 'width', type: 'int', nullable: true })
     width: number;
 

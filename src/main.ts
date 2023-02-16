@@ -14,8 +14,6 @@ import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
-import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
-import { useRequestLogging } from './middlewares/request-logging.middleware';
 import { isEnv } from './utils/util';
 
 // import bodyParser from 'body-parser';
@@ -39,15 +37,18 @@ async function bootstrap() {
     // -------------------------------------------
 
     // -------------- Middleware --------------
-    app.use(helmet());
+    app.use(
+        helmet({
+            crossOriginResourcePolicy: false,
+        }),
+    );
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
     // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
     // -------------------------------------------
     useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
 
-    // -------------- Global filter --------------
-    app.useGlobalInterceptors(new ResponseTransformInterceptor());
+    // -------------- Global filter/pipes --------------
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.setGlobalPrefix(configService.get<string>('apiPrefix'));
     // -------------------------------------------
@@ -61,7 +62,6 @@ async function bootstrap() {
         // -----------Setup Swagger-------------
         await ConfigDocument(app);
         // -------------------------------------------
-        useRequestLogging(app, 0);
     } else {
         app.enableCors({
             origin: (origin, callback) => {
@@ -74,9 +74,11 @@ async function bootstrap() {
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
     }
+    // -------------------------------------------
 
     // -----------Setup Redis Adapter-------------
     // await initAdapters(app);
+    // -------------------------------------------
 
     await app.listen(port, LISTEN_ON, async () => {
         LoggerService.log(`==========================================================`);

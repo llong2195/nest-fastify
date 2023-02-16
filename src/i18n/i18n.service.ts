@@ -6,11 +6,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { DEFAULT_LOCALE } from '@src/configs';
 
-export enum LOCALES {
-    EN = 'en',
-    VI = 'vi',
-}
-
 @Injectable()
 export class I18nService {
     constructor(@Inject(REQUEST) private request: Request) {

@@ -1,13 +1,16 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { Response } from 'express';
-import { createReadStream, existsSync } from 'fs';
+import { Request, Response } from 'express';
+import { createReadStream, existsSync, statSync } from 'fs';
 import { join } from 'path';
+import mime from 'mime-types';
+import contentDisposition from 'content-disposition';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
 
 import { AuthUserDto, BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
 import {
     Controller,
     Get,
+    Headers,
     HttpCode,
     HttpException,
     HttpStatus,
@@ -15,6 +18,7 @@ import {
     Param,
     Post,
     Query,
+    Req,
     Res,
     StreamableFile,
     UploadedFile,
@@ -82,27 +86,64 @@ export class FileController {
         return new PaginationResponse<FileEntity>(data.body, data.meta);
     }
 
-    @Get('/image/download/:path')
-    async GetImage(@Param('path') path: string): Promise<StreamableFile> {
+    @Get('/stream/:path')
+    async stream(
+        @Param('path') path: string,
+        @Headers() headers,
+        @Req() req: Request,
+        @Res({ passthrough: true }) res: Response,
+        @Query('download') download = 'false',
+    ): Promise<any> {
         const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
         if (!existsSync(filePath)) {
             throw new NotFoundException();
         }
-        const file = createReadStream(filePath);
+        const { size } = statSync(filePath);
+        const contentType = mime.contentType(filePath.split('.').pop());
+        const header = {
+            'Content-Type': contentType,
+            'Content-Length': size,
+        };
+        console.log(header);
+        // if (contentType.includes('video')) {
+        //     const videoRange = req.headers.range;
+        //     const CHUNK_SIZE = 10 * 10 ** 6; // 10 MB
+        //     console.log('videoRange', videoRange);
 
+        //     if (videoRange) {
+        //         const start = parseInt(videoRange.replace(/bytes=/, '').split('-')[0], 10) || 0;
+        //         const end = Math.min(start + CHUNK_SIZE, size - 1);
+        //         const contentLength = end - start + 1;
+        //         const readStreamfile = createReadStream(filePath, {
+        //             start,
+        //             end,
+        //         });
+        //         const head = {
+        //             'Accept-Ranges': 'bytes',
+        //             'Content-Range': `bytes ${start}-${end}/${size}`,
+        //             'Content-Length': contentLength,
+        //             'Content-Type': contentType,
+        //         };
+        //         console.log(head);
+        //         res.writeHead(HttpStatus.PARTIAL_CONTENT, head);
+        //         return readStreamfile.pipe(res);
+        //     } else {
+        //         const head = {
+        //             'Accept-Ranges': 'bytes',
+        //             'Content-Length': size,
+        //             'Content-Type': contentType,
+        //         };
+        //         res.writeHead(HttpStatus.OK, head); //200
+        //         // createReadStream(videoPath).pipe(res);
+        //         const readStreamfile = createReadStream(filePath);
+        //         return readStreamfile.pipe(res);
+        //     }
+        // }
+        if (download === 'true') {
+            header['Content-Disposition'] = contentDisposition(filePath);
+        }
+        res.set(header);
+        const file = createReadStream(filePath);
         return new StreamableFile(file);
-    }
-
-    @Get('/image/read/:path')
-    async readImage(@Param('path') path: string, @Res() res: Response) {
-        const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
-        if (!existsSync(filePath)) {
-            throw new NotFoundException();
-        }
-        console.log(filePath);
-        const file = createReadStream(filePath);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        file.pipe(res);
     }
 }

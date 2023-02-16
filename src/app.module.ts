@@ -25,6 +25,8 @@ import { HealthModule } from './modules/health/health.module';
 import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
+import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
+import { I18nService } from './i18n/i18n.service';
 
 @Module({
     imports: [
@@ -114,7 +116,7 @@ import { UserModule } from './modules/user/user.module';
         },
         {
             provide: APP_INTERCEPTOR,
-            useClass: ClassSerializerInterceptor,
+            useClass: ResponseTransformInterceptor,
         },
         AppService,
     ],

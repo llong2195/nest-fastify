@@ -1,6 +1,7 @@
 {
 	"LOGIN_FAIL": "Username or Password is incorrect",
-	"SUCCESS": "success",
+	"SUCCESS": "Success",
+	"INVALID" : "Invalid",
 	"ACCESS_DENIED": "ACCESS_DENIED",
 	"DISABLED_ACCOUNT": "DISABLED_ACCOUNT",
 	"DELETED_ACCOUNT": "DELETED_ACCOUNT",
