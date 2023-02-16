@@ -8,10 +8,10 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { LoggerService } from '@src/logger/custom.logger';
 import { Hash } from '@src/utils/hash.util';
 
-import { FileRepository } from '../file/file.repository';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './user.repository';
+import { pagination } from '@utils/pagination.util';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {
@@ -31,8 +31,15 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         return this._findById(id);
     }
 
-    getInactiveUsers(filter: iPaginationOption): Promise<PaginationResponse<UserEntity>> {
-        return this.repository.getInactiveUsers(filter.page, filter.limit);
+    async getInactiveUsers(filter: iPaginationOption): Promise<PaginationResponse<UserEntity>> {
+        // const qb = this.repository.createQueryBuilder().where('is_active = :active', { active: true });
+        // return this._iPaginate(qb, filter.page, filter.limit);
+        // const repo = this.repository.manager.getRepository(UserEntity);
+        // const qb2 = repo.createQueryBuilder().where('is_active = :active', { active: true });
+        // return this._iPaginate(qb2, filter.page, filter.limit);
+        const { page, limit } = filter;
+        const result = await this.repository.getInactiveUsers(page, limit);
+        return pagination(result, result.length, filter.page, filter.limit);
     }
 
     async changePassword(userId: EntityId, changePass: ChangePasswordDto): Promise<UserEntity> {
