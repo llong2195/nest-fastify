@@ -17,6 +17,7 @@ import { PAGE_SIZE } from '@src/configs/config';
 
 import { PaginationResponse } from './base.dto';
 import { IBaseService } from './i.base.service';
+import { trim } from '@utils/util';
 
 export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {
     protected readonly repository: R;
@@ -159,12 +160,14 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     * @param {number} page
-     * @param {number} limit
-     * @param {FindOptionsWhere<T> | FindOptionsWhere<T>[]} options
-     * @param {string[]} fields
-     * @param {FindManyOptions<T>} manyOptions
-     * @returns Promise<PaginationResponse<T>>
+     * It takes in a page number, a limit, and some options, and returns a paginated response
+     * @param {number} page - number - The current page number
+     * @param {number} limit - number = PAGE_SIZE,
+     * @param {FindOptionsWhere<T> | FindOptionsWhere<T>[]} [options] - This is the where clause. It
+     * can be a single object or an array of objects.
+     * @param [fields] - The fields you want to select from the database.
+     * @param [manyOptions] - FindManyOptions<T>
+     * @returns A pagination response object.
      */
     async _paginate(
         page: number,
@@ -179,7 +182,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         if (page > totalPage || page <= 0) {
             return new PaginationResponse([], {
                 pagination: {
-                    currentPage: 0,
+                    currentPage: page,
                     limit: limit,
                     total: 0,
                     totalPages: 0,
@@ -210,11 +213,11 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     }
 
     /**
-     * @param queryBuilder
-     * @param page
-     * @param limit
-     * @param queryString
-     * @returns
+     * It takes a query builder, a page number, and a limit, and returns a paginated response
+     * @param queryBuilder - SelectQueryBuilder<T>
+     * @param {number} page - The current page number
+     * @param {number} limit - The number of items to return per page.
+     * @returns A pagination response object.
      */
     async _iPaginate<T>(
         queryBuilder: SelectQueryBuilder<T>,
@@ -227,7 +230,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         if (total <= 0) {
             return new PaginationResponse<T>([], {
                 pagination: {
-                    currentPage: 0,
+                    currentPage: page,
                     limit: limit,
                     total: 0,
                     totalPages: 0,
@@ -237,6 +240,64 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
 
         const totalPage = Math.ceil(total / limit);
         return new PaginationResponse(items, {
+            pagination: {
+                currentPage: Number(page),
+                limit: limit,
+                total: total,
+                totalPages: totalPage,
+            },
+        });
+    }
+
+    /**
+     * It takes a query builder, a page number, a limit, and a custom table name (optional) and returns
+     * a pagination response
+     * @param queryBuilder - SelectQueryBuilder<T>
+     * @param {number} page - number,
+     * @param {number} limit - The number of items to return per page.
+     * @param [customTable=null] - This is the table name that you want to use for the query. If you
+     * don't pass this, it will use the table name of the repository.
+     * @returns A pagination response object
+     */
+    async iPaginateCustom<T>(
+        queryBuilder: SelectQueryBuilder<T>,
+        page: number,
+        limit: number,
+        customTable = null,
+    ): Promise<PaginationResponse<T>> {
+        const skip = (page - 1) * limit;
+
+        const total = await queryBuilder.getCount();
+        const data = await queryBuilder.take(limit).skip(skip).getRawMany();
+        const tableName = customTable ?? this.repository.metadata.tableName;
+
+        const results: T[] = data.map(item => {
+            const a: Record<string, unknown> = {};
+
+            Object.keys(item).forEach(key => {
+                if (key.lastIndexOf('id') === key.length - 2) {
+                    a[trim(key, tableName + '_')] = parseInt(item[key], 10);
+                } else {
+                    a[trim(key, tableName + '_')] = item[key];
+                }
+            });
+            return a as T;
+        });
+
+        if (total <= 0) {
+            return new PaginationResponse([], {
+                pagination: {
+                    currentPage: Number(page),
+                    limit: limit,
+                    total: 0,
+                    totalPages: 0,
+                },
+            });
+        }
+
+        const totalPage = total % limit === 0 ? 0 : Math.ceil(total / limit);
+
+        return new PaginationResponse(results, {
             pagination: {
                 currentPage: Number(page),
                 limit: limit,

@@ -3,6 +3,7 @@ import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
 import { PassThrough } from 'stream';
+import { camelCase } from 'change-case';
 
 /**
  *
@@ -110,6 +111,16 @@ export const toStandard = (phone: string): string => {
 };
 
 /**
+ * It takes a string, removes the first and last characters of the string, and returns the result
+ * @param {string} str - The string to be trimmed.
+ * @param {string} trim_str - The string to trim from the beginning and end of the string.
+ */
+export const trim = (str: string, trim_str: string) => {
+    const reg = new RegExp(`^${trim_str}+|${trim_str}+$`, 'gm');
+    return camelCase(str.replace(reg, ''));
+};
+
+/**
  *
  * @param str
  * @returns
@@ -125,7 +136,6 @@ export const toSnakeCase = (str: string): string => str.replace(/[A-Z]/g, letter
 export const getRandomInt = (min: number, max: number): number => {
     min = Math.ceil(min);
     max = Math.floor(max);
-
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
@@ -138,7 +148,6 @@ export const currentTimestamp = (second = true): number => {
     if (second) {
         return Math.round(Date.now() / 1000);
     }
-
     return Date.now();
 };
 
