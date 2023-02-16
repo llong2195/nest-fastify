@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { createReadStream, existsSync, statSync } from 'fs';
 import { join } from 'path';
 import mime from 'mime-types';
+import contentDisposition from 'content-disposition';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
 
 import { AuthUserDto, BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
@@ -91,7 +92,8 @@ export class FileController {
         @Headers() headers,
         @Req() req: Request,
         @Res({ passthrough: true }) res: Response,
-    ): Promise<StreamableFile> {
+        @Query('download') download = 'false',
+    ): Promise<any> {
         const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
         if (!existsSync(filePath)) {
             throw new NotFoundException();
@@ -109,7 +111,7 @@ export class FileController {
         //     console.log('videoRange', videoRange);
 
         //     if (videoRange) {
-        //         const start = Number(videoRange.replace(/\D/g, ''));
+        //         const start = parseInt(videoRange.replace(/bytes=/, '').split('-')[0], 10) || 0;
         //         const end = Math.min(start + CHUNK_SIZE, size - 1);
         //         const contentLength = end - start + 1;
         //         const readStreamfile = createReadStream(filePath, {
@@ -124,7 +126,7 @@ export class FileController {
         //         };
         //         console.log(head);
         //         res.writeHead(HttpStatus.PARTIAL_CONTENT, head);
-        //         return new StreamableFile(readStreamfile);
+        //         return readStreamfile.pipe(res);
         //     } else {
         //         const head = {
         //             'Accept-Ranges': 'bytes',
@@ -134,12 +136,12 @@ export class FileController {
         //         res.writeHead(HttpStatus.OK, head); //200
         //         // createReadStream(videoPath).pipe(res);
         //         const readStreamfile = createReadStream(filePath);
-        //         return new StreamableFile(readStreamfile);
+        //         return readStreamfile.pipe(res);
         //     }
         // }
-        // if (download === 'true') {
-        //     headers['Content-Disposition'] = contentDisposition(file.metaData.name);
-        // }
+        if (download === 'true') {
+            header['Content-Disposition'] = contentDisposition(filePath);
+        }
         res.set(header);
         const file = createReadStream(filePath);
         return new StreamableFile(file);
