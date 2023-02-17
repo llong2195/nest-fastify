@@ -108,7 +108,7 @@ export class FileController {
             if (download === 'true') {
                 header['Content-Disposition'] = contentDisposition(filePath);
             }
-            console.log(header);
+            // console.log(header);
             if (contentType.includes('video')) {
                 const videoRange = headers.range;
                 const CHUNK_SIZE = 10 * 10 ** 6; // 10 MB
@@ -122,7 +122,7 @@ export class FileController {
                     });
                     const head = {
                         'Accept-Ranges': 'bytes',
-                        'Content-Type': 'video/mp4',
+                        'Content-Type': contentType,
                         'Content-Range': `bytes ${start}-${end}/${size}`,
                         'Content-Length': contentLength,
                     };
@@ -131,7 +131,7 @@ export class FileController {
                 } else {
                     const head = {
                         'Accept-Ranges': 'bytes',
-                        'Content-Type': 'video/mp4',
+                        'Content-Type': contentType,
                         'Content-Length': size,
                     };
                     res.writeHead(HttpStatus.OK, head); //200
@@ -142,7 +142,6 @@ export class FileController {
             } else {
                 res.set(header);
                 const file = createReadStream(filePath);
-                console.log('149 return new StreamableFile(file);');
                 return new StreamableFile(file);
             }
         } catch (error) {
@@ -152,21 +151,22 @@ export class FileController {
 
     @Get('video/:path')
     async getStreamVideo(@Param(':path') path: string, @Headers() headers, @Res({ passthrough: true }) res: Response) {
-        const videoPath = join(process.cwd(), UPLOAD_LOCATION, `${path}`);
-        const { size } = statSync(videoPath);
+        const filePath = join(process.cwd(), UPLOAD_LOCATION, `${path}`);
+        const { size } = statSync(filePath);
+        const contentType = mime.contentType(filePath.split('.').pop());
         const videoRange = headers.range;
         const CHUNK_SIZE = 10 * 10 ** 6; // 10 MB
         if (videoRange) {
             const start = Number(videoRange.replace(/\D/g, ''));
             const end = Math.min(start + CHUNK_SIZE, size - 1);
             const contentLength = end - start + 1;
-            const readStreamfile = createReadStream(videoPath, {
+            const readStreamfile = createReadStream(filePath, {
                 start,
                 end,
             });
             const head = {
                 'Accept-Ranges': 'bytes',
-                'Content-Type': 'video/mp4',
+                'Content-Type': contentType,
                 'Content-Range': `bytes ${start}-${end}/${size}`,
                 'Content-Length': contentLength,
             };
@@ -175,12 +175,12 @@ export class FileController {
         } else {
             const head = {
                 'Accept-Ranges': 'bytes',
-                'Content-Type': 'video/mp4',
+                'Content-Type': contentType,
                 'Content-Length': size,
             };
             res.writeHead(HttpStatus.OK, head); //200
-            // createReadStream(videoPath).pipe(res);
-            const readStreamfile = createReadStream(videoPath);
+            // createReadStream(filePath).pipe(res);
+            const readStreamfile = createReadStream(filePath);
             return new StreamableFile(readStreamfile);
         }
     }
