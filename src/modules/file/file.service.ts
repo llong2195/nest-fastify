@@ -4,7 +4,7 @@ import { LoggerService } from 'src/logger/custom.logger';
 import { BaseService } from '@base/base.service';
 import { FileType } from '@enums/file.enum';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { SERVER_URL, UPLOAD_LOCATION } from '@src/configs/config';
+import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@src/configs/config';
 import { ErrorMessageCode } from '@src/constants';
 import { cloudinary } from '@src/utils/cloudinary.util';
 
@@ -29,7 +29,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
         }
         const createFile = new FileEntity(null);
         createFile.userId = userId;
-        createFile.originUrl = `${SERVER_URL}/api/v1/file/stream/${file.filename}`;
+        createFile.originUrl = `${SERVER_URL}/${API_PREFIX}/v1/file/stream/${file.filename}`;
         createFile.type = FileType.IMAGE;
         return await this._store(createFile);
     }
