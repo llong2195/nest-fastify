@@ -3,3 +3,8 @@ export enum EnvEnum {
     Staging = 'staging',
     Production = 'production',
 }
+
+export enum LOCALES {
+    EN = 'en',
+    VI = 'vi',
+}

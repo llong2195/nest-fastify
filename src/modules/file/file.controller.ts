@@ -1,13 +1,16 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { Response } from 'express';
-import { createReadStream, existsSync } from 'fs';
+import { Request, Response } from 'express';
+import { createReadStream, existsSync, statSync } from 'fs';
 import { join } from 'path';
+import mime from 'mime-types';
+import contentDisposition from 'content-disposition';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
 
 import { AuthUserDto, BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
 import {
     Controller,
     Get,
+    Headers,
     HttpCode,
     HttpException,
     HttpStatus,
@@ -15,6 +18,7 @@ import {
     Param,
     Post,
     Query,
+    Req,
     Res,
     StreamableFile,
     UploadedFile,
@@ -82,27 +86,102 @@ export class FileController {
         return new PaginationResponse<FileEntity>(data.body, data.meta);
     }
 
-    @Get('/image/download/:path')
-    async GetImage(@Param('path') path: string): Promise<StreamableFile> {
-        const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
-        if (!existsSync(filePath)) {
-            throw new NotFoundException();
+    @Get('/stream/:path')
+    async stream(
+        @Param('path') path: string,
+        @Headers() headers,
+        @Req() req: Request,
+        @Res({ passthrough: true }) res: Response,
+        @Query('download') download = 'false',
+    ): Promise<any> {
+        try {
+            const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
+            if (!existsSync(filePath)) {
+                throw new NotFoundException();
+            }
+            const { size } = statSync(filePath);
+            const contentType = mime.contentType(filePath.split('.').pop());
+            const header = {
+                'Content-Type': contentType,
+                'Content-Length': size,
+            };
+            if (download === 'true') {
+                header['Content-Disposition'] = contentDisposition(filePath);
+            }
+            // console.log(header);
+            if (contentType.includes('video')) {
+                const videoRange = headers.range;
+                const CHUNK_SIZE = 10 * 10 ** 6; // 10 MB
+                if (videoRange) {
+                    const start = Number(videoRange.replace(/\D/g, ''));
+                    const end = Math.min(start + CHUNK_SIZE, size - 1);
+                    const contentLength = end - start + 1;
+                    const readStreamfile = createReadStream(filePath, {
+                        start,
+                        end,
+                    });
+                    const head = {
+                        'Accept-Ranges': 'bytes',
+                        'Content-Type': contentType,
+                        'Content-Range': `bytes ${start}-${end}/${size}`,
+                        'Content-Length': contentLength,
+                    };
+                    res.writeHead(HttpStatus.PARTIAL_CONTENT, head); //206
+                    return new StreamableFile(readStreamfile);
+                } else {
+                    const head = {
+                        'Accept-Ranges': 'bytes',
+                        'Content-Type': contentType,
+                        'Content-Length': size,
+                    };
+                    res.writeHead(HttpStatus.OK, head); //200
+                    // createReadStream(videoPath).pipe(res);
+                    const readStreamfile = createReadStream(filePath);
+                    return new StreamableFile(readStreamfile);
+                }
+            } else {
+                res.set(header);
+                const file = createReadStream(filePath);
+                return new StreamableFile(file);
+            }
+        } catch (error) {
+            console.log(error);
         }
-        const file = createReadStream(filePath);
-
-        return new StreamableFile(file);
     }
 
-    @Get('/image/read/:path')
-    async readImage(@Param('path') path: string, @Res() res: Response) {
-        const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
-        if (!existsSync(filePath)) {
-            throw new NotFoundException();
+    @Get('video/:path')
+    async getStreamVideo(@Param(':path') path: string, @Headers() headers, @Res({ passthrough: true }) res: Response) {
+        const filePath = join(process.cwd(), UPLOAD_LOCATION, `${path}`);
+        const { size } = statSync(filePath);
+        const contentType = mime.contentType(filePath.split('.').pop());
+        const videoRange = headers.range;
+        const CHUNK_SIZE = 10 * 10 ** 6; // 10 MB
+        if (videoRange) {
+            const start = Number(videoRange.replace(/\D/g, ''));
+            const end = Math.min(start + CHUNK_SIZE, size - 1);
+            const contentLength = end - start + 1;
+            const readStreamfile = createReadStream(filePath, {
+                start,
+                end,
+            });
+            const head = {
+                'Accept-Ranges': 'bytes',
+                'Content-Type': contentType,
+                'Content-Range': `bytes ${start}-${end}/${size}`,
+                'Content-Length': contentLength,
+            };
+            res.writeHead(HttpStatus.PARTIAL_CONTENT, head); //206
+            return new StreamableFile(readStreamfile);
+        } else {
+            const head = {
+                'Accept-Ranges': 'bytes',
+                'Content-Type': contentType,
+                'Content-Length': size,
+            };
+            res.writeHead(HttpStatus.OK, head); //200
+            // createReadStream(filePath).pipe(res);
+            const readStreamfile = createReadStream(filePath);
+            return new StreamableFile(readStreamfile);
         }
-        console.log(filePath);
-        const file = createReadStream(filePath);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        file.pipe(res);
     }
 }

@@ -5,7 +5,7 @@ import { LoggerService } from 'src/logger/custom.logger';
 import { QueryFailedError } from 'typeorm';
 
 import { BaseError } from '@exceptions/errors';
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
 import * as Sentry from '@sentry/node';
 import { SENTRY_DSN } from '@src/configs';
@@ -13,6 +13,7 @@ import { IResponseBody } from '@src/interface';
 
 import { ErrorCode } from '../constants/error-code';
 import { isDev } from '../utils/util';
+import { I18nService } from '@src/i18n/i18n.service';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -29,6 +30,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         response: Response,
         exception: HttpException | QueryFailedError | Error,
     ): void {
+        const i18nService = new I18nService(request);
         let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         let errorCode = ErrorCode.UNKNOWN;
         let message = 'Internal server error';
@@ -85,10 +87,11 @@ export class AllExceptionFilter implements ExceptionFilter {
         if (Array.isArray(responseBody.message)) {
             responseBody.message = responseBody.message[0];
         }
+        if (responseBody.message) responseBody.message = i18nService.t(message);
         response.status(statusCode).json(responseBody);
     }
 
-    catch(exception: HttpException | Error, host: ArgumentsHost): void {
+    catch(exception: HttpException | Error | BaseError, host: ArgumentsHost): void {
         const ctx: HttpArgumentsHost = host.switchToHttp();
         const response: Response = ctx.getResponse();
         const request: Request = ctx.getRequest();
