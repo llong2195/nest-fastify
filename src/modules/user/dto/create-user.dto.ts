@@ -20,10 +20,6 @@ export class CreateUserDto {
     lastName: string;
 
     @ApiProperty()
-    @IsOptional()
-    avatarId: number;
-
-    @ApiProperty()
     @IsNotEmpty({ message: 'password is not empty' })
     @Length(8, 24, { message: 'password invalid' })
     password: string;

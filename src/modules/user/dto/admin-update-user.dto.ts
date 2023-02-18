@@ -12,10 +12,6 @@ export class AdminUpdateUserDto {
 
     @IsOptional()
     @IsNotEmpty()
-    avatarId: number;
-
-    @IsOptional()
-    @IsNotEmpty()
     @Length(8, 24)
     password: string;
 
