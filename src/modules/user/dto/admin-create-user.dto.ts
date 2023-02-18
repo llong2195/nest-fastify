@@ -19,10 +19,6 @@ export class AdminCreateUserDto {
     @IsNotEmpty({ message: 'last name is not empty' })
     lastName: string;
 
-    @ApiProperty({ example: '1', required: false })
-    @IsOptional()
-    avatarId: number;
-
     @ApiProperty({ example: 'password' })
     @IsNotEmpty({ message: 'password is not empty' })
     @Length(8, 24, { message: 'password invalid' })

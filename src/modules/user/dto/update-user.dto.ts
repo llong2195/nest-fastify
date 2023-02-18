@@ -15,11 +15,6 @@ export class UpdateUserDto {
     @ApiProperty()
     @IsOptional()
     @IsNotEmpty()
-    avatarId: number;
-
-    @ApiProperty()
-    @IsOptional()
-    @IsNotEmpty()
     @Length(8, 24)
     password: string;
 

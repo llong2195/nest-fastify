@@ -24,6 +24,12 @@ export class UserRepository extends Repository<UserEntity> {
             .getMany();
     }
 
+    /**
+     * This function returns a promise that resolves to the number of users that are active and not
+     * deleted.
+     * @param {boolean} deleted - boolean
+     * @returns The number of users that are active and not deleted.
+     */
     countInactiveUsers(deleted: boolean): Promise<number> {
         return this.createQueryBuilder()
             .where('is_active = :active', { active: true })
