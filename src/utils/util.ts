@@ -1,8 +1,8 @@
+import { camelCase } from 'change-case';
 import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
 import { PassThrough } from 'stream';
-import { camelCase } from 'change-case';
 
 /**
  *
