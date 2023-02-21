@@ -5,8 +5,8 @@ import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
-import { LoggerService } from './logger/custom.logger';
 import { ErrorMessageCode } from './constants';
+import { LoggerService } from './logger/custom.logger';
 
 @ApiTags('/')
 @Controller()
