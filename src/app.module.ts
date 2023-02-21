@@ -3,7 +3,7 @@ import { join } from 'path';
 import { appConfig, authConfig, databaseConfig } from '@config/index';
 import { HttpModule } from '@nestjs/axios';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
-import { ClassSerializerInterceptor, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -16,6 +16,7 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { AllExceptionFilter } from './filter/exception.filter';
 import { I18nModule } from './i18n/i18n.module';
+import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { LoggerModule } from './logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommanderModule } from './modules/commander/commander.module';
@@ -25,8 +26,6 @@ import { HealthModule } from './modules/health/health.module';
 import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
-import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
-import { I18nService } from './i18n/i18n.service';
 
 @Module({
     imports: [

@@ -20,7 +20,7 @@ export class AuthController {
 
     // @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
-    @Throttle(3, 2)
+    @Throttle(10, 10)
     @Post('/login')
     async login(@Body() request: LoginRequestDto): Promise<BaseResponseDto<any>> {
         const data = await this.authService.login(request);
