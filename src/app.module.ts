@@ -5,7 +5,7 @@ import { HttpModule } from '@nestjs/axios';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { QueueModule } from '@src/modules/queue/queue.module';
@@ -26,6 +26,7 @@ import { HealthModule } from './modules/health/health.module';
 import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
+import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard';
 
 @Module({
     imports: [
@@ -116,6 +117,10 @@ import { UserModule } from './modules/user/user.module';
         {
             provide: APP_INTERCEPTOR,
             useClass: ResponseTransformInterceptor,
+        },
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerBehindProxyGuard,
         },
         AppService,
     ],
