@@ -6,15 +6,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { DEFAULT_LOCALE } from '@src/configs';
 
+i18n.configure({
+    directory: join(__dirname, '../../locales'),
+    defaultLocale: DEFAULT_LOCALE,
+    updateFiles: false,
+});
+
 @Injectable()
 export class I18nService {
-    constructor(@Inject(REQUEST) private request: Request) {
-        i18n.configure({
-            directory: join(__dirname, '../../locales'),
-            defaultLocale: DEFAULT_LOCALE,
-            updateFiles: false,
-        });
-    }
+    constructor(@Inject(REQUEST) private request: Request) {}
 
     /**
      * It takes a phrase and a language, and returns the translated phrase in the specified language
