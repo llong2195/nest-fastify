@@ -130,7 +130,7 @@ if (isDev()) {
         //     provide: APP_GUARD,
         //     useClass: ThrottlerBehindProxyGuard,
         // },
-        ...providers,
+        // ...providers,
     ],
 })
 export class AppModule implements NestModule {
