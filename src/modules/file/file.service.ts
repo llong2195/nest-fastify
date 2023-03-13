@@ -29,7 +29,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
         }
         const createFile = new FileEntity(null);
         createFile.userId = userId;
-        createFile.originUrl = `${SERVER_URL}/${API_PREFIX}/v1/file/stream/${file.filename}`;
+        createFile.originUrl = `${SERVER_URL}/${API_PREFIX}/v1/file/${file.filename}`;
         createFile.type = FileType.IMAGE;
         return await this._store(createFile);
     }
