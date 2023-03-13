@@ -86,7 +86,7 @@ export class FileController {
         return new PaginationResponse<FileEntity>(data.body, data.meta);
     }
 
-    @Get('/stream/:path')
+    @Get('/:path')
     async stream(
         @Param('path') path: string,
         @Headers() headers,
@@ -149,39 +149,4 @@ export class FileController {
         }
     }
 
-    @Get('video/:path')
-    async getStreamVideo(@Param(':path') path: string, @Headers() headers, @Res({ passthrough: true }) res: Response) {
-        const filePath = join(process.cwd(), UPLOAD_LOCATION, `${path}`);
-        const { size } = statSync(filePath);
-        const contentType = mime.contentType(filePath.split('.').pop());
-        const videoRange = headers.range;
-        const CHUNK_SIZE = 10 * 10 ** 6; // 10 MB
-        if (videoRange) {
-            const start = Number(videoRange.replace(/\D/g, ''));
-            const end = Math.min(start + CHUNK_SIZE, size - 1);
-            const contentLength = end - start + 1;
-            const readStreamfile = createReadStream(filePath, {
-                start,
-                end,
-            });
-            const head = {
-                'Accept-Ranges': 'bytes',
-                'Content-Type': contentType,
-                'Content-Range': `bytes ${start}-${end}/${size}`,
-                'Content-Length': contentLength,
-            };
-            res.writeHead(HttpStatus.PARTIAL_CONTENT, head); //206
-            return new StreamableFile(readStreamfile);
-        } else {
-            const head = {
-                'Accept-Ranges': 'bytes',
-                'Content-Type': contentType,
-                'Content-Length': size,
-            };
-            res.writeHead(HttpStatus.OK, head); //200
-            // createReadStream(filePath).pipe(res);
-            const readStreamfile = createReadStream(filePath);
-            return new StreamableFile(readStreamfile);
-        }
-    }
 }
