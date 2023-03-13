@@ -1,14 +1,20 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 
 import { PAGE_SIZE } from '@config/index';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 
 import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserRepository extends Repository<UserEntity> {
-    constructor(private readonly dataSource: DataSource) {
-        super(UserEntity, dataSource.manager);
+    constructor(private readonly dataSource: DataSource, @Optional() manager?: EntityManager) {
+        let sManager = dataSource.createEntityManager();
+        let sQueryRunner = dataSource.createQueryRunner();
+        if (manager && manager != undefined && manager != null) {
+            sManager = manager;
+            sQueryRunner = manager.queryRunner;
+        }
+        super(UserEntity, sManager, sQueryRunner);
     }
 
     /**

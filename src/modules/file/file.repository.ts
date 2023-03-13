@@ -1,13 +1,19 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 
 import { FileEntity } from './entities/file.entity';
 
 @Injectable()
 export class FileRepository extends Repository<FileEntity> {
-    constructor(private dataSource: DataSource) {
-        super(FileEntity, dataSource.manager);
+    constructor(private readonly dataSource: DataSource, @Optional() manager?: EntityManager) {
+        let sManager = dataSource.createEntityManager();
+        let sQueryRunner = dataSource.createQueryRunner();
+        if (manager && manager != undefined && manager != null) {
+            sManager = manager;
+            sQueryRunner = manager.queryRunner;
+        }
+        super(FileEntity, sManager, sQueryRunner);
     }
 
     /**
