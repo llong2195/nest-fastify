@@ -3,7 +3,7 @@ import { join } from 'path';
 import { appConfig, authConfig, databaseConfig } from '@config/index';
 import { HttpModule } from '@nestjs/axios';
 import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -12,7 +12,6 @@ import { QueueModule } from '@src/modules/queue/queue.module';
 import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { AllExceptionFilter } from './filter/exception.filter';
 import { I18nModule } from './i18n/i18n.module';
@@ -27,7 +26,16 @@ import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
 import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard';
+import { isDev } from './utils';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
+const providers = [] as Provider[];
+if (isDev()) {
+    providers.push({
+        provide: APP_INTERCEPTOR,
+        useClass: LoggingInterceptor,
+    });
+}
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -118,11 +126,11 @@ import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard'
             provide: APP_INTERCEPTOR,
             useClass: ResponseTransformInterceptor,
         },
-        {
-            provide: APP_GUARD,
-            useClass: ThrottlerBehindProxyGuard,
-        },
-        AppService,
+        // {
+        //     provide: APP_GUARD,
+        //     useClass: ThrottlerBehindProxyGuard,
+        // },
+        ...providers,
     ],
 })
 export class AppModule implements NestModule {

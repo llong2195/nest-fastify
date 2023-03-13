@@ -6,7 +6,6 @@ import { INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
-// import { runInCluster } from './utils/runInCluster';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationConfig } from '@src/configs/validation.config';
 import { LoggerService } from '@src/logger/custom.logger';
@@ -15,15 +14,13 @@ import { ValidatorsModule } from '@validators/validators.module';
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
 import { isEnv } from './utils/util';
-
-// import bodyParser from 'body-parser';
 declare const module: any;
 
 async function bootstrap() {
     let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
 
     if (isEnv(EnvEnum.Production) || isEnv(EnvEnum.Staging)) {
-        const logLevel = process.env.LOG_LEVEL || 'log,error,warn,debug,verbose';
+        const logLevel = process.env.LOG_LEVEL || 'error,debug,verbose';
         logLevelsDefault = logLevel.split(',') as LogLevel[];
     }
     const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
@@ -37,11 +34,6 @@ async function bootstrap() {
     // -------------------------------------------
 
     // -------------- Middleware --------------
-    app.use(
-        helmet({
-            crossOriginResourcePolicy: false,
-        }),
-    );
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
     // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
@@ -63,6 +55,11 @@ async function bootstrap() {
         await ConfigDocument(app);
         // -------------------------------------------
     } else {
+        app.use(
+            helmet({
+                crossOriginResourcePolicy: false,
+            }),
+        );
         app.enableCors({
             origin: (origin, callback) => {
                 if (DOMAIN_WHITELIST.indexOf(origin) !== -1) {
@@ -109,5 +106,3 @@ async function ConfigDocument(app: INestApplication): Promise<void> {
 }
 
 bootstrap();
-
-// runInCluster(bootstrap);
