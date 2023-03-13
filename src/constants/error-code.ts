@@ -5,6 +5,7 @@ export const ErrorCode = {
     DATABASE_ERROR: 9002,
     INVALID_HEADERS: 9003,
     SYNTAXERROR: 9004,
+    NOT_FOUND: 9005,
 
     // Database
     DATABASE_CONNECTION_ERROR: 9100,

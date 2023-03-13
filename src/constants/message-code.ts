@@ -1,3 +1,3 @@
-export enum MessageCode {
-    SUCCESS = 'SUCCESS',
-}
+export const MessageCode = {
+    SUCCESS: 'SUCCESS',
+};
