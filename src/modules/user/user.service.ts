@@ -51,7 +51,7 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         if (!compareResult) {
             throw new HttpException('Password is incorrect', HttpStatus.BAD_REQUEST);
         }
-        user.password = Hash.make(changePass.new_password);
+        user.password = changePass.new_password;
         await user.save();
         return user;
     }
