@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { FastifyRequest } from 'fastify';
 import * as i18n from 'i18n';
 import { join } from 'path';
 
@@ -14,7 +14,7 @@ i18n.configure({
 
 @Injectable()
 export class I18nService {
-    constructor(@Inject(REQUEST) private request: Request) {}
+    constructor(@Inject(REQUEST) private request: FastifyRequest) {}
 
     /**
      * It takes a phrase and a language, and returns the translated phrase in the specified language
@@ -26,7 +26,9 @@ export class I18nService {
     t(phrase: string, lang?: string): string {
         return i18n.__({
             phrase,
-            locale: lang ? lang : this.request.acceptsLanguages()[0] || DEFAULT_LOCALE,
+            locale: lang
+                ? lang
+                : this?.request?.headers['accept-language']?.split(';')[0]?.split(',')[0] || DEFAULT_LOCALE,
         });
     }
 }

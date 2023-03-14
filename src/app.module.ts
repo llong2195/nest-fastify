@@ -21,7 +21,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CommanderModule } from './modules/commander/commander.module';
 import { CronModule } from './modules/cron/cron.module';
 import { FileModule } from './modules/file/file.module';
-import { HealthModule } from './modules/health/health.module';
 import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
@@ -84,7 +83,6 @@ if (isDev()) {
         LoggerModule,
         I18nModule,
         DatabaseModule,
-        HealthModule,
         ValidatorsModule,
         SettingModule,
         CronModule,
