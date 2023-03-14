@@ -1,5 +1,5 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { Request, Response } from 'express';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { createReadStream, existsSync, statSync } from 'fs';
 import { join } from 'path';
 import mime from 'mime-types';
@@ -25,10 +25,10 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+// import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UPLOAD_LOCATION } from '@src/configs/config';
-import { multerOptions } from '@src/configs/multer.config';
+// import { multerOptions } from '@src/configs/multer.config';
 import { Roles } from '@src/decorators/role.decorators';
 import { RoleEnum } from '@src/enums';
 import { FileEntity } from '@src/modules/file/entities/file.entity';
@@ -42,7 +42,7 @@ import { FileService } from './file.service';
 @Controller('v1/file')
 export class FileController {
     constructor(private readonly uploadFileService: FileService) {}
-
+    /*
     // @UseGuards(JwtAuthGuard)
     @ApiConsumes('multipart/form-data')
     @ApiBody({
@@ -50,7 +50,7 @@ export class FileController {
         type: CreateFileDto,
     })
     @HttpCode(HttpStatus.OK)
-    @UseInterceptors(FileInterceptor('file', multerOptions))
+    // @UseInterceptors(FileInterceptor('file', multerOptions))
     @Post('/upload-image-local')
     async local(@UploadedFile() file: Express.Multer.File, @AuthUser() authUser?: AuthUserDto) {
         const uploadfile = await this.uploadFileService.uploadFile(authUser?.id, file);
@@ -65,7 +65,7 @@ export class FileController {
     })
     @HttpCode(HttpStatus.OK)
     @Post('/upload-image-cloud')
-    @UseInterceptors(FileInterceptor('file', multerOptions))
+    // @UseInterceptors(FileInterceptor('file', multerOptions))
     async cloud(
         @UploadedFile() file: Express.Multer.File,
         @AuthUser() authUser?: AuthUserDto,
@@ -77,6 +77,7 @@ export class FileController {
             throw new HttpException(error.message, 500);
         }
     }
+    */
 
     @UseGuards(JwtAuthGuard)
     @Roles(RoleEnum.ADMIN)
@@ -90,8 +91,8 @@ export class FileController {
     async stream(
         @Param('path') path: string,
         @Headers() headers,
-        @Req() req: Request,
-        @Res({ passthrough: true }) res: Response,
+        @Req() req: FastifyRequest,
+        @Res({ passthrough: true }) res: FastifyReply,
         @Query('download') download = 'false',
     ): Promise<any> {
         try {
@@ -126,7 +127,7 @@ export class FileController {
                         'Content-Range': `bytes ${start}-${end}/${size}`,
                         'Content-Length': contentLength,
                     };
-                    res.writeHead(HttpStatus.PARTIAL_CONTENT, head); //206
+                    res.status(HttpStatus.PARTIAL_CONTENT).headers(head); //206
                     return new StreamableFile(readStreamfile);
                 } else {
                     const head = {
@@ -134,13 +135,13 @@ export class FileController {
                         'Content-Type': contentType,
                         'Content-Length': size,
                     };
-                    res.writeHead(HttpStatus.OK, head); //200
+                    res.status(HttpStatus.OK).headers(head); //200
                     // createReadStream(videoPath).pipe(res);
                     const readStreamfile = createReadStream(filePath);
                     return new StreamableFile(readStreamfile);
                 }
             } else {
-                res.set(header);
+                res.headers(header);
                 const file = createReadStream(filePath);
                 return new StreamableFile(file);
             }
