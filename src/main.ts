@@ -1,4 +1,5 @@
 import helmet from '@fastify/helmet';
+import FastifyMultipart from '@fastify/multipart';
 import { INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -30,11 +31,7 @@ async function bootstrap() {
     const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
     const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
     // -------------------------------------------
-    // app.use(
-    //     helmet({
-    //         crossOriginResourcePolicy: false,
-    //     }),
-    // );
+    app.register(FastifyMultipart);
     // -------------- Middleware --------------
     // app.use(json({ limit: '50mb' }));
     // app.use(urlencoded({ extended: true, limit: '50mb' }));
