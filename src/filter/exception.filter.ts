@@ -88,7 +88,6 @@ export class AllExceptionFilter implements ExceptionFilter {
             responseBody.message = responseBody.message[0];
         }
         if (responseBody.message) responseBody.message = i18nService.t(message);
-        console.log('response.status(statusCode).send(responseBody);');
 
         response.status(statusCode).send(responseBody);
     }
