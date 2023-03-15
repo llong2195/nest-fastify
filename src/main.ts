@@ -1,3 +1,5 @@
+import { useContainer } from 'class-validator';
+
 import helmet from '@fastify/helmet';
 import FastifyMultipart from '@fastify/multipart';
 import { INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
@@ -8,11 +10,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationConfig } from '@src/configs/validation.config';
 import { LoggerService } from '@src/logger/custom.logger';
 import { ValidatorsModule } from '@validators/validators.module';
-import { useContainer } from 'class-validator';
 
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
 import { isEnv } from './utils/util';
+
 declare const module: any;
 
 async function bootstrap() {

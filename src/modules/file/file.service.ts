@@ -3,6 +3,7 @@ import { LoggerService } from 'src/logger/custom.logger';
 
 import { BaseService } from '@base/base.service';
 import { FileType } from '@enums/file.enum';
+import { MultipartFile } from '@fastify/multipart';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@src/configs/config';
 import { ErrorMessageCode } from '@src/constants';
@@ -10,7 +11,6 @@ import { cloudinary } from '@src/utils/cloudinary.util';
 
 import { FileEntity } from './entities/file.entity';
 import { FileRepository } from './file.repository';
-import { MultipartFile } from '@fastify/multipart';
 
 @Injectable()
 export class FileService extends BaseService<FileEntity, FileRepository> {
