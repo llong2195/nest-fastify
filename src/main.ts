@@ -1,15 +1,14 @@
-import { useContainer } from 'class-validator';
-import { json, urlencoded } from 'express';
-import helmet from 'helmet';
-
+import helmet from '@fastify/helmet';
+import FastifyMultipart from '@fastify/multipart';
 import { INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationConfig } from '@src/configs/validation.config';
 import { LoggerService } from '@src/logger/custom.logger';
 import { ValidatorsModule } from '@validators/validators.module';
+import { useContainer } from 'class-validator';
 
 import { AppModule } from './app.module';
 import { EnvEnum } from './enums/app.enum';
@@ -23,7 +22,7 @@ async function bootstrap() {
         const logLevel = process.env.LOG_LEVEL || 'error,debug,verbose';
         logLevelsDefault = logLevel.split(',') as LogLevel[];
     }
-    const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
+    const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
         logger: logLevelsDefault,
     });
     // ------------- Config ---------------
@@ -32,10 +31,10 @@ async function bootstrap() {
     const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
     const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
     // -------------------------------------------
-
+    app.register(FastifyMultipart);
     // -------------- Middleware --------------
-    app.use(json({ limit: '50mb' }));
-    app.use(urlencoded({ extended: true, limit: '50mb' }));
+    // app.use(json({ limit: '50mb' }));
+    // app.use(urlencoded({ extended: true, limit: '50mb' }));
     // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
     // -------------------------------------------
     useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
@@ -55,11 +54,6 @@ async function bootstrap() {
         await ConfigDocument(app);
         // -------------------------------------------
     } else {
-        app.use(
-            helmet({
-                crossOriginResourcePolicy: false,
-            }),
-        );
         app.enableCors({
             origin: (origin, callback) => {
                 if (DOMAIN_WHITELIST.indexOf(origin) !== -1) {
@@ -70,6 +64,7 @@ async function bootstrap() {
             },
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
+        await app.register(helmet);
     }
     // -------------------------------------------
 

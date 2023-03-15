@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { FastifyRequest } from 'fastify';
 
 import { ValidateError } from '@exceptions/errors/index';
 import { Controller, Get, Inject, Req } from '@nestjs/common';
@@ -12,7 +12,7 @@ import { I18nService } from './i18n/i18n.service';
 @ApiTags('/')
 @Controller()
 export class AppController {
-    constructor(private logger: LoggerService, @Inject(I18N_SERVICE) private i18n: I18nService) {}
+    constructor(private logger: LoggerService) {}
 
     @Get()
     getHello() {
@@ -20,7 +20,7 @@ export class AppController {
     }
 
     @Get('/profile')
-    async profile(@Req() req: Request): Promise<any> {
+    async profile(@Req() req: FastifyRequest): Promise<any> {
         this.logger.verbose('verbose main');
         this.logger.debug('verbose 1', 'verbose 1');
         this.logger.log('log', 'verbose 1');

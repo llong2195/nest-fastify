@@ -10,6 +10,7 @@ import { cloudinary } from '@src/utils/cloudinary.util';
 
 import { FileEntity } from './entities/file.entity';
 import { FileRepository } from './file.repository';
+import { MultipartFile } from '@fastify/multipart';
 
 @Injectable()
 export class FileService extends BaseService<FileEntity, FileRepository> {
@@ -19,11 +20,11 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
 
     /**
      * It uploads a file, resizes it, and saves it to the database
-     * @param {number} userId - number, file: Express.Multer.File
-     * @param file - Express.Multer.File
+     * @param {number} userId - number, file: MultipartFile
+     * @param file - MultipartFile
      * @returns The file entity
      */
-    async uploadFile(userId: number, file: Express.Multer.File): Promise<FileEntity> {
+    async uploadFile(userId: number, file: MultipartFile): Promise<FileEntity> {
         if (!file) {
             throw new HttpException(`file is not null`, HttpStatus.BAD_REQUEST);
         }
@@ -37,19 +38,18 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
     /**
      * It uploads a file to cloudinary, creates a file entity in the database, and returns the file
      * entity
-     * @param file - Express.Multer.File - The file object that Multer has created for us.
+     * @param file - MultipartFile - The file object that Multer has created for us.
      * @param {number} userId - The userId of the user who uploaded the image.
      * @param {string} [tags] - tags ? tags : `avatars`,
      * @returns The file entity
      */
-    async uploadImageToCloudinary(file: Express.Multer.File, userId: number, tags?: string): Promise<FileEntity> {
+    async uploadImageToCloudinary(file: MultipartFile, userId: number, tags?: string): Promise<FileEntity> {
         try {
             if (!file) {
                 throw new BadRequestException(ErrorMessageCode.FILE_NOT_FOUND);
             }
-            console.log(file);
             const path = process.cwd() + `/${UPLOAD_LOCATION}/${file.filename}`;
-            const uniqueFileName = Date.now() + '-' + file.originalname;
+            const uniqueFileName = Date.now() + '-' + file.filename;
             const imagePublicId = `file/${uniqueFileName}`;
 
             const image = await cloudinary.uploader.upload(path, {
