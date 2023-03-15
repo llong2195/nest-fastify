@@ -5,6 +5,8 @@ import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } 
 import mime from 'mime-types';
 import { join } from 'path';
 import { AuthUser } from 'src/decorators/auth.user.decorator';
+import { pipeline } from 'stream';
+import util from 'util';
 
 import { AuthUserDto, BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
 import {
@@ -29,10 +31,8 @@ import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@src/configs/config';
 import { Roles } from '@src/decorators/role.decorators';
 import { RoleEnum } from '@src/enums';
 import { FileEntity } from '@src/modules/file/entities/file.entity';
-
 import { getFullDate } from '@utils/index';
-import { pipeline } from 'stream';
-import util from 'util';
+
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileService } from './file.service';
