@@ -54,7 +54,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         } else if (exception instanceof HttpException) {
             const responseException = exception.getResponse();
             statusCode = exception.getStatus();
-            errorCode = ((responseException as Record<string, unknown>).errorCode as number) || ErrorCode.UNKNOWN;
+            errorCode = ((responseException as Record<string, unknown>)?.errorCode as number) || ErrorCode.UNKNOWN;
             message =
                 typeof exception.getResponse() == 'string'
                     ? exception.getResponse()
@@ -88,6 +88,8 @@ export class AllExceptionFilter implements ExceptionFilter {
             responseBody.message = responseBody.message[0];
         }
         if (responseBody.message) responseBody.message = i18nService.t(message);
+        console.log('response.status(statusCode).send(responseBody);');
+
         response.status(statusCode).send(responseBody);
     }
 
@@ -95,6 +97,8 @@ export class AllExceptionFilter implements ExceptionFilter {
         const ctx: HttpArgumentsHost = host.switchToHttp();
         const request: FastifyRequest = ctx.getRequest();
         const response: FastifyReply = ctx.getResponse();
+        console.log('123123');
+        
         this.logger.error(exception.message, exception.stack, exception.name);
         // Handling error message and logging
         // this.handleMessage(exception);

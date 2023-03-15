@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@fastify/helmet": "^10.1.0",
+    "@fastify/multipart": "^7.5.0",
     "@fastify/static": "^6.9.0",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/axios": "^2.0.0",
