@@ -97,8 +97,6 @@ export class AllExceptionFilter implements ExceptionFilter {
         const ctx: HttpArgumentsHost = host.switchToHttp();
         const request: FastifyRequest = ctx.getRequest();
         const response: FastifyReply = ctx.getResponse();
-        console.log('123123');
-        
         this.logger.error(exception.message, exception.stack, exception.name);
         // Handling error message and logging
         // this.handleMessage(exception);

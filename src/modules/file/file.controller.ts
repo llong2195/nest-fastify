@@ -22,7 +22,6 @@ import {
     Req,
     Res,
     StreamableFile,
-    UploadedFile,
     UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -31,12 +30,12 @@ import { Roles } from '@src/decorators/role.decorators';
 import { RoleEnum } from '@src/enums';
 import { FileEntity } from '@src/modules/file/entities/file.entity';
 
+import { getFullDate } from '@utils/index';
+import { pipeline } from 'stream';
+import util from 'util';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileService } from './file.service';
-import util from 'util';
-import { pipeline } from 'stream';
-import { getFullDate } from '@utils/index';
 
 const pump = util.promisify(pipeline);
 export type MultipartFile = {
@@ -169,7 +168,6 @@ export class FileController {
             if (download === 'true') {
                 header['Content-Disposition'] = contentDisposition(filePath);
             }
-            // console.log(header);
             if (contentType.includes('video')) {
                 const videoRange = headers.range;
                 const CHUNK_SIZE = 10 * 10 ** 6; // 10 MB
