@@ -1,13 +1,11 @@
 import { FastifyRequest } from 'fastify';
 
 import { ValidateError } from '@exceptions/errors/index';
-import { Controller, Get, Inject, Req } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ErrorMessageCode } from './constants';
 import { LoggerService } from './logger/custom.logger';
-import { I18N_SERVICE } from './i18n/i18n.module';
-import { I18nService } from './i18n/i18n.service';
 
 @ApiTags('/')
 @Controller()

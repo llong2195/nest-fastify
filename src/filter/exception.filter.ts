@@ -9,9 +9,9 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from
 import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
 import * as Sentry from '@sentry/node';
 import { SENTRY_DSN } from '@src/configs';
+import { I18nService } from '@src/i18n/i18n.service';
 import { IResponseBody } from '@src/interface';
 
-import { I18nService } from '@src/i18n/i18n.service';
 import { ErrorCode } from '../constants/error-code';
 import { isDev } from '../utils/util';
 
@@ -88,7 +88,6 @@ export class AllExceptionFilter implements ExceptionFilter {
             responseBody.message = responseBody.message[0];
         }
         if (responseBody.message) responseBody.message = i18nService.t(message);
-        console.log('response.status(statusCode).send(responseBody);');
 
         response.status(statusCode).send(responseBody);
     }
