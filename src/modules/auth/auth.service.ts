@@ -28,11 +28,11 @@ export class AuthService {
     async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
         const user = await this.userService.findByEmail(email);
         if (!user) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         const compareResult = await bcrypt.compare(password, user.password);
         if (!compareResult) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         return user;
     }
@@ -46,17 +46,17 @@ export class AuthService {
     async login(request: LoginRequestDto): Promise<any> {
         const user = await this.userService.findByEmail(request.email);
         if (!user) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         const compareResult = await bcrypt.compare(request.password, user.password);
         if (!compareResult) {
-            throw new UnauthorizedException(ErrorMessageCode.LOGIN_FAIL);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
         if (!user.isActive) {
-            throw new UnauthorizedException(ErrorMessageCode.DISABLED_ACCOUNT);
+            throw new UnauthorizedException(ErrorMessageCode.AUTH_DISABLED_ACCOUNT);
         }
         if (user.deleted) {
-            throw new HttpException(ErrorMessageCode.DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
+            throw new HttpException(ErrorMessageCode.AUTH_DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
         }
         const payload: AuthUserDto = {
             email: user.email,

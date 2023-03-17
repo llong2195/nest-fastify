@@ -11,6 +11,7 @@ import { cloudinary } from '@src/utils/cloudinary.util';
 
 import { FileEntity } from './entities/file.entity';
 import { FileRepository } from './file.repository';
+import { NotFoundError } from '@exceptions/errors';
 
 @Injectable()
 export class FileService extends BaseService<FileEntity, FileRepository> {
@@ -46,7 +47,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
     async uploadImageToCloudinary(file: MultipartFile, userId: number, tags?: string): Promise<FileEntity> {
         try {
             if (!file) {
-                throw new BadRequestException(ErrorMessageCode.FILE_NOT_FOUND);
+                throw new NotFoundError(ErrorMessageCode.NOT_FOUND);
             }
             const path = process.cwd() + `/${UPLOAD_LOCATION}/${file.filename}`;
             const uniqueFileName = Date.now() + '-' + file.filename;

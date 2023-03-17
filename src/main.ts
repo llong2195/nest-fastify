@@ -33,8 +33,9 @@ async function bootstrap() {
     const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
     const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
     // -------------------------------------------
-    app.register(FastifyMultipart);
+
     // -------------- Middleware --------------
+    app.register(FastifyMultipart);
     // app.use(json({ limit: '50mb' }));
     // app.use(urlencoded({ extended: true, limit: '50mb' }));
     // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody

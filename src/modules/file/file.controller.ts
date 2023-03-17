@@ -36,15 +36,9 @@ import { getFullDate } from '@utils/index';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileService } from './file.service';
+import { MultipartFile } from '@fastify/multipart';
 
 const pump = util.promisify(pipeline);
-export type MultipartFile = {
-    data: Buffer;
-    filename: string;
-    encoding: string;
-    mimetype: string;
-    limit: boolean;
-};
 
 @ApiBearerAuth()
 @ApiTags('/v1/file')
@@ -61,36 +55,13 @@ export class FileController {
     @HttpCode(HttpStatus.OK)
     @Post('/upload-image-local')
     async local(@Req() req: FastifyRequest, @AuthUser() authUser?: AuthUserDto) {
-        const file = await req.file({
-            limits: {
-                files: 1,
-                fileSize: MAX_FILE_SIZE_IMAGE,
-            },
-            isPartAFile: (fieldName, contentType, fileName) => {
-                if (fieldName !== 'file') {
-                    return false;
-                }
-                if (contentType.match(/\/(jpg|jpeg|png|gif)$/) || fileName.match(/\.(jpg|jpeg|png|gif)$/)) {
-                    // Allow storage of file
-                    return true;
-                } else {
-                    // Reject file
-                    return false;
-                }
-            },
-        });
-        if (!file || file == undefined || file == null) {
-            throw new BadRequestException();
-        } else {
-            const path = join(process.cwd(), UPLOAD_LOCATION);
-            if (!existsSync(path)) {
-                mkdirSync(path, { recursive: true });
-            }
-            file.filename = `${getFullDate()}-${file.filename}`;
-            await pump(file.file, createWriteStream(join(path, `${file.filename}`)));
+        try {
+            const file = await await this.uploadImageService(req);
+            const uploadfile = await this.uploadFileService.uploadFile(authUser?.id, file);
+            return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, uploadfile));
+        } catch (error) {
+            throw new BadRequestException(error.message);
         }
-        const uploadfile = await this.uploadFileService.uploadFile(authUser?.id, file);
-        return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, uploadfile));
     }
 
     // @UseGuards(JwtAuthGuard)
@@ -103,34 +74,7 @@ export class FileController {
     @Post('/upload-image-cloud')
     async cloud(@Req() req: FastifyRequest, @AuthUser() authUser?: AuthUserDto): Promise<BaseResponseDto<FileEntity>> {
         try {
-            const file = await req.file({
-                limits: {
-                    files: 1,
-                    fileSize: MAX_FILE_SIZE_IMAGE,
-                },
-                isPartAFile: (fieldName, contentType, fileName) => {
-                    if (fieldName !== 'file') {
-                        return false;
-                    }
-                    if (contentType.match(/\/(jpg|jpeg|png|gif)$/) || fileName.match(/\.(jpg|jpeg|png|gif)$/)) {
-                        // Allow storage of file
-                        return true;
-                    } else {
-                        // Reject file
-                        return false;
-                    }
-                },
-            });
-            if (!file || file == undefined || file == null) {
-                throw new BadRequestException();
-            } else {
-                const path = join(process.cwd(), UPLOAD_LOCATION);
-                if (!existsSync(path)) {
-                    mkdirSync(path, { recursive: true });
-                }
-                file.filename = `${getFullDate()}-${file.filename}`;
-                await pump(file.file, createWriteStream(join(path, `${file.filename}`)));
-            }
+            const file = await this.uploadImageService(req);
             const data = await this.uploadFileService.uploadImageToCloudinary(file, authUser?.id);
             return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, data));
         } catch (error) {
@@ -204,7 +148,49 @@ export class FileController {
                 return new StreamableFile(file);
             }
         } catch (error) {
-            console.log(error);
+            throw new BadRequestException(error.message);
+        }
+    }
+
+    /**
+     * It takes a request, checks if the request has a file, if it does, it checks if the file is an
+     * image, if it is, it saves the file to the server
+     * @param {FastifyRequest} req - FastifyRequest - The request object
+     * @returns A MultipartFile object
+     */
+    async uploadImageService(req: FastifyRequest): Promise<MultipartFile> {
+        try {
+            const file = await req.file({
+                limits: {
+                    files: 1,
+                    fileSize: MAX_FILE_SIZE_IMAGE,
+                },
+                isPartAFile: (fieldName, contentType, fileName) => {
+                    if (fieldName !== 'file') {
+                        return false;
+                    }
+                    if (contentType.match(/\/(jpg|jpeg|png|gif)$/) || fileName.match(/\.(jpg|jpeg|png|gif)$/)) {
+                        // Allow storage of file
+                        return true;
+                    } else {
+                        // Reject file
+                        return false;
+                    }
+                },
+            });
+            if (!file || file == undefined || file == null) {
+                throw new BadRequestException();
+            } else {
+                const path = join(process.cwd(), UPLOAD_LOCATION);
+                if (!existsSync(path)) {
+                    mkdirSync(path, { recursive: true });
+                }
+                file.filename = `${getFullDate()}-${file.filename}`;
+                await pump(file.file, createWriteStream(join(path, `${file.filename}`)));
+            }
+            return file;
+        } catch (error) {
+            throw new BadRequestException(error);
         }
     }
 }
