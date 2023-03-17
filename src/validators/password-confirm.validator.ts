@@ -1,4 +1,6 @@
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+    ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface
+} from 'class-validator';
 
 @ValidatorConstraint({ name: 'isEqualPasswordField', async: false })
 export class PasswordConfirmValidator implements ValidatorConstraintInterface {
