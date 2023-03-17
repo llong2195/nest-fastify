@@ -1,8 +1,15 @@
 import {
-    BadGatewayException, BadRequestException, ConflictException, ForbiddenException,
-    GatewayTimeoutException, InternalServerErrorException, MethodNotAllowedException,
-    RequestTimeoutException, ServiceUnavailableException, UnauthorizedException,
-    UnsupportedMediaTypeException
+    BadGatewayException,
+    BadRequestException,
+    ConflictException,
+    ForbiddenException,
+    GatewayTimeoutException,
+    InternalServerErrorException,
+    MethodNotAllowedException,
+    RequestTimeoutException,
+    ServiceUnavailableException,
+    UnauthorizedException,
+    UnsupportedMediaTypeException,
 } from '@nestjs/common';
 
 // 400

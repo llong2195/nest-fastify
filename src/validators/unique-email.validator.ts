@@ -1,6 +1,4 @@
-import {
-    ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface
-} from 'class-validator';
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { UserService } from 'src/modules/user/user.service';
 
 import { Injectable } from '@nestjs/common';
