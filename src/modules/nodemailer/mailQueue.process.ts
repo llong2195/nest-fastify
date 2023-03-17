@@ -1,9 +1,7 @@
 import { Job } from 'bull';
 
 import { OnQueueActive, Process, Processor } from '@nestjs/bull';
-import {
-    NodemailerService, QUEUE_EMAIL, QUEUE_EMAIL_SENDMAIL
-} from '@src/modules/nodemailer/nodemailer.service';
+import { NodemailerService, QUEUE_EMAIL, QUEUE_EMAIL_SENDMAIL } from '@src/modules/nodemailer/nodemailer.service';
 
 @Processor(QUEUE_EMAIL)
 export class mailQueueProcessor {

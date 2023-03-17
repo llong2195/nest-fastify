@@ -2,9 +2,7 @@ import { AuthUser } from 'src/decorators/auth.user.decorator';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
 import { AuthUserDto, BaseResponseDto } from '@base/base.dto';
-import {
-    Body, ClassSerializerInterceptor, Controller, Post, UseGuards, UseInterceptors
-} from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ChangePasswordDto } from '../dto/change-password.dto';
