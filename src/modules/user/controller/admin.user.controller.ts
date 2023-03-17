@@ -3,17 +3,8 @@ import { DeleteResult } from 'typeorm';
 
 import { BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
 import {
-    Body,
-    ClassSerializerInterceptor,
-    Controller,
-    Delete,
-    Get,
-    NotFoundException,
-    Param,
-    Patch,
-    Post,
-    Query,
-    UseInterceptors,
+    Body, ClassSerializerInterceptor, Controller, Delete, Get, NotFoundException, Param, Patch,
+    Post, Query, UseInterceptors
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
