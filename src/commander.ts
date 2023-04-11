@@ -1,7 +1,8 @@
 import { CommandFactory } from 'nest-commander';
 
 import { LogLevel } from '@nestjs/common';
-import { CommanderModule } from '@src/modules/commander/commander.module';
+
+import { CommanderModule } from '@modules/commander/commander.module';
 
 // import { AppModule } from './app.module';
 

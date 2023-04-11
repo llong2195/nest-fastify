@@ -2,18 +2,20 @@ import { useContainer } from 'class-validator';
 
 import helmet from '@fastify/helmet';
 import FastifyMultipart from '@fastify/multipart';
-import { INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
+import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationConfig } from '@src/configs/validation.config';
+
+import { ValidationConfig } from '@configs/validation.config';
+import { EnvEnum } from '@enums/app.enum';
 import { LoggerService } from '@src/logger/custom.logger';
+import { isEnv } from '@utils/util';
 import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppModule } from './app.module';
-import { EnvEnum } from './enums/app.enum';
-import { isEnv } from './utils/util';
+import { MessageService } from './i18n/message.service';
 
 declare const module: any;
 
@@ -36,15 +38,12 @@ async function bootstrap() {
 
     // -------------- Middleware --------------
     app.register(FastifyMultipart);
-    // app.use(json({ limit: '50mb' }));
-    // app.use(urlencoded({ extended: true, limit: '50mb' }));
-    // app.use('/payment/hooks', bodyParser.raw({ type: 'application/json' })); // webhook use rawBody
     // -------------------------------------------
-    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
 
     // -------------- Global filter/pipes --------------
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.setGlobalPrefix(configService.get<string>('apiPrefix'));
+    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
     // -------------------------------------------
 
     // -------------- Setup Cors --------------
@@ -62,13 +61,22 @@ async function bootstrap() {
                 if (DOMAIN_WHITELIST.indexOf(origin) !== -1) {
                     callback(null, true);
                 } else {
-                    callback(new Error());
+                    callback(
+                        new ForbiddenException(
+                            `The CORS policy for this site does not allow access from the specified Origin.`,
+                        ),
+                        false,
+                    );
                 }
             },
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
         await app.register(helmet);
     }
+    // -------------------------------------------
+
+    // -----------MessageService init-------------
+    MessageService.init();
     // -------------------------------------------
 
     // -----------Setup Redis Adapter-------------

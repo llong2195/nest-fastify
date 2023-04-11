@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE } from '@configs/config';
 import { Injectable } from '@nestjs/common';
 
 import langs from './index';
@@ -5,7 +6,7 @@ import langs from './index';
 @Injectable()
 export class MessageService {
     static langs: Map<string, Map<string, string>>;
-    static languageDefault = 'vi';
+    static languageDefault = DEFAULT_LOCALE || 'vi';
 
     static init(): void {
         MessageService.langs = langs;

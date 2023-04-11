@@ -4,11 +4,16 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'fs';
 import mime from 'mime-types';
 import { join } from 'path';
-import { AuthUser } from 'src/decorators/auth.user.decorator';
 import { pipeline } from 'stream';
 import util from 'util';
 
-import { AuthUserDto, BaseResponseDto, iPaginationOption, PaginationResponse } from '@base/base.dto';
+import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
+import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
+import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@configs/config';
+import { CurrentUser, Roles } from '@decorators/index';
+import { FileEntity } from '@entities/file.entity';
+import { RoleEnum } from '@enums/role.enum';
+import { MultipartFile } from '@fastify/multipart';
 import {
     BadRequestException,
     Controller,
@@ -27,16 +32,11 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@src/configs/config';
-import { Roles } from '@src/decorators/role.decorators';
-import { RoleEnum } from '@src/enums';
-import { FileEntity } from '@src/modules/file/entities/file.entity';
 import { getFullDate } from '@utils/index';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileService } from './file.service';
-import { MultipartFile } from '@fastify/multipart';
 
 const pump = util.promisify(pipeline);
 
@@ -54,10 +54,10 @@ export class FileController {
     })
     @HttpCode(HttpStatus.OK)
     @Post('/upload-image-local')
-    async local(@Req() req: FastifyRequest, @AuthUser() authUser?: AuthUserDto) {
+    async local(@Req() req: FastifyRequest, @CurrentUser() currentUser?: CurrentUserDto) {
         try {
             const file = await await this.uploadImageService(req);
-            const uploadfile = await this.uploadFileService.uploadFile(authUser?.id, file);
+            const uploadfile = await this.uploadFileService.uploadFile(currentUser?.id, file);
             return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, uploadfile));
         } catch (error) {
             throw new BadRequestException(error.message);
@@ -72,10 +72,13 @@ export class FileController {
     })
     @HttpCode(HttpStatus.OK)
     @Post('/upload-image-cloud')
-    async cloud(@Req() req: FastifyRequest, @AuthUser() authUser?: AuthUserDto): Promise<BaseResponseDto<FileEntity>> {
+    async cloud(
+        @Req() req: FastifyRequest,
+        @CurrentUser() currentUser?: CurrentUserDto,
+    ): Promise<BaseResponseDto<FileEntity>> {
         try {
             const file = await this.uploadImageService(req);
-            const data = await this.uploadFileService.uploadImageToCloudinary(file, authUser?.id);
+            const data = await this.uploadFileService.uploadImageToCloudinary(file, currentUser?.id);
             return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, data));
         } catch (error) {
             throw new HttpException(error.message, 500);
@@ -85,7 +88,7 @@ export class FileController {
     @UseGuards(JwtAuthGuard)
     @Roles(RoleEnum.ADMIN)
     @Get('/get-all')
-    async getAll(@Query() filter: iPaginationOption): Promise<PaginationResponse<FileEntity>> {
+    async getAll(@Query() filter: PaginationOption): Promise<PaginationResponse<FileEntity>> {
         const data = await this.uploadFileService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
         return new PaginationResponse<FileEntity>(data.body, data.meta);
     }
