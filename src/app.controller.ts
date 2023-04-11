@@ -1,8 +1,9 @@
 import { FastifyRequest } from 'fastify';
 
-import { ValidateError } from '@exceptions/errors/index';
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+
+import { ValidateError } from '@exceptions/errors/index';
 
 import { ErrorMessageCode } from './constants';
 import { LoggerService } from './logger/custom.logger';

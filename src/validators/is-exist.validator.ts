@@ -42,6 +42,6 @@ export class IsExist implements ValidatorConstraintInterface {
     }
 
     defaultMessage(validationArguments?: ValidationArguments): string {
-        return `${validationArguments.value}" is not Exist.`;
+        return `${validationArguments.value}" is not exist.`;
     }
 }
