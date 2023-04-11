@@ -1,5 +1,5 @@
-import enLangs from './en.lang';
-import viLangs from './vi.lang';
+import enLangs from './locales/en.lang';
+import viLangs from './locales/vi.lang';
 
 const map = new Map<string, Map<string, string>>();
 

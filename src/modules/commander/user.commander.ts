@@ -1,11 +1,11 @@
 import { Command, CommandRunner } from 'nest-commander';
 import { DataSource } from 'typeorm';
 
+import { UserEntity } from '@entities/user.entity';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { BCRYPT_SALT } from '@src/configs';
 import { RoleEnum } from '@src/enums';
 import { LoggerService } from '@src/logger/custom.logger';
-import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { Hash } from '@utils/hash.util';
 
 @Command({ name: 'seed:user' })
