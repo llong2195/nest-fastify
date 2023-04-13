@@ -112,3 +112,5 @@ async function ConfigDocument(app: INestApplication): Promise<void> {
 }
 
 bootstrap();
+
+// runInCluster(bootstrap);
