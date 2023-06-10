@@ -1,12 +1,12 @@
-import { useContainer } from 'class-validator';
-
 import helmet from '@fastify/helmet';
 import FastifyMultipart from '@fastify/multipart';
 import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, PartialGraphHost } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { useContainer } from 'class-validator';
+import fastify from 'fastify';
 
 import { ValidationConfig } from '@configs/validation.config';
 import { EnvEnum } from '@enums/app.enum';
@@ -16,6 +16,7 @@ import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppModule } from './app.module';
 import { MessageService } from './i18n/message.service';
+import { writeFileSync } from 'fs';
 
 declare const module: any;
 
@@ -26,8 +27,22 @@ async function bootstrap() {
         const logLevel = process.env.LOG_LEVEL || 'error,debug,verbose';
         logLevelsDefault = logLevel.split(',') as LogLevel[];
     }
-    const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
+    const instance = fastify();
+    // instance.addHook('onRequest', (request, reply, done) => {
+    //     reply['setHeader'] = function (key, value) {
+    //         return this.raw.setHeader(key, value);
+    //     };
+    //     reply['writeHead'] = function (key, value) {
+    //         return this.raw.writeHead(key, value);
+    //     };
+    //     reply['end'] = function () {
+    //         this.raw.end();
+    //     };
+    //     done();
+    // });
+    const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(instance), {
         logger: logLevelsDefault,
+        snapshot: true,
     });
     // ------------- Config ---------------
     const configService = app.get(ConfigService);
@@ -43,7 +58,6 @@ async function bootstrap() {
     // -------------- Global filter/pipes --------------
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.setGlobalPrefix(configService.get<string>('apiPrefix'));
-    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
     // -------------------------------------------
 
     // -------------- Setup Cors --------------
@@ -58,7 +72,7 @@ async function bootstrap() {
     } else {
         app.enableCors({
             origin: (origin, callback) => {
-                if (DOMAIN_WHITELIST.indexOf(origin) !== -1) {
+                if (DOMAIN_WHITELIST.indexOf('*') !== -1 || DOMAIN_WHITELIST.indexOf(origin) !== -1) {
                     callback(null, true);
                 } else {
                     callback(
@@ -73,6 +87,10 @@ async function bootstrap() {
         });
         await app.register(helmet);
     }
+    // -------------------------------------------
+
+    // -----------------Validator-----------------
+    useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
     // -------------------------------------------
 
     // -----------MessageService init-------------
