@@ -177,11 +177,11 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         manyOptions?: FindManyOptions<T>,
     ): Promise<PaginationResponse<T>> {
         const total = await this.repository.count({ where: options });
-        const offset = page === 1 ? 0 : limit * (page - 1);
+        const skip = page === 1 ? 0 : limit * (page - 1);
         const items = await this.repository.find({
             where: options,
             select: fields,
-            skip: offset,
+            skip: skip,
             take: limit,
             ...manyOptions,
         });
@@ -225,8 +225,10 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     ): Promise<PaginationResponse<T>> {
         const skip = (page - 1) * limit;
 
-        const total = await queryBuilder.getCount();
-        const data = await queryBuilder.take(limit).skip(skip).getRawMany();
+        const [data, total] = await Promise.all([
+            queryBuilder.limit(limit).offset(skip).getRawMany(),
+            queryBuilder.getCount(),
+        ]);
         const tableName = customTable ?? this.repository.metadata.tableName;
 
         const results: T[] = data.map(item => {
