@@ -37,6 +37,7 @@ import { getFullDate } from '@utils/index';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileService } from './file.service';
+import { FilterFileDto } from './dto/get-file.dto';
 
 const pump = util.promisify(pipeline);
 
@@ -99,7 +100,7 @@ export class FileController {
         @Headers() headers,
         @Req() req: FastifyRequest,
         @Res({ passthrough: true }) res: FastifyReply,
-        @Query('download') download = 'false',
+        @Query() filter: FilterFileDto,
     ): Promise<any> {
         try {
             const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
@@ -112,7 +113,7 @@ export class FileController {
                 'Content-Type': contentType,
                 'Content-Length': size,
             };
-            if (download === 'true') {
+            if (filter.download === true) {
                 header['Content-Disposition'] = contentDisposition(filePath);
             }
             if (contentType.includes('video')) {
