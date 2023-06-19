@@ -22,6 +22,7 @@ import { UserModule } from '@modules/user/user.module';
 import { isEnv } from '@utils/index';
 import { ValidatorsModule } from '@validators/validators.module';
 
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
 import { AllExceptionFilter } from './filter/exception.filter';
@@ -29,8 +30,8 @@ import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard'
 import { I18nModule } from './i18n/i18n.module';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
+import { IORedisModule, IRedisModuleOptions } from './libs';
 import { LoggerModule } from './logger/logger.module';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 const providers = [] as Provider[];
 
@@ -81,11 +82,13 @@ if (isEnv(EnvEnum.Production)) {
         BullModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
-            useFactory: (config: ConfigService) =>
+            useFactory: (configService: ConfigService) =>
                 ({
                     redis: {
-                        host: config.get<string>('REDIS_HOST'),
-                        port: config.get<number>('REDIS_PORT'),
+                        host: configService.get<string>('REDIS_HOST'),
+                        port: configService.get<number>('REDIS_PORT'),
+                        username: configService.get<string>('REDIS_USERNAME'),
+                        password: configService.get<string>('REDIS_PASSWORD'),
                     },
                     defaultJobOptions: {
                         removeOnComplete: true,
@@ -116,27 +119,20 @@ if (isEnv(EnvEnum.Production)) {
         QueueModule,
         CommanderModule,
         QrCodeModule,
-        // IORedisModule.registerAsync({
-        //     imports: [ConfigModule],
-        //     useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
-        //         return {
-        //             connectionOptions: {
-        //                 host: configService.get('REDIS_HOST'),
-        //                 port: configService.get('REDIS_PORT'),
-        //                 password: configService.get('REDIS_PASS'),
-        //             },
-        //             onClientReady: (client: Redis) => {
-        //                 client.on('connect', () => {
-        //                     LoggerService.log(
-        //                         `Connected to redis on ${client.options.host}:${client.options.port}`,
-        //                         IORedisModule.name,
-        //                     );
-        //                 });
-        //             },
-        //         };
-        //     },
-        //     inject: [ConfigService],
-        // }),
+        IORedisModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
+                return {
+                    connectionOptions: {
+                        host: configService.get<string>('REDIS_HOST'),
+                        port: configService.get<number>('REDIS_PORT'),
+                        username: configService.get<string>('REDIS_USERNAME'),
+                        password: configService.get<string>('REDIS_PASSWORD'),
+                    },
+                };
+            },
+            inject: [ConfigService],
+        }),
     ],
     controllers: [AppController],
     providers: [

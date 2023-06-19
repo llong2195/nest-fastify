@@ -16,7 +16,15 @@ export class IORedisModule {
                 const { connectionOptions, onClientReady } = await useFactory(...args);
 
                 const client = new IORedis(connectionOptions);
-                onClientReady(client);
+                if (typeof onClientReady == 'function') {
+                    onClientReady(client);
+                }
+                client.on('connect', () => {
+                    Logger.log(
+                        `Connected to redis on ${client.options.host}:${client.options.port}`,
+                        IORedisModule.name,
+                    );
+                });
                 client.on('error', err => {
                     Logger.error(err, IORedisModule.name);
                 });

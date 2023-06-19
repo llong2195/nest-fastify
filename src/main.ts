@@ -16,7 +16,6 @@ import { ValidatorsModule } from '@validators/validators.module';
 
 import { AppModule } from './app.module';
 import { MessageService } from './i18n/message.service';
-import { writeFileSync } from 'fs';
 
 declare const module: any;
 

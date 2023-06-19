@@ -1,6 +1,5 @@
 import { camelCase } from 'change-case';
 import CryptoJS from 'crypto-js';
-import moment from 'moment';
 import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
 import { PassThrough } from 'stream';
 
@@ -148,37 +147,6 @@ export const currentTimestamp = (second = true): number => {
         return Math.round(Date.now() / 1000);
     }
     return Date.now();
-};
-
-/**
- *
- * @param second
- * @returns
- */
-export const startTimeOfDay = (second = true): string | number => {
-    if (second) {
-        return moment().utcOffset(7).startOf('day').unix();
-    }
-    return moment().utcOffset(7).startOf('day').format('x');
-};
-
-/**
- *
- * @param time unixtime
- * @param second
- * @returns
- */
-export const startTimeOfADay = (time: number, second = true): string | number => {
-    if (second) {
-        return moment(time * 1000)
-            .utcOffset(7)
-            .startOf('day')
-            .unix();
-    }
-    return moment(time * 1000)
-        .utcOffset(7)
-        .startOf('day')
-        .format('x');
 };
 
 /**
