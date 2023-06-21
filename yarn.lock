@@ -462,10 +462,10 @@
     path-to-regexp "^6.1.0"
     reusify "^1.0.4"
 
-"@fastify/multipart@^7.6.1":
-  version "7.6.1"
-  resolved "https://registry.yarnpkg.com/@fastify/multipart/-/multipart-7.6.1.tgz#f91ca1cf3be722706fa8ea6d239b3f4f17730d44"
-  integrity sha512-9b0F1goBqf6HpNOBm3HXQUjWbL7984W3iCIfwwg/WVFp4fam8NItO1mmY1xyt1hOhITZrblTKUHTHHtZb5bkvA==
+"@fastify/multipart@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@fastify/multipart/-/multipart-7.7.0.tgz#491024539beedc33fe68b50c7b104002933077f8"
+  integrity sha512-lE5v6+MVbLYmPL8yUHrvyezEOLQbZulEPL8itwGqPbNxL2pWdAN1HWEZ7f3VdwyR6wmQdOcpfZ0zdCU4BbWKzw==
   dependencies:
     "@fastify/busboy" "^1.0.0"
     "@fastify/deepmerge" "^1.0.0"
@@ -7469,10 +7469,10 @@ type-fest@^0.21.3:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.21.3.tgz#d260a24b0198436e133fa26a524a6d65fa3b2e37"
   integrity sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==
 
-typeorm@^0.3.16:
-  version "0.3.16"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.3.16.tgz#a001d77b36cfaaf9ff495e15805dd17883116b7b"
-  integrity sha512-wJ4Qy1oqRKNDdZiBTTaVMqwo/XxC52Q7uNPTjltPgLhvIW173bL6Iad0lhptMOsFlpixFPaUu3PNziaRBwX2Zw==
+typeorm@^0.3.17:
+  version "0.3.17"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.3.17.tgz#a73c121a52e4fbe419b596b244777be4e4b57949"
+  integrity sha512-UDjUEwIQalO9tWw9O2A4GU+sT3oyoUXheHJy4ft+RFdnRdQctdQ34L9SqE2p7LdwzafHx1maxT+bqXON+Qnmig==
   dependencies:
     "@sqltools/formatter" "^1.2.5"
     app-root-path "^3.1.0"

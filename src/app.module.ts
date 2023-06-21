@@ -1,7 +1,6 @@
 import { join } from 'path';
 
 import { HttpModule } from '@nestjs/axios';
-import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
 import { MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
@@ -77,24 +76,6 @@ if (isEnv(EnvEnum.Production)) {
                     ttl: config.get<number>('THROTTLE_TTL'),
                     limit: config.get<number>('THROTTLE_LIMIT'),
                 } as ThrottlerModuleOptions),
-        }),
-
-        BullModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) =>
-                ({
-                    redis: {
-                        host: configService.get<string>('REDIS_HOST'),
-                        port: configService.get<number>('REDIS_PORT'),
-                        username: configService.get<string>('REDIS_USERNAME'),
-                        password: configService.get<string>('REDIS_PASSWORD'),
-                    },
-                    defaultJobOptions: {
-                        removeOnComplete: true,
-                        attempts: 10,
-                    },
-                } as BullRootModuleOptions),
         }),
 
         HttpModule.registerAsync({
