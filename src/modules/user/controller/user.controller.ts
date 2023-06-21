@@ -1,5 +1,4 @@
 import { plainToInstance } from 'class-transformer';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
 import {
     Body,
@@ -16,6 +15,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
 import { CurrentUser } from '@decorators/current.user.decorator';
 import { UserEntity } from '@entities/user.entity';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
