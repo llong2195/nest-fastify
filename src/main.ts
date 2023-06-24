@@ -2,7 +2,7 @@ import helmet from '@fastify/helmet';
 import FastifyMultipart from '@fastify/multipart';
 import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, PartialGraphHost } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';

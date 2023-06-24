@@ -12,23 +12,22 @@
             "decoratorMetadata": true
         },
         "keepClassNames": true,
-        "baseUrl": "./dist",
+        "baseUrl": "./",
         "paths": {
-            "@configs/*": ["./configs/*"],
-            "@base/*": ["./base/*"],
-            "@validators/*": ["./validators/*"],
-            "@modules/*": ["./modules/*"],
-            "@exceptions/*": ["./exceptions/*"],
-            "@decorators/*": ["./decorators/*"],
-            "@enums/*": ["./enums/*"],
-            "@constants/*": ["./constants/*"],
-            "@entities/*": ["./entities/*"],
-            "@guard/*": ["./guard/*"],
-            "@utils/*": ["./utils/*"],
-            "@libs/*": ["./libs/*"],
-            "@src/*": ["./*"]
+            "@configs/*": ["dist/configs/*"],
+            "@base/*": ["dist/base/*"],
+            "@validators/*": ["dist/validators/*"],
+            "@modules/*": ["dist/modules/*"],
+            "@exceptions/*": ["dist/exceptions/*"],
+            "@decorators/*": ["dist/decorators/*"],
+            "@enums/*": ["dist/enums/*"],
+            "@constants/*": ["dist/constants/*"],
+            "@entities/*": ["dist/entities/*"],
+            "@guard/*": ["dist/guard/*"],
+            "@utils/*": ["dist/utils/*"],
+            "@libs/*": ["dist/libs/*"],
+            "@src/*": ["dist/*"]
         }
     },
-    "root": "src",
     "minify": false
 }
