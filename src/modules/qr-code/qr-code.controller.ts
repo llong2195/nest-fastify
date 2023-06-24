@@ -1,6 +1,4 @@
-import { Response } from 'express';
-
-import { Body, Controller, Get, Header, Res } from '@nestjs/common';
+import { Body, Controller, Get, Header, Res, Response, StreamableFile } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { generateQR } from '@utils/util';
@@ -12,8 +10,8 @@ import { QRCodeDto } from './dto/create-qr-code.dto';
 export class QrCodeController {
     @Get()
     @Header('Content-Type', 'image/png')
-    getQRCode(@Body() param: QRCodeDto, @Res() res: Response) {
-        const qr = generateQR(param.text, param.size);
-        res.send(qr);
+    async getQRCode(@Body() param: QRCodeDto, @Res({ passthrough: true }) res: Response) {
+        const qr = await generateQR(param.text, param.size);
+        return new StreamableFile(qr);
     }
 }

@@ -1,4 +1,4 @@
-import { LoggerService } from 'src/logger/custom.logger';
+import { LoggerService } from '@src/logger/custom.logger';
 import {
     BaseEntity,
     EntityManager,

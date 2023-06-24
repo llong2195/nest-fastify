@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { LoggerService } from 'src/logger/custom.logger';
+import { LoggerService } from '@src/logger/custom.logger';
 import { QueryFailedError } from 'typeorm';
 
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
