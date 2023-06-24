@@ -7,7 +7,7 @@ export class QRCodeDto {
     @ApiProperty({
         description: 'text',
         required: true,
-        default: 'fjob',
+        default: 'qrcode',
     })
     @IsNotEmpty()
     @IsString()
