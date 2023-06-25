@@ -107,7 +107,6 @@ if (isEnv(EnvEnum.Production)) {
         FileModule,
         NodemailerModule,
         QueueModule,
-        CommanderModule,
         QrCodeModule,
         IORedisModule.registerAsync({
             imports: [ConfigModule],
