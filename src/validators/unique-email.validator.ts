@@ -1,13 +1,17 @@
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
 import { Injectable } from '@nestjs/common';
-
-import { UserService } from '@modules/user/user.service';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { UserEntity } from '@entities/user.entity';
 
 @ValidatorConstraint({ name: 'isEmailUnique', async: true })
 @Injectable()
 export class UniqueEmailValidator implements ValidatorConstraintInterface {
-    constructor(private readonly userService: UserService) {}
+    constructor(
+        @InjectDataSource()
+        private readonly dataSource: DataSource,
+    ) {}
 
     defaultMessage(validationArguments?: ValidationArguments): string {
         return `${validationArguments.value} is taken, please try another`;
@@ -21,7 +25,7 @@ export class UniqueEmailValidator implements ValidatorConstraintInterface {
      * @returns A boolean value.
      */
     async validate(value: any, validationArguments?: ValidationArguments): Promise<boolean> {
-        const result = await this.userService.findByEmail(value);
+        const result = await this.dataSource.getRepository(UserEntity).findOneBy({ email: value });
         return !result;
     }
 }
