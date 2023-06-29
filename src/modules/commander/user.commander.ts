@@ -5,7 +5,7 @@ import { UserEntity } from '@entities/user.entity';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { BCRYPT_SALT } from '@src/configs';
 import { RoleEnum } from '@src/enums';
-import { LoggerService } from '@src/logger/custom.logger';
+import { LoggerService } from '@logger/custom.logger';
 import { Hash } from '@utils/hash.util';
 
 @Command({ name: 'seed:user' })

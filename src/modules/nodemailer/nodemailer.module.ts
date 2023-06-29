@@ -5,7 +5,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { mailQueueProcessor } from '@src/modules/nodemailer/mailQueue.process';
+import { mailQueueProcessor } from './mailQueue.process';
 
 import { NodemailerController } from './nodemailer.controller';
 import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';

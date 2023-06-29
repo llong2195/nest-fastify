@@ -14,19 +14,20 @@
         "keepClassNames": true,
         "baseUrl": "./",
         "paths": {
-            "@configs/*": ["dist/configs/*"],
-            "@base/*": ["dist/base/*"],
-            "@validators/*": ["dist/validators/*"],
-            "@modules/*": ["dist/modules/*"],
-            "@exceptions/*": ["dist/exceptions/*"],
-            "@decorators/*": ["dist/decorators/*"],
-            "@enums/*": ["dist/enums/*"],
-            "@constants/*": ["dist/constants/*"],
-            "@entities/*": ["dist/entities/*"],
-            "@guard/*": ["dist/guard/*"],
-            "@utils/*": ["dist/utils/*"],
-            "@libs/*": ["dist/libs/*"],
-            "@src/*": ["dist/*"]
+            // "@configs/*": ["dist/configs/*"],
+            // "@base/*": ["dist/base/*"],
+            // "@validators/*": ["dist/validators/*"],
+            // "@modules/*": ["dist/modules/*"],
+            // "@logger/*": ["dist/logger/*"],
+            // "@exceptions/*": ["dist/exceptions/*"],
+            // "@decorators/*": ["dist/decorators/*"],
+            // "@enums/*": ["dist/enums/*"],
+            // "@constants/*": ["dist/constants/*"],
+            // "@entities/*": ["dist/entities/*"],
+            // "@guard/*": ["dist/guard/*"],
+            // "@utils/*": ["dist/utils/*"],
+            // "@libs/*": ["dist/libs/*"],
+            // "@src/*": ["dist/*"]
         }
     },
     "minify": false

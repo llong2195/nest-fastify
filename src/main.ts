@@ -10,7 +10,7 @@ import fastify from 'fastify';
 
 import { ValidationConfig } from '@configs/validation.config';
 import { EnvEnum } from '@enums/app.enum';
-import { LoggerService } from '@src/logger/custom.logger';
+import { LoggerService } from '@logger/custom.logger';
 import { isEnv } from '@utils/util';
 import { ValidatorsModule } from '@validators/validators.module';
 

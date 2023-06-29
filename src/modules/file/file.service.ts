@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { LoggerService } from '@src/logger/custom.logger';
+import { LoggerService } from '@logger/custom.logger';
 
 import { BaseService } from '@base/base.service';
 import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@configs/config';

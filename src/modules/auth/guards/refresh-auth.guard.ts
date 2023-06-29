@@ -1,7 +1,7 @@
 import { ErrorMessageCode } from '@constants/error-message-code';
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { LoggerService } from '@src/logger/custom.logger';
+import { LoggerService } from '@logger/custom.logger';
 
 @Injectable()
 export class RefreshAuthGuard extends AuthGuard('refresh') {
