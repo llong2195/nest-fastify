@@ -13,7 +13,6 @@ import { EnvEnum } from '@enums/app.enum';
 import { LoggerService } from '@logger/custom.logger';
 import { isEnv } from '@utils/util';
 import { ValidatorsModule } from '@validators/validators.module';
-
 import { AppModule } from './app.module';
 import { MessageService } from './i18n/message.service';
 

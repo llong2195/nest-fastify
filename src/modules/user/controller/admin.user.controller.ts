@@ -1,6 +1,3 @@
-import { plainToInstance } from 'class-transformer';
-import { DeleteResult } from 'typeorm';
-
 import {
     Body,
     ClassSerializerInterceptor,
@@ -15,11 +12,12 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { DeleteResult } from 'typeorm';
 
 import { BaseResponseDto } from '@base/base.dto';
 import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
 import { UserEntity } from '@entities/user.entity';
-
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../user.service';

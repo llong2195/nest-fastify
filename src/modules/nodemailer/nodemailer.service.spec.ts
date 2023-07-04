@@ -1,6 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
-
 import { BullModule } from '@nestjs/bull';
+import { Test, TestingModule } from '@nestjs/testing';
 
 import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
 

@@ -1,16 +1,15 @@
-import { join } from 'path';
-
 import { HttpModule } from '@nestjs/axios';
 import { MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
+import { join } from 'path';
 
 import { appConfig, authConfig, databaseConfig } from '@configs/index';
 import { EnvEnum } from '@enums/index';
 import { AuthModule } from '@modules/auth/auth.module';
-import { CommanderModule } from '@modules/commander/commander.module';
 import { CronModule } from '@modules/cron/cron.module';
 import { FileModule } from '@modules/file/file.module';
 import { NodemailerModule } from '@modules/nodemailer/nodemailer.module';
@@ -20,8 +19,6 @@ import { SettingModule } from '@modules/setting/setting.module';
 import { UserModule } from '@modules/user/user.module';
 import { isEnv } from '@utils/index';
 import { ValidatorsModule } from '@validators/validators.module';
-
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { AppController } from './app.controller';
 import { DatabaseModule } from './database/database.module';
 import { AllExceptionFilter } from './filter/exception.filter';

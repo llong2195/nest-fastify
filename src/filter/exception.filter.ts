@@ -1,19 +1,18 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { LoggerService } from '@logger/custom.logger';
-import { QueryFailedError } from 'typeorm';
-
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
 import { ConfigService } from '@nestjs/config';
 import * as Sentry from '@sentry/node';
 import '@sentry/tracing';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { QueryFailedError } from 'typeorm';
 
+import { DEFAULT_LOCALE, SENTRY_DSN } from '@configs/index';
 import { ErrorCode } from '@constants/error-code';
 import { BaseError } from '@exceptions/errors';
-import { DEFAULT_LOCALE, SENTRY_DSN } from '@src/configs';
+import { LoggerService } from '@logger/custom.logger';
+import { MessageService } from '@src/i18n/message.service';
 import { IResponseBody } from '@src/interface';
 import { isDev } from '@utils/util';
-import { MessageService } from '@src/i18n/message.service';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {

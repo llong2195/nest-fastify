@@ -1,8 +1,8 @@
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { LoggerService } from '@logger/custom.logger';
 
 @Injectable()

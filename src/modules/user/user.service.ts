@@ -1,8 +1,7 @@
-import { DataSource } from 'typeorm';
-import { EntityId } from 'typeorm/repository/EntityId';
-
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { EntityId } from 'typeorm/repository/EntityId';
 
 import { BaseService } from '@base/base.service';
 import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
@@ -10,7 +9,6 @@ import { UserEntity } from '@entities/user.entity';
 import { NotFoundError, ValidateError } from '@exceptions/errors';
 import { LoggerService } from '@logger/custom.logger';
 import { Hash } from '@utils/hash.util';
-
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';

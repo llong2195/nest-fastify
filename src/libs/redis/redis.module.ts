@@ -1,6 +1,5 @@
-import IORedis from 'ioredis';
-
 import { DynamicModule, Global, Logger, Module } from '@nestjs/common';
+import IORedis from 'ioredis';
 
 import type { RedisAsyncModuleOptions } from './redis.interface';
 

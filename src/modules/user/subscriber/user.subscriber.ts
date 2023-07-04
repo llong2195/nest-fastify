@@ -1,7 +1,6 @@
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
-
-import { ConfigService } from '@nestjs/config';
 
 import { UserEntity } from '@entities/user.entity';
 

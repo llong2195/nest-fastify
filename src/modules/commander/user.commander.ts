@@ -1,10 +1,10 @@
+import { InjectDataSource } from '@nestjs/typeorm';
 import { Command, CommandRunner } from 'nest-commander';
 import { DataSource } from 'typeorm';
 
+import { BCRYPT_SALT } from '@configs/index';
 import { UserEntity } from '@entities/user.entity';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { BCRYPT_SALT } from '@src/configs';
-import { RoleEnum } from '@src/enums';
+import { RoleEnum } from '@enums/index';
 import { LoggerService } from '@logger/custom.logger';
 import { Hash } from '@utils/hash.util';
 

@@ -1,12 +1,11 @@
-import { join } from 'path';
-
 import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { mailQueueProcessor } from './mailQueue.process';
+import { join } from 'path';
 
+import { mailQueueProcessor } from './mailQueue.process';
 import { NodemailerController } from './nodemailer.controller';
 import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
 

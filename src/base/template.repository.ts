@@ -1,9 +1,8 @@
-import { DataSource, EntityManager, Repository } from 'typeorm';
-
-import { UserEntity } from '@entities/index';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, EntityManager, QueryRunner, Repository } from 'typeorm';
 
+import { UserEntity } from '@entities/index';
 import { BaseRepository } from './base.repository';
 
 /**
@@ -24,8 +23,8 @@ export class TemplateRepository extends Repository<UserEntity> {
 @Injectable()
 export class Template2Repository extends Repository<UserEntity> {
     constructor(private readonly dataSource: DataSource, manager?: EntityManager) {
-        let sManager;
-        let sQueryRunner;
+        let sManager: EntityManager;
+        let sQueryRunner: QueryRunner;
         if (manager && manager != undefined && manager != null) {
             sQueryRunner = manager.queryRunner;
             sManager = manager;

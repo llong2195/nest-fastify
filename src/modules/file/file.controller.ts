@@ -1,3 +1,4 @@
+import { MultipartFile } from '@fastify/multipart';
 import { plainToInstance } from 'class-transformer';
 import contentDisposition from 'content-disposition';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -13,7 +14,6 @@ import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@configs/config';
 import { CurrentUser, Roles } from '@decorators/index';
 import { FileEntity } from '@entities/file.entity';
 import { RoleEnum } from '@enums/role.enum';
-import { MultipartFile } from '@fastify/multipart';
 import {
     BadRequestException,
     Controller,
@@ -36,8 +36,8 @@ import { getFullDate } from '@utils/index';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
-import { FileService } from './file.service';
 import { FilterFileDto } from './dto/get-file.dto';
+import { FileService } from './file.service';
 
 const pump = util.promisify(pipeline);
 

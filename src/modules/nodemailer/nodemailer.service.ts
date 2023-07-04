@@ -1,8 +1,8 @@
-import { Queue } from 'bull';
-
 import { MailerService } from '@nestjs-modules/mailer';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
+import { Queue } from 'bull';
+
 import { LoggerService } from '@logger/custom.logger';
 
 export const QUEUE_EMAIL = 'QUEUE_EMAIL';

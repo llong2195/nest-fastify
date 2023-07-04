@@ -1,5 +1,4 @@
-import { DataSource, EntityManager, Repository } from 'typeorm';
-
+import { DataSource, EntityManager, QueryRunner, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 import { SettingEntity } from '@entities/setting.entity';
@@ -7,8 +6,8 @@ import { SettingEntity } from '@entities/setting.entity';
 @Injectable()
 export class SettingRepository extends Repository<SettingEntity> {
     constructor(private readonly dataSource: DataSource, manager?: EntityManager) {
-        let sManager;
-        let sQueryRunner;
+        let sManager: EntityManager;
+        let sQueryRunner: QueryRunner;
         if (manager && manager != undefined && manager != null) {
             sQueryRunner = manager.queryRunner;
             sManager = manager;

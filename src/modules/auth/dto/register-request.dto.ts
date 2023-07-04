@@ -1,7 +1,6 @@
-import { Type } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
-
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, Length, Validate } from 'class-validator';
+
 import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
 import { UniqueEmailValidator } from '@validators/unique-email.validator';
 
