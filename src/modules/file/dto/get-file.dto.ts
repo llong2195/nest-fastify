@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ConvertToBoolean } from '@utils/index';
 import { IsBoolean, IsOptional } from 'class-validator';
+
+import { ConvertToBoolean } from '@utils/index';
 
 export class FilterFileDto {
     @ApiProperty({

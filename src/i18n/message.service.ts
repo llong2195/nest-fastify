@@ -1,6 +1,6 @@
-import { DEFAULT_LOCALE } from '@configs/config';
 import { Injectable } from '@nestjs/common';
 
+import { DEFAULT_LOCALE } from '@configs/config';
 import langs from './locales/index';
 
 @Injectable()

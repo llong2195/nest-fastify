@@ -1,6 +1,5 @@
-import { Redis } from 'ioredis';
-
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Redis } from 'ioredis';
 
 import { IORedisKey } from './redis.module';
 

@@ -24,6 +24,7 @@
             "@base/*": ["src/base/*"],
             "@validators/*": ["src/validators/*"],
             "@modules/*": ["src/modules/*"],
+            "@logger/*": ["src/logger/*"],
             "@exceptions/*": ["src/exceptions/*"],
             "@decorators/*": ["src/decorators/*"],
             "@enums/*": ["src/enums/*"],

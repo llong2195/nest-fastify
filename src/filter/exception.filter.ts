@@ -1,23 +1,26 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { LoggerService } from 'src/logger/custom.logger';
-import { QueryFailedError } from 'typeorm';
-
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
 import { ConfigService } from '@nestjs/config';
 import * as Sentry from '@sentry/node';
 import '@sentry/tracing';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { QueryFailedError } from 'typeorm';
 
+import { DEFAULT_LOCALE, SENTRY_DSN } from '@configs/index';
 import { ErrorCode } from '@constants/error-code';
 import { BaseError } from '@exceptions/errors';
-import { SENTRY_DSN } from '@src/configs';
-import { I18nService } from '@src/i18n/i18n.service';
+import { LoggerService } from '@logger/custom.logger';
+import { MessageService } from '@src/i18n/message.service';
 import { IResponseBody } from '@src/interface';
 import { isDev } from '@utils/util';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-    constructor(private logger: LoggerService, private readonly configService: ConfigService) {
+    constructor(
+        private logger: LoggerService,
+        private readonly configService: ConfigService,
+        private readonly i18nService: MessageService,
+    ) {
         Sentry.init({
             dsn: SENTRY_DSN,
             normalizeDepth: 10,
@@ -30,10 +33,10 @@ export class AllExceptionFilter implements ExceptionFilter {
         response: FastifyReply,
         exception: HttpException | QueryFailedError | Error,
     ): void {
-        const i18nService = new I18nService(request);
         let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         let errorCode = ErrorCode.UNKNOWN;
         let message = 'Internal server error';
+        const lang = request?.headers['accept-language']?.split(';')[0]?.split(',')[0] || DEFAULT_LOCALE;
         let responseBody: IResponseBody = {
             statusCode: statusCode,
             errorCode: errorCode,
@@ -87,7 +90,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         if (Array.isArray(responseBody.message)) {
             responseBody.message = responseBody.message[0];
         }
-        if (responseBody.message) responseBody.message = i18nService.t(responseBody.message as string);
+        if (responseBody.message) responseBody.message = this.i18nService.lang(responseBody.message as string, lang);
         response.status(statusCode).send(responseBody);
         this.handleMessage(exception, request, responseBody);
     }

@@ -1,15 +1,18 @@
-import { Queue } from 'bull';
-
 import { MailerService } from '@nestjs-modules/mailer';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
-import { LoggerService } from '@src/logger/custom.logger';
+import { Queue } from 'bull';
+
+import { LoggerService } from '@logger/custom.logger';
 
 export const QUEUE_EMAIL = 'QUEUE_EMAIL';
 export const QUEUE_EMAIL_SENDMAIL = 'QUEUE_EMAIL_SENDMAIL';
 @Injectable()
 export class NodemailerService {
-    constructor(private readonly mailerService: MailerService, @InjectQueue(QUEUE_EMAIL) private queueMail: Queue) {}
+    constructor(
+        private readonly mailerService: MailerService,
+        @InjectQueue(QUEUE_EMAIL) private queueMail: Queue,
+    ) {}
 
     public async example(): Promise<void> {
         this.mailerService

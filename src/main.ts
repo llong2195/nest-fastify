@@ -2,7 +2,7 @@ import helmet from '@fastify/helmet';
 import FastifyMultipart from '@fastify/multipart';
 import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, PartialGraphHost } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
@@ -10,13 +10,11 @@ import fastify from 'fastify';
 
 import { ValidationConfig } from '@configs/validation.config';
 import { EnvEnum } from '@enums/app.enum';
-import { LoggerService } from '@src/logger/custom.logger';
+import { LoggerService } from '@logger/custom.logger';
 import { isEnv } from '@utils/util';
 import { ValidatorsModule } from '@validators/validators.module';
-
 import { AppModule } from './app.module';
 import { MessageService } from './i18n/message.service';
-import { writeFileSync } from 'fs';
 
 declare const module: any;
 

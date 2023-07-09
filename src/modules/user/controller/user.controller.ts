@@ -1,6 +1,3 @@
-import { plainToInstance } from 'class-transformer';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
-
 import {
     Body,
     ClassSerializerInterceptor,
@@ -12,11 +9,12 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
 
 import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
 import { CurrentUser } from '@decorators/current.user.decorator';
 import { UserEntity } from '@entities/user.entity';
-
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../user.service';

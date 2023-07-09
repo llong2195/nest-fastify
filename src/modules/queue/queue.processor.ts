@@ -1,6 +1,5 @@
-import { Job } from 'bull';
-
 import { Process, Processor } from '@nestjs/bull';
+import { Job } from 'bull';
 
 import { TRANSCODING_QUEUE } from './queue.service';
 

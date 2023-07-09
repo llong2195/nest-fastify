@@ -1,12 +1,11 @@
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { plainToClass, plainToInstance } from 'class-transformer';
 
 import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
 import { CurrentUser } from '@decorators/current.user.decorator';
 import { UserEntity } from '@entities/user.entity';
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Throttle } from '@nestjs/throttler';
-
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/login-request.dto';
@@ -16,7 +15,10 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 @ApiTags('v1/auth')
 @Controller('v1/auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly userService: UserService,
+    ) {}
 
     @HttpCode(HttpStatus.OK)
     @Throttle(10, 10)
