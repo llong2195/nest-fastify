@@ -81,7 +81,7 @@ if (isEnv(EnvEnum.Production)) {
                         // Example user agent: Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)
                         new RegExp('bingbot', 'gi'),
                     ],
-                } as ThrottlerModuleOptions),
+                }) as ThrottlerModuleOptions,
         }),
 
         HttpModule.registerAsync({

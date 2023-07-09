@@ -23,7 +23,7 @@ import { QueueService } from './queue.service';
                         removeOnComplete: true,
                         attempts: 10,
                     },
-                } as BullRootModuleOptions),
+                }) as BullRootModuleOptions,
         }),
 
         BullModule.registerQueue({

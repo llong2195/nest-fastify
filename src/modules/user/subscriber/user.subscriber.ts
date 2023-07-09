@@ -8,7 +8,10 @@ import { UserEntity } from '@entities/user.entity';
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     private readonly bcryptSalt: number;
 
-    constructor(dataSource: DataSource, private readonly configService: ConfigService) {
+    constructor(
+        dataSource: DataSource,
+        private readonly configService: ConfigService,
+    ) {
         dataSource.subscribers.push(this);
         this.bcryptSalt = configService.get<number>('bcryptSalt');
     }

@@ -5,7 +5,10 @@ import { SettingEntity } from '@entities/setting.entity';
 
 @Injectable()
 export class SettingRepository extends Repository<SettingEntity> {
-    constructor(private readonly dataSource: DataSource, manager?: EntityManager) {
+    constructor(
+        private readonly dataSource: DataSource,
+        manager?: EntityManager,
+    ) {
         let sManager: EntityManager;
         let sQueryRunner: QueryRunner;
         if (manager && manager != undefined && manager != null) {

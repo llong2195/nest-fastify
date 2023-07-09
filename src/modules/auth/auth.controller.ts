@@ -15,7 +15,10 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 @ApiTags('v1/auth')
 @Controller('v1/auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly userService: UserService,
+    ) {}
 
     @HttpCode(HttpStatus.OK)
     @Throttle(10, 10)
