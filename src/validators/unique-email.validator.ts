@@ -1,8 +1,8 @@
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
-
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { DataSource } from 'typeorm';
+
 import { UserEntity } from '@entities/user.entity';
 
 @ValidatorConstraint({ name: 'isEmailUnique', async: true })

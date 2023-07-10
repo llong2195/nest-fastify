@@ -86,7 +86,7 @@
     "@types/crypto-js": "^4.1.1",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.4.1",
-    "@types/passport-jwt": "^3.0.8",
+    "@types/passport-jwt": "^3.0.9",
     "@types/qrcode": "^1.5.1",
     "@types/request-ip": "^0.0.38",
     "@types/supertest": "^2.0.12",

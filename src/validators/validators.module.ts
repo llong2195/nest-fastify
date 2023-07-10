@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserEntity } from '@entities/user.entity';
-
 import { IsExist } from './is-exist.validator';
 import { IsNotExist } from './is-not-exist.validator';
 import { PasswordConfirmValidator } from './password-confirm.validator';

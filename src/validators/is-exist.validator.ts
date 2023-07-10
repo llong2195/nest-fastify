@@ -1,7 +1,5 @@
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
-import { ValidationArguments } from 'class-validator/types/validation/ValidationArguments';
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { DataSource, EntityTarget } from 'typeorm';
-
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 

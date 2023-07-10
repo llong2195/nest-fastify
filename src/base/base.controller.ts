@@ -2,7 +2,7 @@ import { BadRequestException, HttpException } from '@nestjs/common';
 import { isString } from 'class-validator';
 import { QueryFailedError } from 'typeorm';
 
-import { ErrorCode } from '@constants/error-code';
+import { ErrorCode, ErrorMessageCode } from '@constants/index';
 import { ValidateError } from '@exceptions/errors';
 import { BaseError } from '@exceptions/errors/base.error';
 import { DatabaseError } from '@exceptions/errors/database.error';
@@ -28,10 +28,10 @@ export class BaseController {
             });
         } else if (error instanceof TypeError) {
             // console.error(error)
-            throw new ValidateError(this.i18n.lang('UNKNOWN_ERROR', lang), ErrorCode.SYNTAX_ERROR);
+            throw new ValidateError(this.i18n.lang(ErrorMessageCode.SYNTAX_ERROR, lang), ErrorCode.SYNTAX_ERROR);
         } else if (error instanceof QueryFailedError) {
             // console.error(error)
-            throw new DatabaseError(this.i18n.lang('UNKNOWN_ERROR', lang), ErrorCode.UNKNOWN);
+            throw new DatabaseError(this.i18n.lang(ErrorMessageCode.UNKNOWN, lang), ErrorCode.UNKNOWN);
         } else if (error instanceof HttpException) {
             const response = error.getResponse() as Record<string, unknown>;
             if (isString(response)) {
@@ -47,6 +47,6 @@ export class BaseController {
             });
         }
 
-        throw new DatabaseError(this.i18n.lang('UNKNOWN_ERROR', lang), ErrorCode.UNKNOWN);
+        throw new DatabaseError(this.i18n.lang(ErrorMessageCode.UNKNOWN, lang), ErrorCode.UNKNOWN);
     }
 }
