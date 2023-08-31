@@ -1,4 +1,3 @@
-import { appConfig, authConfig, databaseConfig } from '@configs/index';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
@@ -10,7 +9,6 @@ import { UserCommander } from './user.commander';
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: ['.env'],
-            load: [appConfig, databaseConfig, authConfig],
         }),
         DatabaseModule,
     ],

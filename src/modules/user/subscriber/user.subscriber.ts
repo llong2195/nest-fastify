@@ -13,7 +13,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
         private readonly configService: ConfigService,
     ) {
         dataSource.subscribers.push(this);
-        this.bcryptSalt = configService.get<number>('bcryptSalt');
+        this.bcryptSalt = configService.get<number>('BCRYPT_SALT');
     }
 
     listenTo() {
@@ -23,14 +23,14 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     async beforeInsert(event: InsertEvent<UserEntity>): Promise<void> {
         const { password } = event.entity;
         if (password) {
-            event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+            event.entity.password = await bcrypt.hash(password, Number(this.bcryptSalt));
         }
     }
 
     async beforeUpdate(event: UpdateEvent<UserEntity>): Promise<void> {
         const { password } = event.entity;
         if (password) {
-            event.entity.password = await bcrypt.hash(password, this.bcryptSalt);
+            event.entity.password = await bcrypt.hash(password, Number(this.bcryptSalt));
         }
     }
 }

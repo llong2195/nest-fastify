@@ -32,6 +32,7 @@
             "@entities/*": ["src/entities/*"],
             "@guard/*": ["src/guard/*"],
             "@utils/*": ["src/utils/*"],
+            "@i18n/*": ["src/i18n/*"],
             "@libs/*": ["src/libs/*"],
             "@src/*": ["src/*"]
         }

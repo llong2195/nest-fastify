@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export class DateAudit extends BaseEntity {
-    @Column({ default: false })
+    @Column({ name: 'deleted', default: false })
     deleted: boolean;
 
     @CreateDateColumn({
