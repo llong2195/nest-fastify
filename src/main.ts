@@ -44,7 +44,7 @@ async function bootstrap() {
     });
     // ------------- Config ---------------
     const configService = app.get(ConfigService);
-    const port: number = configService.get<number>('port');
+    const port: number = configService.get<number>('PORT');
     const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
     const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
     // -------------------------------------------
@@ -55,7 +55,7 @@ async function bootstrap() {
 
     // -------------- Global filter/pipes --------------
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
-    app.setGlobalPrefix(configService.get<string>('apiPrefix'));
+    app.setGlobalPrefix(configService.get<string>('API_PREFIX'));
     // -------------------------------------------
 
     // -------------- Setup Cors --------------

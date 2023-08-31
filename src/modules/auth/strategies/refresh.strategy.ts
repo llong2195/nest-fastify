@@ -1,14 +1,14 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { authConfig } from '@configs/auth.config';
+import { JWT_SECRET_KEY } from '@configs/config';
 
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     constructor() {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: authConfig().jwtSecretKey,
+            secretOrKey: JWT_SECRET_KEY,
         });
     }
 

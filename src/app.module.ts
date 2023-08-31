@@ -1,5 +1,5 @@
 import { HttpModule } from '@nestjs/axios';
-import { MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
@@ -7,7 +7,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { join } from 'path';
 
-import { appConfig, authConfig, databaseConfig } from '@configs/index';
 import { EnvEnum } from '@enums/index';
 import { AuthModule } from '@modules/auth/auth.module';
 import { CronModule } from '@modules/cron/cron.module';
@@ -30,6 +29,7 @@ import { IORedisModule, IRedisModuleOptions } from './libs';
 import { LoggerModule } from './logger/logger.module';
 
 const providers = [] as Provider[];
+const modules = [] as DynamicModule[];
 
 if (isEnv(EnvEnum.Production)) {
     providers.push({
@@ -41,22 +41,22 @@ if (isEnv(EnvEnum.Production)) {
         provide: APP_INTERCEPTOR,
         useClass: LoggingInterceptor,
     });
+    modules.push(
+        DevtoolsModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => ({
+                http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
+                port: config.get<number>('PORT'),
+            }),
+        }),
+    );
 }
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: ['.env'],
-            load: [appConfig, databaseConfig, authConfig],
-        }),
-
-        DevtoolsModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
-                http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
-                port: config.get<number>('port'),
-            }),
         }),
 
         ServeStaticModule.forRoot({
@@ -119,6 +119,8 @@ if (isEnv(EnvEnum.Production)) {
             },
             inject: [ConfigService],
         }),
+
+        ...modules,
     ],
     controllers: [AppController],
     providers: [
@@ -133,11 +135,4 @@ if (isEnv(EnvEnum.Production)) {
         ...providers,
     ],
 })
-export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer): void {
-        // consumer.apply(RawBodyMiddleware).forRoutes({
-        //     path: 'webhook/stripe',
-        //     method: RequestMethod.POST,
-        // });
-    }
-}
+export class AppModule {}

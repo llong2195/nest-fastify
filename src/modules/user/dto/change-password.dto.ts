@@ -12,10 +12,10 @@ export class ChangePasswordDto {
     @ApiProperty()
     @IsNotEmpty()
     @Length(8, 24)
-    new_password: string;
+    newPassword: string;
 
     @ApiProperty()
     @IsNotEmpty()
     @Validate(PasswordConfirmValidator, ['new_password'])
-    new_password_confirmation: string;
+    newPasswordConfirmation: string;
 }

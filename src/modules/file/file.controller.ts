@@ -1,5 +1,4 @@
 import { MultipartFile } from '@fastify/multipart';
-import { plainToInstance } from 'class-transformer';
 import contentDisposition from 'content-disposition';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'fs';
@@ -59,7 +58,7 @@ export class FileController {
         try {
             const file = await await this.uploadImageService(req);
             const uploadfile = await this.uploadFileService.uploadFile(currentUser?.id, file);
-            return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, uploadfile));
+            return new BaseResponseDto<FileEntity>(uploadfile);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -80,7 +79,7 @@ export class FileController {
         try {
             const file = await this.uploadImageService(req);
             const data = await this.uploadFileService.uploadImageToCloudinary(file, currentUser?.id);
-            return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, data));
+            return new BaseResponseDto<FileEntity>(data);
         } catch (error) {
             throw new HttpException(error.message, 500);
         }

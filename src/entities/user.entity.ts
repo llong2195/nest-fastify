@@ -22,7 +22,6 @@ export class UserEntity extends DateAudit {
     @Column({ name: 'last_name', type: 'varchar', nullable: true })
     lastName: string;
 
-    // @Exclude()
     @Column({ name: 'password', type: 'varchar', nullable: true })
     password: string;
 

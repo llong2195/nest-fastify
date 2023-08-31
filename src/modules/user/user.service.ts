@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';
 
 import { BaseService } from '@base/base.service';
-import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
 import { UserEntity } from '@entities/user.entity';
 import { NotFoundError, ValidateError } from '@exceptions/errors';
 import { LoggerService } from '@logger/custom.logger';
@@ -15,11 +12,7 @@ import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {
-    constructor(
-        @InjectDataSource() private readonly dataSource: DataSource,
-        repository: UserRepository,
-        logger: LoggerService,
-    ) {
+    constructor(repository: UserRepository, logger: LoggerService) {
         super(repository, logger);
     }
 
@@ -31,13 +24,6 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         return this._findById(id);
     }
 
-    async getInactiveUsers(filter: PaginationOption): Promise<PaginationResponse<UserEntity>> {
-        const { page, limit, deleted } = filter;
-        const result = await this.repository.getInactiveUsers(deleted, page, limit);
-        const total = await this.repository.countInactiveUsers(deleted);
-        return this.pagination<UserEntity>(result, total, page, limit);
-    }
-
     async changePassword(userId: EntityId, changePass: ChangePasswordDto): Promise<UserEntity> {
         const user = await this._findById(userId);
         if (!user) {
@@ -47,7 +33,7 @@ export class UserService extends BaseService<UserEntity, UserRepository> {
         if (!compareResult) {
             throw new ValidateError('PASSWORD_INCORRECT');
         }
-        user.password = changePass.new_password;
+        user.password = changePass.newPassword;
         await user.save();
         return user;
     }

@@ -19,11 +19,11 @@ export class AdminUpdateUserDto {
     @Length(8, 24)
     password: string;
 
-    @ApiProperty({ required: false, description: 'password_confirmation' })
+    @ApiProperty({ required: false, description: 'passwordConfirmation' })
     @IsOptional()
     @IsNotEmpty()
     @Validate(PasswordConfirmValidator, ['password'])
-    password_confirmation: string;
+    passwordConfirmation: string;
 
     @ApiProperty({ required: false, description: 'role', enum: RoleEnum })
     @IsOptional()
