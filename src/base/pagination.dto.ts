@@ -1,8 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsOptional, Max, Min } from 'class-validator';
 
 import { MessageCode } from '@constants/message-code';
-import { ApiProperty } from '@nestjs/swagger';
 import { ConvertToBoolean, ConvertToNumber } from '@utils/transformers.util';
 
 export class PaginationResponse<T> {

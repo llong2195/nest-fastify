@@ -24,6 +24,7 @@
             "@base/*": ["src/base/*"],
             "@validators/*": ["src/validators/*"],
             "@modules/*": ["src/modules/*"],
+            "@logger/*": ["src/logger/*"],
             "@exceptions/*": ["src/exceptions/*"],
             "@decorators/*": ["src/decorators/*"],
             "@enums/*": ["src/enums/*"],
@@ -31,6 +32,7 @@
             "@entities/*": ["src/entities/*"],
             "@guard/*": ["src/guard/*"],
             "@utils/*": ["src/utils/*"],
+            "@i18n/*": ["src/i18n/*"],
             "@libs/*": ["src/libs/*"],
             "@src/*": ["src/*"]
         }

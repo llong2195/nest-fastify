@@ -1,4 +1,4 @@
-import { plainToInstance } from 'class-transformer';
+import { MultipartFile } from '@fastify/multipart';
 import contentDisposition from 'content-disposition';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'fs';
@@ -13,7 +13,6 @@ import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@configs/config';
 import { CurrentUser, Roles } from '@decorators/index';
 import { FileEntity } from '@entities/file.entity';
 import { RoleEnum } from '@enums/role.enum';
-import { MultipartFile } from '@fastify/multipart';
 import {
     BadRequestException,
     Controller,
@@ -36,8 +35,8 @@ import { getFullDate } from '@utils/index';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
-import { FileService } from './file.service';
 import { FilterFileDto } from './dto/get-file.dto';
+import { FileService } from './file.service';
 
 const pump = util.promisify(pipeline);
 
@@ -59,7 +58,7 @@ export class FileController {
         try {
             const file = await await this.uploadImageService(req);
             const uploadfile = await this.uploadFileService.uploadFile(currentUser?.id, file);
-            return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, uploadfile));
+            return new BaseResponseDto<FileEntity>(uploadfile);
         } catch (error) {
             throw new BadRequestException(error.message);
         }
@@ -80,7 +79,7 @@ export class FileController {
         try {
             const file = await this.uploadImageService(req);
             const data = await this.uploadFileService.uploadImageToCloudinary(file, currentUser?.id);
-            return new BaseResponseDto<FileEntity>(plainToInstance(FileEntity, data));
+            return new BaseResponseDto<FileEntity>(data);
         } catch (error) {
             throw new HttpException(error.message, 500);
         }

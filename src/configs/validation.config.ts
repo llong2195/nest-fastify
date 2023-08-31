@@ -1,6 +1,5 @@
-import { ValidatorOptions } from 'class-validator';
-
 import { HttpStatus } from '@nestjs/common';
+import { ValidatorOptions } from 'class-validator';
 
 export const ValidationConfig: ValidatorOptions | Record<string, any> = {
     whitelist: true,

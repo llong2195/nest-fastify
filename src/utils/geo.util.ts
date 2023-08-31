@@ -1,6 +1,5 @@
-import { computeDestinationPoint, getBoundsOfDistance } from 'geolib';
-
 import { ApiProperty } from '@nestjs/swagger';
+import { computeDestinationPoint, getBoundsOfDistance } from 'geolib';
 
 export class Point {
     @ApiProperty({})

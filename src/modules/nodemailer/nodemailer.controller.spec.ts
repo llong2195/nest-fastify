@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-
 import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
 import { join } from 'path';
+
 import { NodemailerController } from './nodemailer.controller';
 import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
 
@@ -39,7 +39,7 @@ describe('NodemailerController', () => {
                                     strict: true,
                                 },
                             },
-                        } as MailerOptions),
+                        }) as MailerOptions,
                 }),
                 BullModule.registerQueue({
                     name: QUEUE_EMAIL,

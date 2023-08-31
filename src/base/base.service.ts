@@ -1,4 +1,3 @@
-import { LoggerService } from 'src/logger/custom.logger';
 import {
     BaseEntity,
     EntityManager,
@@ -13,9 +12,9 @@ import {
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { EntityId } from 'typeorm/repository/EntityId';
 
-import { PAGE_SIZE } from '@src/configs/config';
+import { PAGE_SIZE } from '@configs/config';
+import { LoggerService } from '@logger/custom.logger';
 import { trim } from '@utils/index';
-
 import { IBaseService } from './i.base.service';
 import { PaginationResponse } from './pagination.dto';
 
