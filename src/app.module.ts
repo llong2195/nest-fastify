@@ -70,8 +70,12 @@ if (isEnv(EnvEnum.Production)) {
             inject: [ConfigService],
             useFactory: (config: ConfigService) =>
                 ({
-                    ttl: config.get<number>('THROTTLE_TTL'),
-                    limit: config.get<number>('THROTTLE_LIMIT'),
+                    throttlers: [
+                        {
+                            ttl: config.get<number>('THROTTLE_TTL'),
+                            limit: config.get<number>('THROTTLE_LIMIT'),
+                        },
+                    ],
                     ignoreUserAgents: [
                         // Don't throttle request that have 'googlebot' defined in them.
                         // Example user agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
