@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import { DecodeOptions, SignOptions } from 'jsonwebtoken';
+import { compare } from 'bcrypt';
 
 import { CurrentUserDto } from '@base/base.dto';
 import { ErrorMessageCode } from '@constants/error-message-code';
@@ -29,7 +29,7 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
-        const compareResult = await bcrypt.compare(password, user.password);
+        const compareResult = await compare(password, user.password);
         if (!compareResult) {
             throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
@@ -47,7 +47,7 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
-        const compareResult = await bcrypt.compare(request.password, user.password);
+        const compareResult = await compare(request.password, user.password);
         if (!compareResult) {
             throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
         }
@@ -96,7 +96,7 @@ export class AuthService {
      * @param signOptions - jwt.SignOptions = {}
      * @returns A string
      */
-    async generateToken(payload: Record<string, unknown>, signOptions: jwt.SignOptions = {}): Promise<string> {
+    async generateToken(payload: Record<string, unknown>, signOptions: SignOptions = {}): Promise<string> {
         return this.jwtService.sign(payload, signOptions);
     }
 
@@ -109,7 +109,7 @@ export class AuthService {
      */
     async decodeToken(
         token: string,
-        decodeOptions: jwt.DecodeOptions = {},
+        decodeOptions: DecodeOptions = {},
     ): Promise<null | string | { [key: string]: unknown }> {
         return this.jwtService.decode(token, decodeOptions);
     }

@@ -1,6 +1,6 @@
 import { MultipartFile } from '@fastify/multipart';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import * as fs from 'fs';
+import { unlinkSync } from 'node:fs';
 
 import { BaseService } from '@base/base.service';
 import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@configs/config';
@@ -67,7 +67,7 @@ export class FileService extends BaseService<FileEntity, FileRepository> {
             createFile.userId = userId || null;
             createFile.data = JSON.stringify(image);
             await this._store(createFile);
-            fs.unlinkSync(path);
+            unlinkSync(path);
             return createFile;
         } catch (e) {
             console.log(e);
