@@ -40,7 +40,7 @@
     "@nestjs/jwt": "^10.1.0",
     "@nestjs/passport": "^10.0.1",
     "@nestjs/platform-fastify": "^10.2.3",
-    "@nestjs/schedule": "^3.0.3",
+    "@nestjs/schedule": "^4.0.0",
     "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^7.1.10",
     "@nestjs/throttler": "^4.2.1",
