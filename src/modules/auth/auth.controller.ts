@@ -20,7 +20,7 @@ export class AuthController {
     ) {}
 
     @HttpCode(HttpStatus.OK)
-    @Throttle(10, 10)
+    @Throttle({ default: { limit: 10, ttl: 1000 } })
     @Post('/login')
     async login(@Body() request: LoginRequestDto): Promise<BaseResponseDto<any>> {
         const data = await this.authService.login(request);

@@ -5,7 +5,7 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
-import { join } from 'path';
+import { join } from 'node:path';
 
 import { EnvEnum } from '@enums/index';
 import { AuthModule } from '@modules/auth/auth.module';
@@ -70,8 +70,12 @@ if (isEnv(EnvEnum.Production)) {
             inject: [ConfigService],
             useFactory: (config: ConfigService) =>
                 ({
-                    ttl: config.get<number>('THROTTLE_TTL'),
-                    limit: config.get<number>('THROTTLE_LIMIT'),
+                    throttlers: [
+                        {
+                            ttl: config.get<number>('THROTTLE_TTL'),
+                            limit: config.get<number>('THROTTLE_LIMIT'),
+                        },
+                    ],
                     ignoreUserAgents: [
                         // Don't throttle request that have 'googlebot' defined in them.
                         // Example user agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)

@@ -16,8 +16,6 @@ import { ValidatorsModule } from '@validators/validators.module';
 import { AppModule } from './app.module';
 import { MessageService } from './i18n/message.service';
 
-declare const module: any;
-
 async function bootstrap() {
     let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
 
@@ -38,7 +36,7 @@ async function bootstrap() {
     //     };
     //     done();
     // });
-    const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(instance), {
+    const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(instance as any), {
         logger: logLevelsDefault,
         snapshot: true,
     });
@@ -50,7 +48,9 @@ async function bootstrap() {
     // -------------------------------------------
 
     // -------------- Middleware --------------
-    app.register(FastifyMultipart);
+    // -------------------------------------------
+    // -------------- Middleware --------------
+    app.register(FastifyMultipart as any);
     // -------------------------------------------
 
     // -------------- Global filter/pipes --------------
@@ -83,7 +83,7 @@ async function bootstrap() {
             },
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
         });
-        await app.register(helmet);
+        await app.register(helmet as any);
     }
     // -------------------------------------------
 
@@ -105,11 +105,6 @@ async function bootstrap() {
         LoggerService.log(`Application is running on : ${await app.getUrl()}`, 'Application');
         LoggerService.log(`==========================================================`);
     });
-
-    if (module.hot) {
-        module.hot.accept();
-        module.hot.dispose(() => app.close());
-    }
 }
 
 async function ConfigDocument(app: INestApplication): Promise<void> {
