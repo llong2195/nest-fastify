@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { Request } from 'express';
+import { FastifyRequest } from 'fastify';
 import { getClientIp } from 'request-ip';
 
 /**
@@ -7,7 +7,7 @@ import { getClientIp } from 'request-ip';
     nginx to get the ip.
  */
 export const IpAddress = createParamDecorator((_data: string, ctx: ExecutionContext) => {
-    const req: Request = ctx.switchToHttp().getRequest();
+    const req: FastifyRequest = ctx.switchToHttp().getRequest();
     // const rawIp: string | undefined =
     //     req.header('x-forwarded-for') || req.connection.remoteAddress || req.socket.remoteAddress;
     // const ipAddress = rawIp ? rawIp?.split(',')[0] : '';

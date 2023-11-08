@@ -5,7 +5,7 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
-import { join } from 'path';
+import { join } from 'node:path';
 
 import { EnvEnum } from '@enums/index';
 import { AuthModule } from '@modules/auth/auth.module';

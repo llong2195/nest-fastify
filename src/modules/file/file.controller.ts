@@ -1,11 +1,11 @@
 import { MultipartFile } from '@fastify/multipart';
 import contentDisposition from 'content-disposition';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'fs';
+import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'node:fs';
 import mime from 'mime-types';
-import { join } from 'path';
-import { pipeline } from 'stream';
-import util from 'util';
+import { join } from 'node:path';
+import { pipeline } from 'node:stream';
+import util from 'node:util';
 
 import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
 import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
@@ -56,7 +56,7 @@ export class FileController {
     @Post('/upload-image-local')
     async local(@Req() req: FastifyRequest, @CurrentUser() currentUser?: CurrentUserDto) {
         try {
-            const file = await await this.uploadImageService(req);
+            const file = await this.uploadImageService(req);
             const uploadfile = await this.uploadFileService.uploadFile(currentUser?.id, file);
             return new BaseResponseDto<FileEntity>(uploadfile);
         } catch (error) {
