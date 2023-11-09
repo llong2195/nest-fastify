@@ -43,7 +43,7 @@
     "@nestjs/swagger": "^7.1.14",
     "@nestjs/throttler": "^5.0.1",
     "@nestjs/typeorm": "^10.0.0",
-    "@sentry/node": "^7.76.0",
+    "@sentry/node": "^7.79.0",
     "@sentry/tracing": "^7.76.0",
     "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
