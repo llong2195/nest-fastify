@@ -1,5 +1,5 @@
 import cloudinary, { UploadApiResponse, v2 } from 'cloudinary';
-import { Readable, Stream } from 'stream';
+import { Readable, Stream } from 'node:stream';
 
 import { CLOUD_API_KEY, CLOUD_API_SECRET, CLOUD_NAME } from '@configs/config';
 

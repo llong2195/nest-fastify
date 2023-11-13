@@ -1,7 +1,7 @@
-import { camelCase } from 'change-case';
 import CryptoJS from 'crypto-js';
+import camelCase from 'lodash.camelcase';
+import { PassThrough } from 'node:stream';
 import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
-import { PassThrough } from 'stream';
 
 /**
  *
