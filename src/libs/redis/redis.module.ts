@@ -3,7 +3,7 @@ import IORedis from 'ioredis';
 
 import type { RedisAsyncModuleOptions } from './redis.interface';
 
-export const IORedisKey = 'IOREDIS_MODULES_KEY';
+export const IORedisKey = '__IOREDIS_MODULES_KEY__';
 
 @Global()
 @Module({})
