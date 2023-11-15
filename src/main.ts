@@ -14,7 +14,7 @@ import { LoggerService } from '@logger/custom.logger';
 import { isEnv } from '@utils/util';
 import { ValidatorsModule } from '@validators/validators.module';
 import { AppModule } from './app.module';
-import { MessageService } from './i18n/message.service';
+import { I18nService } from './i18n/i18n.service';
 
 async function bootstrap() {
     let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
@@ -47,8 +47,6 @@ async function bootstrap() {
     const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
     // -------------------------------------------
 
-    // -------------- Middleware --------------
-    // -------------------------------------------
     // -------------- Middleware --------------
     app.register(FastifyMultipart as any);
     // -------------------------------------------
@@ -91,8 +89,8 @@ async function bootstrap() {
     useContainer(app.select(ValidatorsModule), { fallbackOnErrors: true });
     // -------------------------------------------
 
-    // -----------MessageService init-------------
-    MessageService.init();
+    // -----------I18nService init-------------
+    I18nService.init();
     // -------------------------------------------
 
     // -----------Setup Redis Adapter-------------

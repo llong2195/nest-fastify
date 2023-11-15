@@ -4,23 +4,23 @@ import { DEFAULT_LOCALE } from '@configs/config';
 import langs from './locales/index';
 
 @Injectable()
-export class MessageService {
+export class I18nService {
     static langs: Map<string, Map<string, string>>;
     static languageDefault = DEFAULT_LOCALE || 'vi';
 
     static init(): void {
-        MessageService.langs = langs;
+        I18nService.langs = langs;
     }
 
     lang(message: string, language: string = null): string {
-        const lang = language ? language : MessageService.languageDefault;
+        const lang = language ? language : I18nService.languageDefault;
 
-        if (MessageService.langs) {
-            if (MessageService.langs.has(lang)) {
-                return MessageService.langs.get(lang).get(message) ?? message;
+        if (I18nService.langs) {
+            if (I18nService.langs.has(lang)) {
+                return I18nService.langs.get(lang).get(message) ?? message;
             } else {
                 //fallback to default
-                return MessageService.langs.get(MessageService.languageDefault).get(message) ?? message;
+                return I18nService.langs.get(I18nService.languageDefault).get(message) ?? message;
             }
         }
 
