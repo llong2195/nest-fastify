@@ -6,12 +6,12 @@ import { ErrorCode, ErrorMessageCode } from '@constants/index';
 import { ValidateError } from '@exceptions/errors';
 import { BaseError } from '@exceptions/errors/base.error';
 import { DatabaseError } from '@exceptions/errors/database.error';
-import { MessageService } from '@src/i18n/message.service';
+import { I18nService } from '@i18n/i18n.service';
 
 export class BaseController {
-    private i18n: MessageService;
+    private i18n: I18nService;
 
-    constructor(i18n: MessageService) {
+    constructor(i18n: I18nService) {
         this.i18n = i18n;
     }
 

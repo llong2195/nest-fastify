@@ -10,7 +10,7 @@ import { DEFAULT_LOCALE, SENTRY_DSN } from '@configs/index';
 import { ErrorCode } from '@constants/error-code';
 import { BaseError } from '@exceptions/errors';
 import { LoggerService } from '@logger/custom.logger';
-import { MessageService } from '@src/i18n/message.service';
+import { I18nService } from '@i18n/i18n.service';
 import { IResponseBody } from '@src/interface';
 import { isDev } from '@utils/util';
 
@@ -19,7 +19,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     constructor(
         private logger: LoggerService,
         private readonly configService: ConfigService,
-        private readonly i18nService: MessageService,
+        private readonly i18nService: I18nService,
     ) {
         Sentry.init({
             dsn: SENTRY_DSN,

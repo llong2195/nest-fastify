@@ -1,10 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 
-import { MessageService } from './message.service';
+import { I18nService } from './i18n.service';
 
 @Global()
 @Module({
-    providers: [MessageService],
-    exports: [MessageService],
+    providers: [I18nService],
+    exports: [I18nService],
 })
 export class I18nModule {}
