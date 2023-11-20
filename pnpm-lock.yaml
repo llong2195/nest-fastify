@@ -42,8 +42,8 @@ dependencies:
     specifier: ^10.0.2
     version: 10.0.2(@nestjs/common@10.2.9)(passport@0.6.0)
   '@nestjs/platform-fastify':
-    specifier: ^10.2.8
-    version: 10.2.8(@fastify/static@6.12.0)(@nestjs/common@10.2.9)(@nestjs/core@10.2.8)
+    specifier: ^10.2.9
+    version: 10.2.9(@fastify/static@6.12.0)(@nestjs/common@10.2.9)(@nestjs/core@10.2.8)
   '@nestjs/schedule':
     specifier: ^4.0.0
     version: 4.0.0(@nestjs/common@10.2.9)(@nestjs/core@10.2.8)(reflect-metadata@0.1.13)
@@ -684,8 +684,8 @@ packages:
       text-decoding: 1.0.0
     dev: false
 
-  /@fastify/cors@8.4.0:
-    resolution: {integrity: sha512-MlVvMTenltToByTpLwlWtO+7dQ3l2J+1OpmGrx9JpSNWo1d+dhfNCOi23zHhxdFhtpDzfwGwCsKu9DTeG7k7nQ==}
+  /@fastify/cors@8.4.1:
+    resolution: {integrity: sha512-iYQJtrY3pFiDS5mo5zRaudzg2OcUdJ96PD6xfkKOOEilly5nnrFZx/W6Sce2T79xxlEn2qpU3t5+qS2phS369w==}
     dependencies:
       fastify-plugin: 4.5.1
       mnemonist: 0.39.5
@@ -1397,8 +1397,8 @@ packages:
       passport: 0.6.0
     dev: false
 
-  /@nestjs/platform-fastify@10.2.8(@fastify/static@6.12.0)(@nestjs/common@10.2.9)(@nestjs/core@10.2.8):
-    resolution: {integrity: sha512-ZeqIHeGLD7YgJ22K9AkyjcFv/yH/LH+HmujukBq/yDLFlJuurKCgbDPfL0PHq0RRMZu5CeB0dhs8+qihw96yjA==}
+  /@nestjs/platform-fastify@10.2.9(@fastify/static@6.12.0)(@nestjs/common@10.2.9)(@nestjs/core@10.2.8):
+    resolution: {integrity: sha512-kSkNivpAIwgt5Xnawwe8hfcafo9XMmnjNWcNCSXcjkic8pLPJvU4FD2D1+jmOWEx7uqFKKvg1Cf0Y6HenYfaMA==}
     peerDependencies:
       '@fastify/static': ^6.0.0
       '@fastify/view': ^7.0.0 || ^8.0.0
@@ -1410,7 +1410,7 @@ packages:
       '@fastify/view':
         optional: true
     dependencies:
-      '@fastify/cors': 8.4.0
+      '@fastify/cors': 8.4.1
       '@fastify/formbody': 7.4.0
       '@fastify/middie': 8.3.0
       '@fastify/static': 6.12.0
