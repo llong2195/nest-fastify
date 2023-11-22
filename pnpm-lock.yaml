@@ -42,8 +42,8 @@ dependencies:
     specifier: ^10.0.2
     version: 10.0.2(@nestjs/common@10.2.10)(passport@0.6.0)
   '@nestjs/platform-fastify':
-    specifier: ^10.2.9
-    version: 10.2.9(@fastify/static@6.12.0)(@nestjs/common@10.2.10)(@nestjs/core@10.2.10)
+    specifier: ^10.2.10
+    version: 10.2.10(@fastify/static@6.12.0)(@nestjs/common@10.2.10)(@nestjs/core@10.2.10)
   '@nestjs/schedule':
     specifier: ^4.0.0
     version: 4.0.0(@nestjs/common@10.2.10)(@nestjs/core@10.2.10)(reflect-metadata@0.1.13)
@@ -1397,8 +1397,8 @@ packages:
       passport: 0.6.0
     dev: false
 
-  /@nestjs/platform-fastify@10.2.9(@fastify/static@6.12.0)(@nestjs/common@10.2.10)(@nestjs/core@10.2.10):
-    resolution: {integrity: sha512-kSkNivpAIwgt5Xnawwe8hfcafo9XMmnjNWcNCSXcjkic8pLPJvU4FD2D1+jmOWEx7uqFKKvg1Cf0Y6HenYfaMA==}
+  /@nestjs/platform-fastify@10.2.10(@fastify/static@6.12.0)(@nestjs/common@10.2.10)(@nestjs/core@10.2.10):
+    resolution: {integrity: sha512-OGxoLC3mjTPdreE3ooHg6AyXMYdz8m/LDWKr6cssONM5ohtMNcSeexHBFeSx+K4XDyDT3GkspHK+2CSFcphDeA==}
     peerDependencies:
       '@fastify/static': ^6.0.0
       '@fastify/view': ^7.0.0 || ^8.0.0
