@@ -44,7 +44,7 @@
     "@nestjs/throttler": "^5.0.1",
     "@nestjs/typeorm": "^10.0.1",
     "@sentry/node": "^7.80.1",
-    "@sentry/tracing": "^7.80.1",
+    "@sentry/tracing": "^7.81.1",
     "axios": "^1.6.2",
     "bcrypt": "^5.1.1",
     "bull": "^4.11.5",
