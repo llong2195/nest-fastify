@@ -6,5 +6,5 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { Roles } from './role.decorators';
 
 export const Authorize = (...roles: RoleEnum[]) => {
-    return applyDecorators(UseGuards(JwtAuthGuard), UseGuards(RolesGuard), Roles(...roles));
+  return applyDecorators(UseGuards(JwtAuthGuard), UseGuards(RolesGuard), Roles(...roles));
 };

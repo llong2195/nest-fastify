@@ -32,111 +32,111 @@ const providers = [] as Provider[];
 const modules = [] as DynamicModule[];
 
 if (isEnv(EnvEnum.Production)) {
-    providers.push({
-        provide: APP_GUARD,
-        useClass: ThrottlerBehindProxyGuard,
-    });
+  providers.push({
+    provide: APP_GUARD,
+    useClass: ThrottlerBehindProxyGuard,
+  });
 } else {
-    providers.push({
-        provide: APP_INTERCEPTOR,
-        useClass: LoggingInterceptor,
-    });
-    modules.push(
-        DevtoolsModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
-                http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
-                port: config.get<number>('PORT'),
-            }),
-        }),
-    );
+  providers.push({
+    provide: APP_INTERCEPTOR,
+    useClass: LoggingInterceptor,
+  });
+  modules.push(
+    DevtoolsModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
+        port: config.get<number>('PORT'),
+      }),
+    }),
+  );
 }
 @Module({
-    imports: [
-        ConfigModule.forRoot({
-            isGlobal: true,
-            envFilePath: ['.env'],
-        }),
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
 
-        ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '../', '/public'),
-            serveRoot: '/',
-            exclude: ['/api/*', '/auth/*'],
-        }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../', '/public'),
+      serveRoot: '/',
+      exclude: ['/api/*', '/auth/*'],
+    }),
 
-        ThrottlerModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) =>
-                ({
-                    throttlers: [
-                        {
-                            ttl: config.get<number>('THROTTLE_TTL'),
-                            limit: config.get<number>('THROTTLE_LIMIT'),
-                        },
-                    ],
-                    ignoreUserAgents: [
-                        // Don't throttle request that have 'googlebot' defined in them.
-                        // Example user agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
-                        /googlebot/gi,
-
-                        // Don't throttle request that have 'bingbot' defined in them.
-                        // Example user agent: Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)
-                        new RegExp('bingbot', 'gi'),
-                    ],
-                }) as ThrottlerModuleOptions,
-        }),
-
-        HttpModule.registerAsync({
-            imports: [ConfigModule],
-            useFactory: async (configService: ConfigService) => ({
-                timeout: configService.get('HTTP_TIMEOUT'),
-                maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
-            }),
-            inject: [ConfigService],
-        }),
-
-        LoggerModule,
-        I18nModule,
-        DatabaseModule,
-        ValidatorsModule,
-        SettingModule,
-        CronModule,
-        AuthModule,
-        UserModule,
-        FileModule,
-        NodemailerModule,
-        QueueModule,
-        QrCodeModule,
-        IORedisModule.registerAsync({
-            imports: [ConfigModule],
-            useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
-                return {
-                    connectionOptions: {
-                        host: configService.get<string>('REDIS_HOST'),
-                        port: configService.get<number>('REDIS_PORT'),
-                        username: configService.get<string>('REDIS_USERNAME'),
-                        password: configService.get<string>('REDIS_PASSWORD'),
-                    },
-                };
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) =>
+        ({
+          throttlers: [
+            {
+              ttl: config.get<number>('THROTTLE_TTL'),
+              limit: config.get<number>('THROTTLE_LIMIT'),
             },
-            inject: [ConfigService],
-        }),
+          ],
+          ignoreUserAgents: [
+            // Don't throttle request that have 'googlebot' defined in them.
+            // Example user agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+            /googlebot/gi,
 
-        ...modules,
-    ],
-    controllers: [AppController],
-    providers: [
-        {
-            provide: APP_FILTER,
-            useClass: AllExceptionFilter,
-        },
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: ResponseTransformInterceptor,
-        },
-        ...providers,
-    ],
+            // Don't throttle request that have 'bingbot' defined in them.
+            // Example user agent: Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)
+            new RegExp('bingbot', 'gi'),
+          ],
+        }) as ThrottlerModuleOptions,
+    }),
+
+    HttpModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        timeout: configService.get('HTTP_TIMEOUT'),
+        maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
+      }),
+      inject: [ConfigService],
+    }),
+
+    LoggerModule,
+    I18nModule,
+    DatabaseModule,
+    ValidatorsModule,
+    SettingModule,
+    CronModule,
+    AuthModule,
+    UserModule,
+    FileModule,
+    NodemailerModule,
+    QueueModule,
+    QrCodeModule,
+    IORedisModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
+        return {
+          connectionOptions: {
+            host: configService.get<string>('REDIS_HOST'),
+            port: configService.get<number>('REDIS_PORT'),
+            username: configService.get<string>('REDIS_USERNAME'),
+            password: configService.get<string>('REDIS_PASSWORD'),
+          },
+        };
+      },
+      inject: [ConfigService],
+    }),
+
+    ...modules,
+  ],
+  controllers: [AppController],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseTransformInterceptor,
+    },
+    ...providers,
+  ],
 })
 export class AppModule {}

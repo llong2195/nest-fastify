@@ -7,8 +7,8 @@ import { SettingRepository } from './setting.repository';
 import { SettingService } from './setting.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([SettingEntity])],
-    controllers: [SettingController],
-    providers: [SettingService, SettingRepository],
+  imports: [TypeOrmModule.forFeature([SettingEntity])],
+  controllers: [SettingController],
+  providers: [SettingService, SettingRepository],
 })
 export class SettingModule {}

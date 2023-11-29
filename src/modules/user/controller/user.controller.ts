@@ -14,29 +14,29 @@ import { UserService } from '../user.service';
 @UseGuards(JwtAuthGuard)
 @Controller('v1/user')
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
-    @Get('/my-profile')
-    async myProfile(@CurrentUser() currentUserDto: CurrentUserDto): Promise<BaseResponseDto<UserEntity>> {
-        const user = await this.userService.findById(currentUserDto.id);
-        return new BaseResponseDto<UserEntity>(user);
-    }
+  @Get('/my-profile')
+  async myProfile(@CurrentUser() currentUserDto: CurrentUserDto): Promise<BaseResponseDto<UserEntity>> {
+    const user = await this.userService.findById(currentUserDto.id);
+    return new BaseResponseDto<UserEntity>(user);
+  }
 
-    @Patch('/update-profile')
-    async updateProfile(
-        @CurrentUser() currentUserDto: CurrentUserDto,
-        @Body() updateUserDto: UpdateUserDto,
-    ): Promise<BaseResponseDto<UserEntity>> {
-        const data = await this.userService.updateProfile(currentUserDto.id, updateUserDto);
-        return new BaseResponseDto<UserEntity>(data);
-    }
+  @Patch('/update-profile')
+  async updateProfile(
+    @CurrentUser() currentUserDto: CurrentUserDto,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<BaseResponseDto<UserEntity>> {
+    const data = await this.userService.updateProfile(currentUserDto.id, updateUserDto);
+    return new BaseResponseDto<UserEntity>(data);
+  }
 
-    @Post('/change-password')
-    async changePassword(
-        @CurrentUser() currentUserDto: CurrentUserDto,
-        @Body() password: ChangePasswordDto,
-    ): Promise<BaseResponseDto<UserEntity>> {
-        const user = await this.userService.changePassword(currentUserDto.id, password);
-        return new BaseResponseDto<UserEntity>(user);
-    }
+  @Post('/change-password')
+  async changePassword(
+    @CurrentUser() currentUserDto: CurrentUserDto,
+    @Body() password: ChangePasswordDto,
+  ): Promise<BaseResponseDto<UserEntity>> {
+    const user = await this.userService.changePassword(currentUserDto.id, password);
+    return new BaseResponseDto<UserEntity>(user);
+  }
 }

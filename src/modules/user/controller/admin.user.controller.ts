@@ -13,44 +13,44 @@ import { UserService } from '../user.service';
 @ApiBearerAuth()
 @Controller('v1/admin/user')
 export class AdminUserController {
-    constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
-    @Get()
-    async index(@Query() filter: PaginationOption): Promise<PaginationResponse<UserEntity>> {
-        const data = await this.userService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
-        return new PaginationResponse<UserEntity>(data.body, data.meta);
-    }
+  @Get()
+  async index(@Query() filter: PaginationOption): Promise<PaginationResponse<UserEntity>> {
+    const data = await this.userService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
+    return new PaginationResponse<UserEntity>(data.body, data.meta);
+  }
 
-    @Get('/:id')
-    async show(@Param('id') id: number): Promise<BaseResponseDto<UserEntity>> {
-        const user = await this.userService.findById(id);
-        if (!user) {
-            throw new NotFoundException();
-        }
-        return new BaseResponseDto<UserEntity>(user);
+  @Get('/:id')
+  async show(@Param('id') id: number): Promise<BaseResponseDto<UserEntity>> {
+    const user = await this.userService.findById(id);
+    if (!user) {
+      throw new NotFoundException();
     }
+    return new BaseResponseDto<UserEntity>(user);
+  }
 
-    @Post()
-    async create(@Body() userData: CreateUserDto): Promise<BaseResponseDto<UserEntity>> {
-        const createdUser = await this.userService._store(userData);
-        return new BaseResponseDto<UserEntity>(createdUser);
-    }
+  @Post()
+  async create(@Body() userData: CreateUserDto): Promise<BaseResponseDto<UserEntity>> {
+    const createdUser = await this.userService._store(userData);
+    return new BaseResponseDto<UserEntity>(createdUser);
+  }
 
-    @Patch('/:id')
-    async update(@Param('id') id: number, @Body() userData: UpdateUserDto): Promise<BaseResponseDto<UserEntity>> {
-        const updateUser = await this.userService._update(id, userData);
-        return new BaseResponseDto<UserEntity>(updateUser);
-    }
+  @Patch('/:id')
+  async update(@Param('id') id: number, @Body() userData: UpdateUserDto): Promise<BaseResponseDto<UserEntity>> {
+    const updateUser = await this.userService._update(id, userData);
+    return new BaseResponseDto<UserEntity>(updateUser);
+  }
 
-    @Delete('/:id')
-    async destroy(@Param('id') id: number): Promise<BaseResponseDto<DeleteResult>> {
-        await this.userService._softDelete(id);
-        return new BaseResponseDto<DeleteResult>(null);
-    }
+  @Delete('/:id')
+  async destroy(@Param('id') id: number): Promise<BaseResponseDto<DeleteResult>> {
+    await this.userService._softDelete(id);
+    return new BaseResponseDto<DeleteResult>(null);
+  }
 
-    @Post('/:id/restore')
-    async restore(@Param('id') id: number): Promise<BaseResponseDto<UserEntity>> {
-        const user = await this.userService._restore(id);
-        return new BaseResponseDto<UserEntity>(user);
-    }
+  @Post('/:id/restore')
+  async restore(@Param('id') id: number): Promise<BaseResponseDto<UserEntity>> {
+    const user = await this.userService._restore(id);
+    return new BaseResponseDto<UserEntity>(user);
+  }
 }

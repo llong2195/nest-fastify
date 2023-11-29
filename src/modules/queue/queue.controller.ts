@@ -6,10 +6,10 @@ import { QueueService } from './queue.service';
 @ApiTags('queue')
 @Controller('queue')
 export class QueueController {
-    constructor(private queueService: QueueService) {}
+  constructor(private queueService: QueueService) {}
 
-    @Post('transcode')
-    transcode() {
-        this.queueService.transcode();
-    }
+  @Post('transcode')
+  transcode() {
+    this.queueService.transcode();
+  }
 }

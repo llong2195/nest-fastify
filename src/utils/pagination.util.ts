@@ -11,24 +11,24 @@ import { PAGE_SIZE } from '@configs/config';
  * @returns {PaginationResponse} A function that takes in 4 parameters and returns a PaginationResponse object.
  */
 export function pagination<T>(items: T[], total: number, page = 1, limit = PAGE_SIZE): PaginationResponse<T> {
-    const totalPage = Math.ceil(total / limit);
-    if (total <= 0 || page > totalPage) {
-        return new PaginationResponse([], {
-            pagination: {
-                currentPage: page,
-                limit: limit,
-                total: 0,
-                totalPages: 0,
-            },
-        });
-    }
-
-    return new PaginationResponse(items, {
-        pagination: {
-            currentPage: Number(page),
-            limit: limit,
-            total: total,
-            totalPages: totalPage,
-        },
+  const totalPage = Math.ceil(total / limit);
+  if (total <= 0 || page > totalPage) {
+    return new PaginationResponse([], {
+      pagination: {
+        currentPage: page,
+        limit: limit,
+        total: 0,
+        totalPages: 0,
+      },
     });
+  }
+
+  return new PaginationResponse(items, {
+    pagination: {
+      currentPage: Number(page),
+      limit: limit,
+      total: total,
+      totalPages: totalPage,
+    },
+  });
 }

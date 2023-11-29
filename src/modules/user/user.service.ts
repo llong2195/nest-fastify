@@ -12,38 +12,38 @@ import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity, UserRepository> {
-    constructor(repository: UserRepository, logger: LoggerService) {
-        super(repository, logger);
-    }
+  constructor(repository: UserRepository, logger: LoggerService) {
+    super(repository, logger);
+  }
 
-    findByEmail(email: string): Promise<UserEntity | null> {
-        return this.repository.findOne({ where: { email: email } });
-    }
+  findByEmail(email: string): Promise<UserEntity | null> {
+    return this.repository.findOne({ where: { email: email } });
+  }
 
-    findById(id: EntityId): Promise<UserEntity> {
-        return this._findById(id);
-    }
+  findById(id: EntityId): Promise<UserEntity> {
+    return this._findById(id);
+  }
 
-    async changePassword(userId: EntityId, changePass: ChangePasswordDto): Promise<UserEntity> {
-        const user = await this._findById(userId);
-        if (!user) {
-            throw new NotFoundError('NOT_FOUND');
-        }
-        const compareResult = Hash.compare(changePass.password, user.password);
-        if (!compareResult) {
-            throw new ValidateError('PASSWORD_INCORRECT');
-        }
-        user.password = changePass.newPassword;
-        await user.save();
-        return user;
+  async changePassword(userId: EntityId, changePass: ChangePasswordDto): Promise<UserEntity> {
+    const user = await this._findById(userId);
+    if (!user) {
+      throw new NotFoundError('NOT_FOUND');
     }
+    const compareResult = Hash.compare(changePass.password, user.password);
+    if (!compareResult) {
+      throw new ValidateError('PASSWORD_INCORRECT');
+    }
+    user.password = changePass.newPassword;
+    await user.save();
+    return user;
+  }
 
-    async updateProfile(userId: EntityId, updateUserDto: UpdateUserDto): Promise<UserEntity> {
-        const user = await this._findById(userId);
-        if (!user) {
-            throw new NotFoundError('USER_NOT_FOUND');
-        }
-        const updateUser = new UserEntity(updateUserDto);
-        return this._update(userId, updateUser);
+  async updateProfile(userId: EntityId, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    const user = await this._findById(userId);
+    if (!user) {
+      throw new NotFoundError('USER_NOT_FOUND');
     }
+    const updateUser = new UserEntity(updateUserDto);
+    return this._update(userId, updateUser);
+  }
 }

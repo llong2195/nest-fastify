@@ -8,8 +8,8 @@ import { PasswordConfirmValidator } from './password-confirm.validator';
 import { UniqueEmailValidator } from './unique-email.validator';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserEntity])],
-    providers: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
-    exports: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
+  imports: [TypeOrmModule.forFeature([UserEntity])],
+  providers: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
+  exports: [PasswordConfirmValidator, UniqueEmailValidator, IsExist, IsNotExist],
 })
 export class ValidatorsModule {}

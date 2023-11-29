@@ -1,3 +1,3 @@
 export const MessageCode = {
-    SUCCESS: 'SUCCESS',
+  SUCCESS: 'SUCCESS',
 };

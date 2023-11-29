@@ -7,37 +7,37 @@ import { RoleEnum } from '@enums/role.enum';
 @Index('idx_email', ['email'], { unique: true })
 @Entity({ name: 'user' })
 export class UserEntity extends DateAudit {
-    @PrimaryGeneratedColumn({ type: 'bigint' })
-    id: number;
+  @PrimaryGeneratedColumn({ type: 'bigint' })
+  id: number;
 
-    @Column({ unique: true, name: 'email', type: 'varchar', nullable: true })
-    email: string;
+  @Column({ unique: true, name: 'email', type: 'varchar', nullable: true })
+  email: string;
 
-    @Column({ name: 'avatar', type: 'text', nullable: true })
-    avatar: string;
+  @Column({ name: 'avatar', type: 'text', nullable: true })
+  avatar: string;
 
-    @Column({ name: 'first_name', type: 'varchar', nullable: true })
-    firstName: string;
+  @Column({ name: 'first_name', type: 'varchar', nullable: true })
+  firstName: string;
 
-    @Column({ name: 'last_name', type: 'varchar', nullable: true })
-    lastName: string;
+  @Column({ name: 'last_name', type: 'varchar', nullable: true })
+  lastName: string;
 
-    @Column({ name: 'password', type: 'varchar', nullable: true })
-    password: string;
+  @Column({ name: 'password', type: 'varchar', nullable: true })
+  password: string;
 
-    @Column({ name: 'role', type: 'varchar', default: RoleEnum.USER })
-    role: string;
+  @Column({ name: 'role', type: 'varchar', default: RoleEnum.USER })
+  role: string;
 
-    @Column({ name: 'is_active', type: 'boolean', default: true })
-    isActive: boolean;
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  isActive: boolean;
 
-    constructor(partial: Partial<UserEntity>) {
-        super();
-        Object.assign(this, partial);
-    }
+  constructor(partial: Partial<UserEntity>) {
+    super();
+    Object.assign(this, partial);
+  }
 
-    @Expose()
-    get fullName(): string {
-        if (this?.firstName && this?.lastName) return `${this?.firstName} ${this?.lastName}`;
-    }
+  @Expose()
+  get fullName(): string {
+    if (this?.firstName && this?.lastName) return `${this?.firstName} ${this?.lastName}`;
+  }
 }
