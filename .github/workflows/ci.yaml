@@ -4,8 +4,6 @@ on:
     branches: ['*']
   push:
     branches: ['*']
-  merge_group:
-    branches: ['*']
   
 jobs:
   test:
