@@ -2,7 +2,11 @@ name: ci
 on:
   pull_request:
     branches: ['*']
-
+  push:
+    branches: ['*']
+  merge_group:
+    branches: ['*']
+  
 jobs:
   test:
     runs-on: ubuntu-latest
