@@ -7,7 +7,7 @@ import { SettingRepository } from './setting.repository';
 
 @Injectable()
 export class SettingService extends BaseService<SettingEntity, SettingRepository> {
-    constructor(repository: SettingRepository, logger: LoggerService) {
-        super(repository, logger);
-    }
+  constructor(repository: SettingRepository, logger: LoggerService) {
+    super(repository, logger);
+  }
 }

@@ -4,5 +4,5 @@ import { SettingService } from './setting.service';
 
 @Controller('setting')
 export class SettingController {
-    constructor(private readonly settingService: SettingService) {}
+  constructor(private readonly settingService: SettingService) {}
 }
