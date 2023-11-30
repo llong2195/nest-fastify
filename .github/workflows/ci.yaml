@@ -27,5 +27,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # - name: Lint code
+      #   run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
       - name: Run tests
         run: pnpm test
