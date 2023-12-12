@@ -1,12 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Redis } from 'ioredis';
-
-import { IORedisKey } from './redis.module';
+import { InjectRedis } from '../libs/redis/redis.inject';
 
 @Injectable()
 export class RedisService {
   private logger = new Logger(RedisService.name);
-  constructor(@Inject(IORedisKey) private readonly redis: Redis) {
+  constructor(@InjectRedis() private readonly redis: Redis) {
     this.redis.on('ready', () => {
       this.logger.log('Redis connected');
     });

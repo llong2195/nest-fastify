@@ -1,9 +1,8 @@
 import { DynamicModule, Global, Logger, Module } from '@nestjs/common';
 import IORedis from 'ioredis';
 
+import { IORedisKey } from './redis.constants';
 import type { RedisAsyncModuleOptions } from './redis.interface';
-
-export const IORedisKey = '__IOREDIS_MODULES_KEY__';
 
 @Global()
 @Module({})

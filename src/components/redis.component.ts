@@ -2,7 +2,7 @@ import Redis, { RedisOptions } from 'ioredis';
 import { Injectable, Logger, Optional } from '@nestjs/common';
 
 @Injectable()
-export default class RedisComponent {
+export class RedisComponent {
   static cacheInstance = new Map<number, RedisComponent>();
   private redis: Redis;
   private logger = new Logger(RedisComponent.name);
