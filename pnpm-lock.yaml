@@ -49,7 +49,7 @@ dependencies:
     version: 4.0.0(@nestjs/common@10.3.1)(@nestjs/core@10.3.1)(reflect-metadata@0.1.14)
   '@nestjs/serve-static':
     specifier: ^4.0.0
-    version: 4.0.0(@fastify/static@6.12.0)(@nestjs/common@10.3.1)(@nestjs/core@10.3.1)(fastify@4.25.2)
+    version: 4.0.0(@fastify/static@6.12.0)(@nestjs/common@10.3.1)(@nestjs/core@10.3.1)(fastify@4.26.0)
   '@nestjs/swagger':
     specifier: ^7.2.0
     version: 7.2.0(@fastify/static@6.12.0)(@nestjs/common@10.3.1)(@nestjs/core@10.3.1)(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)
@@ -93,8 +93,8 @@ dependencies:
     specifier: ^16.4.1
     version: 16.4.1
   fastify:
-    specifier: ^4.25.2
-    version: 4.25.2
+    specifier: ^4.26.0
+    version: 4.26.0
   geolib:
     specifier: ^3.3.4
     version: 3.3.4
@@ -1457,7 +1457,7 @@ packages:
       - chokidar
     dev: true
 
-  /@nestjs/serve-static@4.0.0(@fastify/static@6.12.0)(@nestjs/common@10.3.1)(@nestjs/core@10.3.1)(fastify@4.25.2):
+  /@nestjs/serve-static@4.0.0(@fastify/static@6.12.0)(@nestjs/common@10.3.1)(@nestjs/core@10.3.1)(fastify@4.26.0):
     resolution: {integrity: sha512-8cTrNV2ngdHIjiLNsXePnw0+KY1ThrZGz/WeyAG5gIvmZNDbnZBOrPoYlKL+MOzlXlQStxR5jKLYmn+nJeoncQ==}
     peerDependencies:
       '@fastify/static': ^6.5.0
@@ -1476,7 +1476,7 @@ packages:
       '@fastify/static': 6.12.0
       '@nestjs/common': 10.3.1(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/core': 10.3.1(@nestjs/common@10.3.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
-      fastify: 4.25.2
+      fastify: 4.26.0
       path-to-regexp: 0.2.5
     dev: false
 
@@ -4185,6 +4185,29 @@ packages:
       - supports-color
     dev: false
 
+  /fastify@4.26.0:
+    resolution: {integrity: sha512-Fq/7ziWKc6pYLYLIlCRaqJqEVTIZ5tZYfcW/mDK2AQ9v/sqjGFpj0On0/7hU50kbPVjLO4de+larPA1WwPZSfw==}
+    dependencies:
+      '@fastify/ajv-compiler': 3.5.0
+      '@fastify/error': 3.4.1
+      '@fastify/fast-json-stringify-compiler': 4.3.0
+      abstract-logging: 2.0.1
+      avvio: 8.2.1
+      fast-content-type-parse: 1.1.0
+      fast-json-stringify: 5.9.1
+      find-my-way: 8.1.0
+      light-my-request: 5.11.0
+      pino: 8.17.0
+      process-warning: 3.0.0
+      proxy-addr: 2.0.7
+      rfdc: 1.3.0
+      secure-json-parse: 2.7.0
+      semver: 7.5.4
+      toad-cache: 3.3.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /fastq@1.15.0:
     resolution: {integrity: sha512-wBrocU2LCXXa+lWBt8RoIRD89Fi8OdABODa/kEnyeyjS5aZO5/GNvI5sEINADqP/h8M29UHTHUb53sUu5Ihqdw==}
     dependencies:
@@ -4257,6 +4280,15 @@ packages:
 
   /find-my-way@7.7.0:
     resolution: {integrity: sha512-+SrHpvQ52Q6W9f3wJoJBbAQULJuNEEQwBvlvYwACDhBTLOTMiQ0HYWh4+vC3OivGP2ENcTI1oKlFA2OepJNjhQ==}
+    engines: {node: '>=14'}
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-querystring: 1.1.2
+      safe-regex2: 2.0.0
+    dev: false
+
+  /find-my-way@8.1.0:
+    resolution: {integrity: sha512-41QwjCGcVTODUmLLqTMeoHeiozbMXYMAE1CKFiDyi9zVZ2Vjh0yz3MF0WQZoIb+cmzP/XlbFjlF2NtJmvZHznA==}
     engines: {node: '>=14'}
     dependencies:
       fast-deep-equal: 3.1.3
