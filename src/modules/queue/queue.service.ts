@@ -9,7 +9,7 @@ export class QueueService {
   constructor(@InjectQueue() private queue: Queue) {}
 
   transcode() {
-    void this.queue.add(TRANSCODING_QUEUE, {
+    this.queue.add(TRANSCODING_QUEUE, {
       file: 'audio.mp3',
     });
   }

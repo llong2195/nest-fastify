@@ -6,6 +6,7 @@ export class RedisComponent {
   static cacheInstance = new Map<number, RedisComponent>();
   private redis: Redis;
   private logger = new Logger(RedisComponent.name);
+
   constructor(@Optional() redisDb?: number) {
     const url = process.env.REDIS_URL || '';
     const useTls = parseInt(process.env.REDIS_TLS || '0') == 1;
