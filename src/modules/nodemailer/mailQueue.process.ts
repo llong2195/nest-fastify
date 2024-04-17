@@ -1,13 +1,14 @@
+import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 
-import { Process, Processor } from '@nestjs/bull';
-import { NodemailerService, QUEUE_EMAIL, QUEUE_EMAIL_SENDMAIL } from './nodemailer.service';
+import { QueueEnum, TopicEnum } from '../../enums/queue.enum';
+import { NodemailerService } from './nodemailer.service';
 
-@Processor(QUEUE_EMAIL)
+@Processor(QueueEnum.EMAIL_QUEUE)
 export class mailQueueProcessor {
   constructor(private readonly nodemailer: NodemailerService) {}
 
-  @Process(QUEUE_EMAIL_SENDMAIL)
+  @Process(TopicEnum.EMAIL_SENDMAIL)
   async processFile(job: Job) {
     const data = job.data;
     await this.nodemailer.example();

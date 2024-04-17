@@ -9,8 +9,8 @@ import { QueryFailedError } from 'typeorm';
 import { DEFAULT_LOCALE, SENTRY_DSN } from '@configs/index';
 import { ErrorCode } from '@constants/error-code';
 import { BaseError } from '@exceptions/errors';
-import { LoggerService } from '@logger/custom.logger';
 import { I18nService } from '@i18n/i18n.service';
+import { LoggerService } from '@logger/custom.logger';
 import { IResponseBody } from '@src/interface';
 import { isDev } from '@utils/util';
 

@@ -20,7 +20,6 @@ import { QueueService } from './queue.service';
             password: configService.get<string>('REDIS_PASSWORD'),
           },
           defaultJobOptions: {
-            removeOnComplete: true,
             attempts: 10,
           },
         }) as BullRootModuleOptions,

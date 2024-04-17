@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { FileController } from './file.controller';
-import { FileRepository } from './file.repository';
 import { FileService } from './file.service';
 
 @Module({
@@ -20,7 +19,7 @@ import { FileService } from './file.service';
     // }),
   ],
   controllers: [FileController],
-  providers: [FileService, FileRepository],
-  exports: [FileRepository, FileService],
+  providers: [FileService],
+  exports: [FileService],
 })
 export class FileModule {}

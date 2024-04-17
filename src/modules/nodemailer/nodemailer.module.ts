@@ -7,7 +7,8 @@ import { join } from 'node:path';
 
 import { mailQueueProcessor } from './mailQueue.process';
 import { NodemailerController } from './nodemailer.controller';
-import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
+import { NodemailerService } from './nodemailer.service';
+import { QueueEnum } from '../../enums/queue.enum';
 
 @Module({
   imports: [
@@ -39,7 +40,7 @@ import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
         }) as MailerOptions,
     }),
     BullModule.registerQueue({
-      name: QUEUE_EMAIL,
+      name: QueueEnum.EMAIL_QUEUE,
     }),
   ],
   controllers: [NodemailerController],

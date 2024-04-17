@@ -2,7 +2,6 @@ import {
   BaseEntity,
   EntityManager,
   FindManyOptions,
-  FindOptionsOrder,
   FindOptionsSelect,
   FindOptionsWhere,
   In,
@@ -43,35 +42,6 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
         return await operation(manager);
       });
     }
-  }
-
-  /**
-   * It returns a list of entities that are deleted or not deleted.
-   * @param {boolean} deleted - boolean - this is the deleted flag that we want to search for.
-   * @param {boolean} sort - boolean - if true, sort by ascending order, else sort by descending
-   * order
-   * @param page - 0 - The page number to return.
-   * @returns An array of objects of type T.
-   */
-  async _findByDeleted(deleted: boolean, sort: boolean, page = 0): Promise<T[] | null> {
-    return await this.repository.find({
-      where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
-      skip: page * PAGE_SIZE,
-      take: PAGE_SIZE,
-      order: { createdAt: sort ? 1 : -1 } as unknown as FindOptionsOrder<T>,
-    });
-  }
-
-  /**
-   * It counts the number of entities in the database that have a deleted property equal to the deleted
-   * parameter.
-   * @param {boolean} deleted - boolean - This is the value of the deleted column that we want to count.
-   * @returns The number of entities that match the given criteria.
-   */
-  async _countByDeleted(deleted: boolean): Promise<number | null> {
-    return await this.repository.count({
-      where: { deleted: deleted } as unknown as FindOptionsWhere<T>,
-    });
   }
 
   /**

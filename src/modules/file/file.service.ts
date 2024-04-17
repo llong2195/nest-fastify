@@ -1,6 +1,8 @@
 import { MultipartFile } from '@fastify/multipart';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { unlinkSync } from 'node:fs';
+import { Repository } from 'typeorm';
 
 import { BaseService } from '@base/base.service';
 import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@configs/config';
@@ -10,11 +12,10 @@ import { FileType } from '@enums/file.enum';
 import { NotFoundError } from '@exceptions/errors';
 import { LoggerService } from '@logger/custom.logger';
 import { cloudinary } from '@utils/cloudinary.util';
-import { FileRepository } from './file.repository';
 
 @Injectable()
-export class FileService extends BaseService<FileEntity, FileRepository> {
-  constructor(repository: FileRepository, logger: LoggerService) {
+export class FileService extends BaseService<FileEntity, Repository<FileEntity>> {
+  constructor(@InjectRepository(FileEntity) repository: Repository<FileEntity>, logger: LoggerService) {
     super(repository, logger);
   }
 

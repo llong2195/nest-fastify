@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';
 
 import { BaseService } from '@base/base.service';
@@ -8,11 +10,10 @@ import { LoggerService } from '@logger/custom.logger';
 import { Hash } from '@utils/hash.util';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserRepository } from './user.repository';
 
 @Injectable()
-export class UserService extends BaseService<UserEntity, UserRepository> {
-  constructor(repository: UserRepository, logger: LoggerService) {
+export class UserService extends BaseService<UserEntity, Repository<UserEntity>> {
+  constructor(@InjectRepository(UserEntity) repository: Repository<UserEntity>, logger: LoggerService) {
     super(repository, logger);
   }
 

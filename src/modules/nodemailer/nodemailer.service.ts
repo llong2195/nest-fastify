@@ -4,14 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 
 import { LoggerService } from '@logger/custom.logger';
+import { QueueEnum, TopicEnum } from '../../enums/queue.enum';
 
-export const QUEUE_EMAIL = 'QUEUE_EMAIL';
-export const QUEUE_EMAIL_SENDMAIL = 'QUEUE_EMAIL_SENDMAIL';
 @Injectable()
 export class NodemailerService {
   constructor(
     private readonly mailerService: MailerService,
-    @InjectQueue(QUEUE_EMAIL) private queueMail: Queue,
+    @InjectQueue(QueueEnum.EMAIL_QUEUE) private queueMail: Queue,
   ) {}
 
   public async example(): Promise<void> {
@@ -32,10 +31,9 @@ export class NodemailerService {
 
   async sendMailwithQueue(data: string) {
     try {
-      const job = await this.queueMail.add(QUEUE_EMAIL_SENDMAIL, {
+      const job = await this.queueMail.add(TopicEnum.EMAIL_SENDMAIL, {
         data: data,
       });
-      console.log(job.id);
       return job.id;
     } catch (e) {
       LoggerService.error(e);
