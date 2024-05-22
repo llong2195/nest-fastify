@@ -47,7 +47,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@sentry/node": "^8.0.0",
     "@sentry/tracing": "^7.114.0",
-    "axios": "^1.7.1",
+    "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "bull": "^4.12.7",
     "class-transformer": "^0.5.1",
