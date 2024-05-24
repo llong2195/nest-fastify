@@ -60,8 +60,8 @@ dependencies:
     specifier: ^10.0.2
     version: 10.0.2(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20)
   '@sentry/node':
-    specifier: ^8.3.0
-    version: 8.3.0
+    specifier: ^8.4.0
+    version: 8.4.0
   '@sentry/tracing':
     specifier: ^7.114.0
     version: 7.114.0
@@ -2085,16 +2085,16 @@ packages:
       '@sentry/utils': 7.114.0
     dev: false
 
-  /@sentry/core@8.3.0:
-    resolution: {integrity: sha512-X7r0WujE7DILtgA5zt4hmHMBTF3xbjJB7Dgrw1Hv5C7WG5qkNqhDPpnRX7WswtHcLSgVPY2GRTQ5Iid7i33zEQ==}
+  /@sentry/core@8.4.0:
+    resolution: {integrity: sha512-0eACPlJvKloFIlcT1c/vjGnvqxLxpGyGuSsU7uonrkmBqIRwLYXWtR4PoHapysKtjPVoHAn9au50ut6ymC2V8Q==}
     engines: {node: '>=14.18'}
     dependencies:
-      '@sentry/types': 8.3.0
-      '@sentry/utils': 8.3.0
+      '@sentry/types': 8.4.0
+      '@sentry/utils': 8.4.0
     dev: false
 
-  /@sentry/node@8.3.0:
-    resolution: {integrity: sha512-7uAQoO/xUoKuWdjbI44IeNOrEPgRtwyn/RI5apN/JsrCoQUA1Z7wxtIwHRyrIt9jfguHUq9iKRM03S6iVayqkg==}
+  /@sentry/node@8.4.0:
+    resolution: {integrity: sha512-k0uqG2F8BQWATIEghA1jQ0tBAr9mJsyS+ZiruXjbixy8kd7+ZM1CCiqeqqrYaanS0hI0mvtg9uxTQzBa1SMQsA==}
     engines: {node: '>=14.18'}
     dependencies:
       '@opentelemetry/api': 1.8.0
@@ -2119,18 +2119,18 @@ packages:
       '@opentelemetry/sdk-trace-base': 1.24.1(@opentelemetry/api@1.8.0)
       '@opentelemetry/semantic-conventions': 1.24.1
       '@prisma/instrumentation': 5.14.0
-      '@sentry/core': 8.3.0
-      '@sentry/opentelemetry': 8.3.0(@opentelemetry/api@1.8.0)(@opentelemetry/core@1.24.1)(@opentelemetry/instrumentation@0.51.1)(@opentelemetry/sdk-trace-base@1.24.1)(@opentelemetry/semantic-conventions@1.24.1)
-      '@sentry/types': 8.3.0
-      '@sentry/utils': 8.3.0
+      '@sentry/core': 8.4.0
+      '@sentry/opentelemetry': 8.4.0(@opentelemetry/api@1.8.0)(@opentelemetry/core@1.24.1)(@opentelemetry/instrumentation@0.51.1)(@opentelemetry/sdk-trace-base@1.24.1)(@opentelemetry/semantic-conventions@1.24.1)
+      '@sentry/types': 8.4.0
+      '@sentry/utils': 8.4.0
     optionalDependencies:
       opentelemetry-instrumentation-fetch-node: 1.2.0
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@sentry/opentelemetry@8.3.0(@opentelemetry/api@1.8.0)(@opentelemetry/core@1.24.1)(@opentelemetry/instrumentation@0.51.1)(@opentelemetry/sdk-trace-base@1.24.1)(@opentelemetry/semantic-conventions@1.24.1):
-    resolution: {integrity: sha512-VyvLM5JQryCjRtu5NENuGui9VXMY5ZZ948oY8dEUEfvX8SeOq0XhBp440XTgu2Nku62IwnwAp/m4auhiZ2rR/w==}
+  /@sentry/opentelemetry@8.4.0(@opentelemetry/api@1.8.0)(@opentelemetry/core@1.24.1)(@opentelemetry/instrumentation@0.51.1)(@opentelemetry/sdk-trace-base@1.24.1)(@opentelemetry/semantic-conventions@1.24.1):
+    resolution: {integrity: sha512-1YXLuRHMhzPzoiD8Pzts5GlZY4V5GSXGn5aBmFlJ13vSrUK6C4qhPfZMboppntPihOxupCPg3XP76ZMj6+XuOg==}
     engines: {node: '>=14.18'}
     peerDependencies:
       '@opentelemetry/api': ^1.8.0
@@ -2144,9 +2144,9 @@ packages:
       '@opentelemetry/instrumentation': 0.51.1(@opentelemetry/api@1.8.0)
       '@opentelemetry/sdk-trace-base': 1.24.1(@opentelemetry/api@1.8.0)
       '@opentelemetry/semantic-conventions': 1.24.1
-      '@sentry/core': 8.3.0
-      '@sentry/types': 8.3.0
-      '@sentry/utils': 8.3.0
+      '@sentry/core': 8.4.0
+      '@sentry/types': 8.4.0
+      '@sentry/utils': 8.4.0
     dev: false
 
   /@sentry/tracing@7.114.0:
@@ -2161,8 +2161,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/types@8.3.0:
-    resolution: {integrity: sha512-DbwRTdx5xn8c2EhElD1UneDbcfqz220INPJYiATGJ9pR+cV5kGohyxI6lJxebPdPhPLEFQqYdLXGA6Cjm/uC6A==}
+  /@sentry/types@8.4.0:
+    resolution: {integrity: sha512-mHUaaYEQCNukzYsTLp4rP2NNO17vUf+oSGS6qmhrsGqmGNICKw2CIwJlPPGeAkq9Y4tiUOye2m5OT1xsOtxLIw==}
     engines: {node: '>=14.18'}
     dev: false
 
@@ -2173,11 +2173,11 @@ packages:
       '@sentry/types': 7.114.0
     dev: false
 
-  /@sentry/utils@8.3.0:
-    resolution: {integrity: sha512-WFaUZy0OWsF6Mrjenxj4N8zGzA6+pdH2lCV60/IB+V5PvGPgl40MUyjN6aLA/E9BRpqwLNQRMroZjln+J/3aiA==}
+  /@sentry/utils@8.4.0:
+    resolution: {integrity: sha512-oDF0RVWW0AyEnsP1x4McHUvQSAxJgx3G6wM9Sb4wc1F8rwsHnCtGHc+WRZ5Gd2AXC5EGkfbg5919+1ku/L4Dww==}
     engines: {node: '>=14.18'}
     dependencies:
-      '@sentry/types': 8.3.0
+      '@sentry/types': 8.4.0
     dev: false
 
   /@sinclair/typebox@0.27.8:
