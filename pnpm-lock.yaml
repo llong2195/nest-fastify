@@ -147,7 +147,7 @@ dependencies:
 devDependencies:
   '@nestjs/cli':
     specifier: ^10.3.2
-    version: 10.3.2(@swc/cli@0.3.12)(@swc/core@1.6.5)
+    version: 10.3.2(@swc/cli@0.3.14)(@swc/core@1.6.5)
   '@nestjs/schematics':
     specifier: ^10.1.1
     version: 10.1.1(typescript@5.5.2)
@@ -155,8 +155,8 @@ devDependencies:
     specifier: ^10.3.9
     version: 10.3.9(@nestjs/common@10.3.9)(@nestjs/core@10.3.9)
   '@swc/cli':
-    specifier: ^0.3.12
-    version: 0.3.12(@swc/core@1.6.5)
+    specifier: ^0.3.14
+    version: 0.3.14(@swc/core@1.6.5)
   '@swc/core':
     specifier: ^1.6.5
     version: 1.6.5
@@ -1356,7 +1356,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@nestjs/cli@10.3.2(@swc/cli@0.3.12)(@swc/core@1.6.5):
+  /@nestjs/cli@10.3.2(@swc/cli@0.3.14)(@swc/core@1.6.5):
     resolution: {integrity: sha512-aWmD1GLluWrbuC4a1Iz/XBk5p74Uj6nIVZj6Ov03JbTfgtWqGFLtXuMetvzMiHxfrHehx/myt2iKAPRhKdZvTg==}
     engines: {node: '>= 16.14'}
     hasBin: true
@@ -1373,7 +1373,7 @@ packages:
       '@angular-devkit/schematics': 17.1.2(chokidar@3.6.0)
       '@angular-devkit/schematics-cli': 17.1.2(chokidar@3.6.0)
       '@nestjs/schematics': 10.1.1(chokidar@3.6.0)(typescript@5.3.3)
-      '@swc/cli': 0.3.12(@swc/core@1.6.5)
+      '@swc/cli': 0.3.14(@swc/core@1.6.5)
       '@swc/core': 1.6.5
       chalk: 4.1.2
       chokidar: 3.6.0
@@ -2249,8 +2249,8 @@ packages:
     resolution: {integrity: sha512-Uy0+khmZqUrUGm5dmMqVlnvufZRSK0FbYzVgp0UMstm+F5+W2/jnEEQyc9vo1ZR/E5ZI/B1WjjoTqBqwJL6Krw==}
     dev: false
 
-  /@swc/cli@0.3.12(@swc/core@1.6.5):
-    resolution: {integrity: sha512-h7bvxT+4+UDrLWJLFHt6V+vNAcUNii2G4aGSSotKz1ECEk4MyEh5CWxmeSscwuz5K3i+4DWTgm4+4EyMCQKn+g==}
+  /@swc/cli@0.3.14(@swc/core@1.6.5):
+    resolution: {integrity: sha512-0vGqD6FSW67PaZUZABkA+ADKsX7OUY/PwNEz1SbQdCvVk/e4Z36Gwh7mFVBQH9RIsMonTyhV1RHkwkGnEfR3zQ==}
     engines: {node: '>= 16.14.0'}
     hasBin: true
     peerDependencies:
