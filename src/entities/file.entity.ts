@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { DateAudit } from '@base/date_audit.entity';
-import { FileType } from '@enums/file.enum';
+import { DateAudit } from '../base/date_audit.entity';
+import { FileType } from '../enums';
 
 @Entity({ name: 'file' })
 export class FileEntity extends DateAudit {

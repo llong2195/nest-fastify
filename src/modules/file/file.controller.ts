@@ -25,17 +25,17 @@ import { join } from 'node:path';
 import { pipeline } from 'node:stream';
 import util from 'node:util';
 
-import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
-import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
-import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@configs/config';
-import { CurrentUser, Roles } from '@decorators/index';
-import { FileEntity } from '@entities/file.entity';
-import { RoleEnum } from '@enums/role.enum';
-import { getFullDate } from '@utils/index';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FilterFileDto } from './dto/get-file.dto';
 import { FileService } from './file.service';
+import { CurrentUserDto, BaseResponseDto } from '../../base/base.dto';
+import { PaginationOption, PaginationResponse } from '../../base/pagination.dto';
+import { UPLOAD_LOCATION, MAX_FILE_SIZE_IMAGE } from '../../configs';
+import { CurrentUser, Roles } from '../../decorators';
+import { FileEntity } from '../../entities';
+import { RoleEnum } from '../../enums';
+import { getFullDate } from '../../utils';
 
 const pump = util.promisify(pipeline);
 

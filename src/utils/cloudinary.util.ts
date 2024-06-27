@@ -1,7 +1,7 @@
 import cloudinary, { UploadApiResponse, v2 } from 'cloudinary';
 import { Readable, Stream } from 'node:stream';
 
-import { CLOUD_API_KEY, CLOUD_API_SECRET, CLOUD_NAME } from '@configs/config';
+import { CLOUD_NAME, CLOUD_API_KEY, CLOUD_API_SECRET } from '../configs';
 
 v2.config({
   cloud_name: CLOUD_NAME,

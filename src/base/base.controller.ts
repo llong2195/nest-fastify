@@ -2,11 +2,9 @@ import { BadRequestException, HttpException } from '@nestjs/common';
 import { isString } from 'class-validator';
 import { QueryFailedError } from 'typeorm';
 
-import { ErrorCode, ErrorMessageCode } from '@constants/index';
-import { ValidateError } from '@exceptions/errors';
-import { BaseError } from '@exceptions/errors/base.error';
-import { DatabaseError } from '@exceptions/errors/database.error';
-import { I18nService } from '@i18n/i18n.service';
+import { ErrorMessageCode, ErrorCode } from '../constants';
+import { BaseError, ValidateError, DatabaseError } from '../exceptions/errors';
+import { I18nService } from '../i18n/i18n.service';
 
 export class BaseController {
   private i18n: I18nService;

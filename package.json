@@ -123,19 +123,7 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/src/$1",
-      "^@configs/(.*)$": "<rootDir>/configs/$1",
-      "^@base/(.*)$": "<rootDir>/base/$1",
-      "^@validators/(.*)$": "<rootDir>/validators/$1",
-      "^@modules/(.*)$": "<rootDir>/modules/$1",
-      "^@exceptions/(.*)$": "<rootDir>/exceptions/$1",
-      "^@decorators/(.*)$": "<rootDir>/decorators/$1",
-      "^@enums/(.*)$": "<rootDir>/enums/$1",
-      "^@constants/(.*)$": "<rootDir>/constants/$1",
-      "^@entities/(.*)$": "<rootDir>/entities/$1",
-      "^@guard/(.*)$": "<rootDir>/guard/$1",
-      "^@utils/(.*)$": "<rootDir>/utils/$1",
-      "^@libs/(.*)$": "<rootDir>/libs/$1",
-      "^@src/(.*)$": "<rootDir>/$1"
+      "^@/(.*)$": "<rootDir>/$1"
     }
   }
 }

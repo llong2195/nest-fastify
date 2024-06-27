@@ -8,13 +8,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import fastify from 'fastify';
 
-import { ValidationConfig } from '@configs/validation.config';
-import { EnvEnum } from '@enums/app.enum';
-import { LoggerService } from '@logger/custom.logger';
-import { isEnv } from '@utils/util';
-import { ValidatorsModule } from '@validators/validators.module';
 import { AppModule } from './app.module';
 import { I18nService } from './i18n/i18n.service';
+import { ValidationConfig } from './configs';
+import { EnvEnum } from './enums';
+import { LoggerService } from './logger/custom.logger';
+import { isEnv } from './utils';
+import { ValidatorsModule } from './validators/validators.module';
 
 async function bootstrap() {
   let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];

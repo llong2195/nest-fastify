@@ -4,11 +4,11 @@ import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { DecodeOptions, SignOptions } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 
-import { CurrentUserDto } from '@base/base.dto';
-import { ErrorMessageCode } from '@constants/error-message-code';
-import { UserEntity } from '@entities/user.entity';
 import { UserService } from '../user/user.service';
 import { LoginRequestDto } from './dto/login-request.dto';
+import { CurrentUserDto } from '../../base/base.dto';
+import { ErrorMessageCode } from '../../constants';
+import { UserEntity } from '../../entities';
 
 @Injectable()
 export class AuthService {

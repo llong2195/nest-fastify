@@ -2,8 +2,8 @@ import { Controller, Get, Header, Query, Res, StreamableFile } from '@nestjs/com
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
 
-import { generateQR } from '@utils/util';
 import { QRCodeDto } from './dto/create-qr-code.dto';
+import { generateQR } from '../../utils';
 
 @ApiTags('v1/qr-code')
 @Controller('v1/qr-code')

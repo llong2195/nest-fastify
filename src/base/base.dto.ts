@@ -1,4 +1,4 @@
-import { MessageCode } from '@constants/message-code';
+import { MessageCode } from '@/constants/message-code';
 
 export class BaseResponseDto<T> {
   message: string;
