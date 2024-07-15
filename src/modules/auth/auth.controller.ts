@@ -2,9 +2,9 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@n
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
-import { BaseResponseDto, CurrentUserDto } from '@base/base.dto';
-import { CurrentUser } from '@decorators/current.user.decorator';
-import { UserEntity } from '@entities/user.entity';
+import { BaseResponseDto, CurrentUserDto } from '@/base/base.dto';
+import { CurrentUser } from '@/decorators';
+import { UserEntity } from '@/entities';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/login-request.dto';

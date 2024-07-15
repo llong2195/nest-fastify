@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { DEFAULT_LOCALE } from '@configs/config';
 import langs from './locales/index';
+import { DEFAULT_LOCALE } from '../configs';
 
 @Injectable()
 export class I18nService {

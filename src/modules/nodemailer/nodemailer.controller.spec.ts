@@ -6,7 +6,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { join } from 'node:path';
 
 import { NodemailerController } from './nodemailer.controller';
-import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
+import { NodemailerService } from './nodemailer.service';
+import { QueueEnum } from '../../enums/queue.enum';
 
 describe('NodemailerController', () => {
   let controller: NodemailerController;
@@ -42,7 +43,7 @@ describe('NodemailerController', () => {
             }) as MailerOptions,
         }),
         BullModule.registerQueue({
-          name: QUEUE_EMAIL,
+          name: QueueEnum.EMAIL_QUEUE,
         }),
       ],
       controllers: [NodemailerController],

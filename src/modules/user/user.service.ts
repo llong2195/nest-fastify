@@ -3,11 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';
 
-import { BaseService } from '@base/base.service';
-import { UserEntity } from '@entities/user.entity';
-import { NotFoundError, ValidateError } from '@exceptions/errors';
-import { LoggerService } from '@logger/custom.logger';
-import { Hash } from '@utils/hash.util';
+import { BaseService } from '@/base/base.service';
+import { UserEntity } from '@/entities';
+import { NotFoundError, ValidateError } from '@/exceptions/errors';
+import { LoggerService } from '@/logger/custom.logger';
+import { Hash } from '@/utils';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 

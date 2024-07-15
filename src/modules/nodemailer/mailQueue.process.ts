@@ -1,7 +1,7 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 
-import { QueueEnum, TopicEnum } from '../../enums/queue.enum';
+import { QueueEnum, TopicEnum } from '@/enums/queue.enum';
 import { NodemailerService } from './nodemailer.service';
 
 @Processor(QueueEnum.EMAIL_QUEUE)

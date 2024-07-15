@@ -1,8 +1,8 @@
 import { Expose } from 'class-transformer';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-import { DateAudit } from '@base/date_audit.entity';
-import { RoleEnum } from '@enums/role.enum';
+import { DateAudit } from '../base/date_audit.entity';
+import { RoleEnum } from '../enums';
 
 @Index('idx_email', ['email'], { unique: true })
 @Entity({ name: 'user' })

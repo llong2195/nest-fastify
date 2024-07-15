@@ -5,10 +5,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'node:path';
 
+import { QueueEnum } from '@/enums/queue.enum';
 import { mailQueueProcessor } from './mailQueue.process';
 import { NodemailerController } from './nodemailer.controller';
 import { NodemailerService } from './nodemailer.service';
-import { QueueEnum } from '../../enums/queue.enum';
 
 @Module({
   imports: [

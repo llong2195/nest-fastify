@@ -4,14 +4,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { unlinkSync } from 'node:fs';
 import { Repository } from 'typeorm';
 
-import { BaseService } from '@base/base.service';
-import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@configs/config';
-import { ErrorMessageCode } from '@constants/error-message-code';
-import { FileEntity } from '@entities/file.entity';
-import { FileType } from '@enums/file.enum';
-import { NotFoundError } from '@exceptions/errors';
-import { LoggerService } from '@logger/custom.logger';
-import { cloudinary } from '@utils/cloudinary.util';
+import { BaseService } from '@/base/base.service';
+import { API_PREFIX, SERVER_URL, UPLOAD_LOCATION } from '@/configs';
+import { ErrorMessageCode } from '@/constants';
+import { FileEntity } from '@/entities';
+import { FileType } from '@/enums';
+import { NotFoundError } from '@/exceptions/errors';
+import { LoggerService } from '@/logger/custom.logger';
+import { cloudinary } from '@/utils';
 
 @Injectable()
 export class FileService extends BaseService<FileEntity, Repository<FileEntity>> {

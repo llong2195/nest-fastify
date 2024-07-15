@@ -11,9 +11,9 @@ import {
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { EntityId } from 'typeorm/repository/EntityId';
 
-import { PAGE_SIZE } from '@configs/config';
-import { LoggerService } from '@logger/custom.logger';
-import { trim } from '@utils/index';
+import { PAGE_SIZE } from '@/configs';
+import { LoggerService } from '@/logger/custom.logger';
+import { trim } from '@/utils';
 import { IBaseService } from './i.base.service';
 import { PaginationResponse } from './pagination.dto';
 
@@ -34,7 +34,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * will be created.
    * @returns The return value of the operation function.
    */
-  async transactionWrap<K>(operation: (...args) => K, manager?: EntityManager) {
+  async transactionWrap<K>(operation: (...args: any[]) => K, manager?: EntityManager) {
     if (manager != undefined) {
       return await operation(manager);
     } else {

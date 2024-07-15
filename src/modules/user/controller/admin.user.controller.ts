@@ -2,9 +2,9 @@ import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Q
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
 
-import { BaseResponseDto } from '@base/base.dto';
-import { PaginationOption, PaginationResponse } from '@base/pagination.dto';
-import { UserEntity } from '@entities/user.entity';
+import { BaseResponseDto } from '@/base/base.dto';
+import { PaginationOption, PaginationResponse } from '@/base/pagination.dto';
+import { UserEntity } from '@/entities';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../user.service';

@@ -3,9 +3,9 @@ import { FastifyRequest } from 'fastify';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { BaseResponseDto } from '@base/base.dto';
-import { DEFAULT_LOCALE } from '@configs/config';
-import { I18nService } from '@i18n/i18n.service';
+import { BaseResponseDto } from '../base/base.dto';
+import { DEFAULT_LOCALE } from '../configs';
+import { I18nService } from '../i18n/i18n.service';
 
 @Injectable()
 export class ResponseTransformInterceptor<T> implements NestInterceptor<T, BaseResponseDto<T>> {

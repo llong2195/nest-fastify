@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
 
-import { RoleEnum } from '@enums/role.enum';
-import { PasswordConfirmValidator } from '@validators/password-confirm.validator';
+import { RoleEnum } from '@/enums';
+import { PasswordConfirmValidator } from '@/validators/password-confirm.validator';
 
 export class AdminUpdateUserDto {
   @ApiProperty({ required: false, description: 'first name' })
