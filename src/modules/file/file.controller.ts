@@ -102,7 +102,7 @@ export class FileController {
   ): Promise<any> {
     try {
       // Sanitize the path to prevent directory traversal
-      const sanitizedPath = path.replace(/(\.\.\/?|\/\.\.)/g, '');
+      const sanitizedPath = path.replace(/\.\.\//g, '');
       const filePath = join(process.cwd(), UPLOAD_LOCATION, sanitizedPath);
       if (!existsSync(filePath)) {
         throw new NotFoundException();
