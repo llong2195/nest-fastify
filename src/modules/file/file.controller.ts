@@ -101,7 +101,9 @@ export class FileController {
     @Query() filter: FilterFileDto,
   ): Promise<any> {
     try {
-      const filePath = join(process.cwd(), UPLOAD_LOCATION, path);
+      // Sanitize the path to prevent directory traversal
+      const sanitizedPath = path.replace(/(\.\.\/?|\/\.\.)/g, '');
+      const filePath = join(process.cwd(), UPLOAD_LOCATION, sanitizedPath);
       if (!existsSync(filePath)) {
         throw new NotFoundException();
       }
