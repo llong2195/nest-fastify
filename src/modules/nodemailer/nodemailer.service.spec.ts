@@ -1,7 +1,8 @@
 import { BullModule } from '@nestjs/bull';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { NodemailerService, QUEUE_EMAIL } from './nodemailer.service';
+import { NodemailerService } from './nodemailer.service';
+import { QueueEnum } from '../../enums/queue.enum';
 
 describe('NodemailerService', () => {
   let service: NodemailerService;
@@ -10,7 +11,7 @@ describe('NodemailerService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         BullModule.registerQueue({
-          name: QUEUE_EMAIL,
+          name: QueueEnum.EMAIL_QUEUE,
         }),
       ],
       providers: [NodemailerService],

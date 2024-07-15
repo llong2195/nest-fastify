@@ -1,6 +1,6 @@
 import { compareSync, hashSync } from 'bcrypt';
 
-import { BCRYPT_SALT } from '../configs';
+import { BCRYPT_SALT } from '@/configs';
 
 export class Hash {
   /**

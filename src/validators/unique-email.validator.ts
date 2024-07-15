@@ -3,7 +3,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { DataSource } from 'typeorm';
 
-import { UserEntity } from '../entities';
+import { UserEntity } from '@/entities';
 
 @ValidatorConstraint({ name: 'isEmailUnique', async: true })
 @Injectable()

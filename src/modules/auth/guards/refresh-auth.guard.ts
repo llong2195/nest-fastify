@@ -1,8 +1,8 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { ErrorMessageCode } from '../../../constants';
-import { LoggerService } from '../../../logger/custom.logger';
+import { ErrorMessageCode } from '@/constants';
+import { LoggerService } from '@/logger/custom.logger';
 
 @Injectable()
 export class RefreshAuthGuard extends AuthGuard('refresh') {

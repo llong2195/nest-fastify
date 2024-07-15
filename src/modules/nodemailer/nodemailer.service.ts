@@ -3,8 +3,8 @@ import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 
-import { QueueEnum, TopicEnum } from '../../enums/queue.enum';
-import { LoggerService } from '../../logger/custom.logger';
+import { QueueEnum, TopicEnum } from '@/enums/queue.enum';
+import { LoggerService } from '@/logger/custom.logger';
 
 @Injectable()
 export class NodemailerService {

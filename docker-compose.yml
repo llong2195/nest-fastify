@@ -14,8 +14,8 @@ services:
   server:
     build:
       context: .
-    env_file:
-      - path: .env
+    environment:
+      NODE_ENV: production
     ports:
       - 4401:4401
     restart: on-failure
