@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 
-import { I18nService } from './i18n.service';
+import { I18nService } from '../components/i18n.service';
 
 @Global()
 @Module({

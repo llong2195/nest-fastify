@@ -9,9 +9,9 @@ import { useContainer } from 'class-validator';
 import fastify from 'fastify';
 
 import { AppModule } from './app.module';
+import { I18nService } from './components/i18n.service';
 import { ValidationConfig } from './configs';
 import { EnvEnum } from './enums';
-import { I18nService } from './i18n/i18n.service';
 import { LoggerService } from './logger/custom.logger';
 import { isEnv } from './utils';
 import { ValidatorsModule } from './validators/validators.module';

@@ -1,15 +1,14 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, LoggerService } from '@nestjs/common';
-import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Sentry from '@sentry/node';
-import '@sentry/tracing';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { QueryFailedError } from 'typeorm';
 
-import { SENTRY_DSN, DEFAULT_LOCALE } from '../configs';
+import { I18nService } from '@/components/i18n.service';
+import { LoggerService } from '@/logger/custom.logger';
+import { DEFAULT_LOCALE, SENTRY_DSN } from '../configs';
 import { ErrorCode } from '../constants';
 import { BaseError } from '../exceptions/errors';
-import { I18nService } from '../i18n/i18n.service';
 import { IResponseBody } from '../interface';
 import { isDev } from '../utils';
 
@@ -95,7 +94,7 @@ export class AllExceptionFilter implements ExceptionFilter {
   }
 
   catch(exception: HttpException | Error | BaseError, host: ArgumentsHost): void {
-    const ctx: HttpArgumentsHost = host.switchToHttp();
+    const ctx = host.switchToHttp();
     const request = ctx.getRequest<FastifyRequest>();
     const response = ctx.getResponse<FastifyReply>();
     // Handling error message and logging
