@@ -8,15 +8,15 @@ import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { join } from 'node:path';
 
 import { AppController } from './app.controller';
+import { ComponentModule } from './components/component.module';
 import { DatabaseModule } from './database/database.module';
+import { EnvEnum } from './enums';
 import { AllExceptionFilter } from './filter/exception.filter';
 import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard';
-import { I18nModule } from './i18n/i18n.module';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
 import { IORedisModule, IRedisModuleOptions } from './libs';
 import { LoggerModule } from './logger/logger.module';
-import { EnvEnum } from './enums';
 import { AuthModule } from './modules/auth/auth.module';
 import { CronModule } from './modules/cron/cron.module';
 import { FileModule } from './modules/file/file.module';
@@ -98,7 +98,7 @@ if (isEnv(EnvEnum.Production)) {
     }),
 
     LoggerModule,
-    I18nModule,
+    ComponentModule,
     DatabaseModule,
     ValidatorsModule,
     SettingModule,
