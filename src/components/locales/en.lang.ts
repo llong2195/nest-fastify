@@ -1,31 +1,35 @@
-const lang = new Map<string, string>();
+import { objectToMap } from '@/utils/util';
 
-lang.set('SUCCESS', 'success.');
-lang.set('UNKNOWN', 'unknown.');
-lang.set('INVALID', 'invalid.');
-lang.set('SYSTEM_GENERAL_ERROR', 'system general error.');
-lang.set('DATABASE_ERROR', 'database error.');
-lang.set('INVALID_HEADERS', 'invalid headers.');
-lang.set('SYNTAX_ERROR', 'syntax error.');
-lang.set('NOT_FOUND', 'not found.');
-lang.set('DATABASE_CONNECTION_ERROR', 'database connection error.');
-lang.set('INSERT_ERROR', 'insert error.');
-lang.set('UPDATE_ERROR', 'update error.');
-lang.set('DELETE_ERROR', 'delete error.');
-lang.set('RECORD_NOT_FOUND', 'record not found.');
-lang.set('PERMISSION_DENIED', 'permission denied.');
-lang.set('AUTH_LOGIN_FAIL', 'login fail.');
-lang.set('AUTH_INVALID_TOKEN', 'invalid token.');
-lang.set('AUTH_MISSING_JWT', 'missing jwt.');
-lang.set('AUTH_DELETED_ACCOUNT', 'deleted account.');
-lang.set('AUTH_DISABLED_ACCOUNT', 'disabled account.');
-lang.set('AUTH_EXPIRED_TOKEN', 'expired token.');
-lang.set('AUTH_INVALID_EMAIL_ADDRESS', 'invalid email address.');
-lang.set('AUTH_INVALID_PASSWORD', 'invalid password.');
-lang.set('NEW_PASSWORD_SAME_AS_CURRENT_PASSWORD', 'new password same as current password.');
-lang.set('NON_ACTIVATED_ACCOUNT', 'non activated account.');
-lang.set('OTP_LIMIT_REACHED', 'otp limit reached.');
-lang.set('USER_NOT_FOUND', 'user not found.');
-lang.set('TOKEN_NOT_FOUND', 'token not found.');
-const enLangs = lang;
-export default enLangs;
+const enLangs = {
+  SUCCESS: 'success.',
+  UNKNOWN: 'unknown.',
+  INVALID: 'invalid.',
+  SYSTEM_GENERAL_ERROR: 'system general error.',
+  DATABASE_ERROR: 'database error.',
+  INVALID_HEADERS: 'invalid headers.',
+  SYNTAX_ERROR: 'syntax error.',
+  NOT_FOUND: 'not found.',
+  DATABASE_CONNECTION_ERROR: 'database connection error.',
+  INSERT_ERROR: 'insert error.',
+  UPDATE_ERROR: 'update error.',
+  DELETE_ERROR: 'delete error.',
+  RECORD_NOT_FOUND: 'record not found.',
+  PERMISSION_DENIED: 'permission denied.',
+  AUTH_LOGIN_FAIL: 'login fail.',
+  AUTH_INVALID_TOKEN: 'invalid token.',
+  AUTH_MISSING_JWT: 'missing jwt.',
+  AUTH_DELETED_ACCOUNT: 'deleted account.',
+  AUTH_DISABLED_ACCOUNT: 'disabled account.',
+  AUTH_EXPIRED_TOKEN: 'expired token.',
+  AUTH_INVALID_EMAIL_ADDRESS: 'invalid email address.',
+  AUTH_INVALID_PASSWORD: 'invalid password.',
+  NEW_PASSWORD_SAME_AS_CURRENT_PASSWORD: 'new password same as current password.',
+  NON_ACTIVATED_ACCOUNT: 'non activated account.',
+  OTP_LIMIT_REACHED: 'otp limit reached.',
+  USER_NOT_FOUND: 'user not found.',
+  TOKEN_NOT_FOUND: 'token not found.',
+};
+
+const lang = objectToMap(enLangs);
+
+export default lang;
