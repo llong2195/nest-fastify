@@ -248,3 +248,31 @@ export const decryptObj = (encryptText: string, secretKey: string): unknown => {
   const bytes = CryptoJS.AES.decrypt(decData, secretKey).toString(CryptoJS.enc.Utf8);
   return JSON.parse(bytes);
 };
+
+/**
+ * Converts an object to a Map<string, string>.
+ *
+ * @param obj - The object to be converted.
+ * @returns The resulting Map<string, string>.
+ */
+export const objectToMap = (obj: object): Map<string, string> => {
+  const map = new Map<string, string>();
+  const stack = [{ obj, prefix: '' }];
+  while (stack.length > 0) {
+    const { obj, prefix } = stack.pop();
+    for (const key in obj) {
+      if (typeof obj[key] === 'object') {
+        if (Array.isArray(obj[key])) {
+          obj[key].forEach((item: object, index: number) => {
+            stack.push({ obj: item, prefix: `${prefix}${key}.${index}.` });
+          });
+        } else {
+          stack.push({ obj: obj[key], prefix: `${prefix}${key}.` });
+        }
+      } else if (!Array.isArray(obj[key])) {
+        map.set(`${prefix}${key}`, obj[key]);
+      }
+    }
+  }
+  return map;
+};
