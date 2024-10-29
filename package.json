@@ -81,7 +81,7 @@
     "@swc/core": "^1.7.39",
     "@types/bcrypt": "^5.0.2",
     "@types/crypto-js": "^4.2.2",
-    "@types/jest": "^29.5.13",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.8.1",
     "@types/passport-jwt": "^4.0.1",
     "@types/qrcode": "^1.5.5",
