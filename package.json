@@ -76,7 +76,7 @@
   "devDependencies": {
     "@nestjs/cli": "^10.4.5",
     "@nestjs/schematics": "^10.2.2",
-    "@nestjs/testing": "^10.4.4",
+    "@nestjs/testing": "^10.4.6",
     "@swc/cli": "^0.4.0",
     "@swc/core": "^1.7.39",
     "@types/bcrypt": "^5.0.2",
