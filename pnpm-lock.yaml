@@ -25,7 +25,7 @@ importers:
         version: 3.1.0(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(axios@1.7.7)(rxjs@7.8.1)
       '@nestjs/bull':
         specifier: ^10.2.1
-        version: 10.2.1(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1))(bull@4.16.3)
+        version: 10.2.1(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1))(bull@4.16.4)
       '@nestjs/common':
         specifier: ^10.4.6
         version: 10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -72,8 +72,8 @@ importers:
         specifier: ^5.1.1
         version: 5.1.1
       bull:
-        specifier: ^4.16.3
-        version: 4.16.3
+        specifier: ^4.16.4
+        version: 4.16.4
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -1863,8 +1863,8 @@ packages:
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
-  bull@4.16.3:
-    resolution: {integrity: sha512-BZbPzNiKXczfZPXBTVhcN73b+CQFHTzVb7yJi1bSYld4/8bDc9oh/j/dYTsQBgOAZIZahFeHO6dPHbVEXXCvCg==}
+  bull@4.16.4:
+    resolution: {integrity: sha512-CF+nGsJyfsCC9MJL8hFxqXzbwq+jGBXhaz1j15G+5N/XtKIPFUUy5O1mfWWKbKunfuH/x+UV4NYRQDHSkjCOgA==}
     engines: {node: '>=12'}
 
   cacheable-lookup@5.0.4:
@@ -3700,8 +3700,8 @@ packages:
     resolution: {integrity: sha512-P0efT1C9jIdVRefqjzOQ9Xml57zpOXnIuS+csaB4MdZbTdmGDLo8XhzBG1N7aO11gKDDkJvBLULeFTo46wwreA==}
     hasBin: true
 
-  msgpackr@1.11.0:
-    resolution: {integrity: sha512-I8qXuuALqJe5laEBYoFykChhSXLikZmUhccjGsPuSJ/7uPip2TJ7lwdIQwWSAi0jGZDXv4WOP8Qg65QZRuXxXw==}
+  msgpackr@1.11.2:
+    resolution: {integrity: sha512-F9UngXRlPyWCDEASDpTf6c9uNhGPTqnTeLVt7bN+bU1eajoR/8V9ys2BRaV5C/e5ihE6sJ9uPIKaYt6bFuO32g==}
 
   mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
@@ -5795,12 +5795,12 @@ snapshots:
       '@nestjs/core': 10.4.6(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)
       tslib: 2.6.3
 
-  '@nestjs/bull@10.2.1(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1))(bull@4.16.3)':
+  '@nestjs/bull@10.2.1(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1))(bull@4.16.4)':
     dependencies:
       '@nestjs/bull-shared': 10.2.1(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1))
       '@nestjs/common': 10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@nestjs/core': 10.4.6(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)
-      bull: 4.16.3
+      bull: 4.16.4
       tslib: 2.6.3
 
   '@nestjs/cli@10.4.5(@swc/cli@0.4.0(@swc/core@1.7.39)(chokidar@3.6.0))(@swc/core@1.7.39)':
@@ -7114,13 +7114,13 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  bull@4.16.3:
+  bull@4.16.4:
     dependencies:
       cron-parser: 4.9.0
       get-port: 5.1.1
       ioredis: 5.4.1
       lodash: 4.17.21
-      msgpackr: 1.11.0
+      msgpackr: 1.11.2
       semver: 7.6.3
       uuid: 8.3.2
     transitivePeerDependencies:
@@ -9550,7 +9550,7 @@ snapshots:
       '@msgpackr-extract/msgpackr-extract-win32-x64': 3.0.3
     optional: true
 
-  msgpackr@1.11.0:
+  msgpackr@1.11.2:
     optionalDependencies:
       msgpackr-extract: 3.0.3
 
