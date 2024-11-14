@@ -10,7 +10,11 @@ export class DbCustomLogger implements Logger {
    * @param {unknown[]} [parameters] - []
    * @param {QueryRunner} [queryRunner] - The QueryRunner instance that is used to execute queries.
    */
-  logQuery(query: string, parameters?: unknown[], queryRunner?: QueryRunner): void {
+  logQuery(
+    query: string,
+    parameters?: unknown[],
+    queryRunner?: QueryRunner,
+  ): void {
     // this.logger.log("logQuery->>>:", [query, parameters])
   }
 
@@ -21,7 +25,12 @@ export class DbCustomLogger implements Logger {
    * @param {unknown[]} [parameters] -
    * @param {QueryRunner} [queryRunner] - QueryRunner
    */
-  logQueryError(error: string | Error, query: string, parameters?: unknown[], queryRunner?: QueryRunner): void {
+  logQueryError(
+    error: string | Error,
+    query: string,
+    parameters?: unknown[],
+    queryRunner?: QueryRunner,
+  ): void {
     this.logger.error('logQueryError->>>:', error, query, parameters);
   }
 
@@ -32,7 +41,12 @@ export class DbCustomLogger implements Logger {
    * @param {unknown[]} [parameters] -
    * @param {QueryRunner} [queryRunner] - QueryRunner
    */
-  logQuerySlow(time: number, query: string, parameters?: unknown[], queryRunner?: QueryRunner): void {
+  logQuerySlow(
+    time: number,
+    query: string,
+    parameters?: unknown[],
+    queryRunner?: QueryRunner,
+  ): void {
     this.logger.warn('logQuerySlow->>>:', time, query, parameters);
   }
 
@@ -62,7 +76,11 @@ export class DbCustomLogger implements Logger {
    * @param {QueryRunner} [queryRunner] - QueryRunner - QueryRunner instance.
    * @returns The return type is void.
    */
-  log(level: 'log' | 'info' | 'warn', message: unknown, queryRunner?: QueryRunner): void {
+  log(
+    level: 'log' | 'info' | 'warn',
+    message: unknown,
+    queryRunner?: QueryRunner,
+  ): void {
     switch (level) {
       case 'info':
         return this.logger.debug(message);

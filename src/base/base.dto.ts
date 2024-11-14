@@ -2,7 +2,7 @@ import { MessageCode } from '@/constants/message-code';
 
 export class BaseResponseDto<T> {
   message: string;
-  body: T | T[] | unknown | any;
+  body: T | T[] | null;
 
   constructor(body: T | T[] | null = null, message = MessageCode.SUCCESS) {
     this.message = message;

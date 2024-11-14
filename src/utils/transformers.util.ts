@@ -4,12 +4,13 @@ import { Transform } from 'class-transformer';
  * It converts a string or array of strings into an array of numbers
  */
 export const ConvertToArrayOfNumbers = () =>
-  Transform(params => {
-    const values = params.value;
-    if (!values) {
+  Transform(({ value }: { value: any }) => {
+    if (value == null || value == undefined) {
       return [];
     }
-    return (Array.isArray(values) ? values : values.split(',')).map((value: string) => Number(value));
+    return (Array.isArray(value) ? value : (value as string).split(',')).map(
+      (i: string) => Number(i),
+    );
   });
 
 /**
@@ -36,7 +37,7 @@ export const ConvertToBoolean = () =>
  */
 export const ConvertToDate = () =>
   Transform(({ value }) => {
-    return new Date(value);
+    return new Date(value as string | number | Date);
   });
 
 /**

@@ -9,7 +9,7 @@ export class QueueController {
   constructor(private queueService: QueueService) {}
 
   @Post('transcode')
-  transcode() {
-    this.queueService.transcode();
+  async transcode() {
+    await this.queueService.transcode();
   }
 }

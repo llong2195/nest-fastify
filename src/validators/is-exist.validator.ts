@@ -1,4 +1,8 @@
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { DataSource, EntityTarget } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -20,7 +24,7 @@ export class IsExist implements ValidatorConstraintInterface {
    */
   async validate(value: string, validationArguments: ValidationArguments) {
     const entity = validationArguments.constraints[0] as EntityTarget<any>;
-    const pathToProperty = validationArguments.constraints[1];
+    const pathToProperty = validationArguments.constraints[1] as string;
     const repo = this.dataSource.getRepository(entity);
     if (!value || !entity || !pathToProperty || !repo) {
       return false;
@@ -28,9 +32,11 @@ export class IsExist implements ValidatorConstraintInterface {
 
     const rs: unknown = await repo.findOne({
       where: {
-        [pathToProperty ? pathToProperty : validationArguments.property]: pathToProperty
-          ? value?.[pathToProperty] || value
-          : value,
+        [pathToProperty ? pathToProperty : validationArguments.property]:
+          pathToProperty
+            ? (value as unknown as Record<string, unknown>)?.[pathToProperty] ||
+              value
+            : value,
       },
     });
     if (typeof rs === 'undefined') {
@@ -40,6 +46,6 @@ export class IsExist implements ValidatorConstraintInterface {
   }
 
   defaultMessage(validationArguments?: ValidationArguments): string {
-    return `${validationArguments.value}" is not exist.`;
+    return `${validationArguments?.value}" is not exist.`;
   }
 }

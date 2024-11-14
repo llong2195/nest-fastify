@@ -1,10 +1,12 @@
 import {
   BaseEntity,
+  DeepPartial,
   EntityManager,
   FindManyOptions,
   FindOptionsSelect,
   FindOptionsWhere,
   In,
+  ObjectLiteral,
   Repository,
   SelectQueryBuilder,
 } from 'typeorm';
@@ -17,7 +19,9 @@ import { trim } from '@/utils';
 import { IBaseService } from './i.base.service';
 import { PaginationResponse } from './pagination.dto';
 
-export class BaseService<T extends BaseEntity, R extends Repository<T>> implements IBaseService<T> {
+export class BaseService<T extends BaseEntity, R extends Repository<T>>
+  implements IBaseService<T>
+{
   protected readonly repository: R;
   protected readonly logger: LoggerService;
 
@@ -34,11 +38,14 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * will be created.
    * @returns The return value of the operation function.
    */
-  async transactionWrap<K>(operation: (...args: any[]) => K, manager?: EntityManager) {
+  async transactionWrap<K>(
+    operation: (manager: EntityManager) => Promise<K>,
+    manager?: EntityManager,
+  ) {
     if (manager != undefined) {
       return await operation(manager);
     } else {
-      return await this.repository.manager.transaction(async manager => {
+      return await this.repository.manager.transaction(async (manager) => {
         return await operation(manager);
       });
     }
@@ -50,7 +57,10 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * @param data - QueryDeepPartialEntity<T>
    * @returns The updated entity.
    */
-  async _update(id: EntityId, data: QueryDeepPartialEntity<T>): Promise<T | null> {
+  async _update(
+    id: EntityId,
+    data: QueryDeepPartialEntity<T>,
+  ): Promise<T | null> {
     await this.repository.update(id, data);
     return await this.repository.findOne({
       where: { id: id } as unknown as FindOptionsWhere<T>,
@@ -102,8 +112,8 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * @param {any} data - any - This is the data that will be stored in the database.
    * @returns The data that was saved to the database.
    */
-  async _store(data: any): Promise<T | null> {
-    return this.repository.save(data, { transaction: true });
+  async _store(data: DeepPartial<T>): Promise<T> {
+    return this.repository.save(data);
   }
 
   /**
@@ -165,13 +175,16 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * @param {number} limit - The number of items to return per page.
    * @returns A pagination response object
    */
-  async _iPaginate<T>(
+  async _iPaginate<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
     page: number,
     limit: number,
   ): Promise<PaginationResponse<T>> {
     const skip = (page - 1) * limit;
-    const [items, total] = await queryBuilder.take(limit).skip(skip).getManyAndCount();
+    const [items, total] = await queryBuilder
+      .take(limit)
+      .skip(skip)
+      .getManyAndCount();
 
     return this.pagination<T>(items, total, page, limit);
   }
@@ -186,24 +199,27 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * don't pass this, it will use the table name of the repository.
    * @returns {PaginationResponse} A pagination response object
    */
-  async _iPaginateCustom<T>(
+  async _iPaginateCustom<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
     page: number,
     limit: number,
-    customTable = null,
+    customTable?: string,
   ): Promise<PaginationResponse<T>> {
     const skip = (page - 1) * limit;
 
     const [data, total] = await Promise.all([
-      queryBuilder.limit(limit).offset(skip).getRawMany(),
+      queryBuilder
+        .limit(limit)
+        .offset(skip)
+        .getRawMany<Record<string, unknown>>(),
       queryBuilder.getCount(),
     ]);
     const tableName = customTable ?? this.repository.metadata.tableName;
 
-    const results: T[] = data.map(item => {
+    const results: T[] = data.map((item) => {
       const a: Record<string, unknown> = {};
 
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         a[trim(key, tableName + '_')] = item[key];
       });
       return a as T;
@@ -221,10 +237,15 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * @param {number} limit - The number of items per page.
    * @returns {PaginationResponse} A new instance of the PaginationResponse class.
    */
-  pagination<T>(items: T[], total: number, page = 1, limit = PAGE_SIZE): PaginationResponse<T> {
+  pagination<T>(
+    items: T[],
+    total: number,
+    page = 1,
+    limit = PAGE_SIZE,
+  ): PaginationResponse<T> {
     const totalPage = Math.ceil(total / limit);
     if (total <= 0 || page > totalPage) {
-      return new PaginationResponse([], {
+      return new PaginationResponse<T>([], {
         pagination: {
           currentPage: page,
           limit: limit,
@@ -249,7 +270,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * timestamp will be in milliseconds.
    * @returns A timestamp in seconds or milliseconds.
    */
-  async currentTimestamp(second = true): Promise<number> {
+  currentTimestamp(second = true): number {
     const date = new Date();
     if (second) {
       const now = Math.floor(date.getTime() / 1000);

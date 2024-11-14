@@ -1,4 +1,10 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Sentry from '@sentry/node';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -34,19 +40,23 @@ export class AllExceptionFilter implements ExceptionFilter {
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     let errorCode = ErrorCode.UNKNOWN;
     let message = 'Internal server error';
-    const lang = request?.headers['accept-language']?.split(';')[0]?.split(',')[0] || DEFAULT_LOCALE;
+    const lang =
+      request?.headers['accept-language']?.split(';')[0]?.split(',')[0] ||
+      DEFAULT_LOCALE;
     let responseBody: IResponseBody = {
       statusCode: statusCode,
       errorCode: errorCode,
       message: message,
     };
+
     if (exception instanceof BaseError) {
       statusCode = exception.getStatus();
       errorCode = exception.getErrorCode();
+      const response = exception.getResponse();
       message =
-        typeof exception.getResponse() == 'string'
-          ? exception.getResponse()
-          : JSON.parse(JSON.stringify(exception.getResponse()))?.message;
+        typeof response == 'string'
+          ? response
+          : (response as { message?: string })?.message || '';
       responseBody = {
         statusCode: statusCode,
         errorCode: errorCode,
@@ -55,11 +65,15 @@ export class AllExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof HttpException) {
       const responseException = exception.getResponse();
       statusCode = exception.getStatus();
-      errorCode = ((responseException as Record<string, unknown>)?.errorCode as number) || ErrorCode.UNKNOWN;
+      errorCode =
+        ((responseException as Record<string, unknown>)?.errorCode as number) ||
+        ErrorCode.UNKNOWN;
+
+      const response = exception.getResponse();
       message =
-        typeof exception.getResponse() == 'string'
-          ? exception.getResponse()
-          : JSON.parse(JSON.stringify(exception.getResponse()))?.message;
+        typeof response == 'string'
+          ? response
+          : JSON.stringify(exception.getResponse() as object);
       responseBody = {
         statusCode: statusCode,
         errorCode: errorCode,
@@ -85,15 +99,17 @@ export class AllExceptionFilter implements ExceptionFilter {
       };
     }
 
-    if (Array.isArray(responseBody.message)) {
-      responseBody.message = responseBody.message[0];
+    if (responseBody.message) {
+      responseBody.message = this.i18nService.lang(responseBody.message, lang);
     }
-    if (responseBody.message) responseBody.message = this.i18nService.lang(responseBody.message, lang);
-    response.status(statusCode).send(responseBody);
     this.handleMessage(exception, request, responseBody);
+    response.status(statusCode).send(responseBody);
   }
 
-  catch(exception: HttpException | Error | BaseError, host: ArgumentsHost): void {
+  catch(
+    exception: HttpException | Error | BaseError,
+    host: ArgumentsHost,
+  ): void {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<FastifyRequest>();
     const response = ctx.getResponse<FastifyReply>();
@@ -113,9 +129,9 @@ export class AllExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException || exception instanceof BaseError) {
       message = JSON.stringify(exception.getResponse());
     } else if (exception instanceof QueryFailedError) {
-      message = exception.stack.toString();
+      message = exception?.stack?.toString() || '';
     } else if (exception instanceof Error) {
-      message = exception.stack.toString();
+      message = exception?.stack?.toString() || '';
       if (message.includes('no such file or directory')) {
         message = 'Not Found';
       }
@@ -124,7 +140,10 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     const { body, headers, ip, method, params, query } = request;
     const user = (request as unknown as Record<string, string>)?.user;
-    Sentry.setTag('ip', JSON.stringify(request.headers['X-FORWARDED-FOR']) + ',' + request.ip);
+    Sentry.setTag(
+      'ip',
+      JSON.stringify(request.headers['X-FORWARDED-FOR']) + ',' + request.ip,
+    );
     Sentry.setTag('queryquery', JSON.stringify(request.query));
     Sentry.setTag('method', request.method);
 

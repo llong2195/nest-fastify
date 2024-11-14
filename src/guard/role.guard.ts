@@ -4,12 +4,13 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '@/decorators/public.decorator';
 import { ROLES_KEY } from '@/decorators/role.decorators';
 import { RoleEnum } from '@/enums/role.enum';
+import { FastifyRequestWithUser } from '@/decorators';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -17,14 +18,22 @@ export class RolesGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-    const requiredRoles = this.reflector.getAllAndOverride<RoleEnum[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (!requiredRoles || requiredRoles.length < 1 || requiredRoles.includes(RoleEnum.ALL)) {
+    const requiredRoles = this.reflector.getAllAndOverride<RoleEnum[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+    if (
+      !requiredRoles ||
+      requiredRoles.length < 1 ||
+      requiredRoles.includes(RoleEnum.ALL)
+    ) {
       return true;
     }
-    const { user } = context.switchToHttp().getRequest();
-    return requiredRoles.some(role => user.role?.includes(role));
+    const req = context.switchToHttp().getRequest<FastifyRequestWithUser>();
+    const user = req.user as { role?: RoleEnum[] } | undefined;
+    if (!user) {
+      return false;
+    }
+    return requiredRoles.some((role) => user?.role?.includes(role));
   }
 }

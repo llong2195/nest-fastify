@@ -1,9 +1,17 @@
 import helmet from '@fastify/helmet';
 import FastifyMultipart from '@fastify/multipart';
-import { ForbiddenException, INestApplication, LogLevel, ValidationPipe } from '@nestjs/common';
+import {
+  ForbiddenException,
+  INestApplication,
+  LogLevel,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import fastify from 'fastify';
@@ -17,7 +25,13 @@ import { isEnv } from './utils';
 import { ValidatorsModule } from './validators/validators.module';
 
 async function bootstrap() {
-  let logLevelsDefault: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
+  let logLevelsDefault: LogLevel[] = [
+    'log',
+    'error',
+    'warn',
+    'debug',
+    'verbose',
+  ];
 
   if (isEnv(EnvEnum.Production) || isEnv(EnvEnum.Staging)) {
     const logLevel = process.env.LOG_LEVEL || 'error,debug,verbose';
@@ -36,15 +50,21 @@ async function bootstrap() {
   //     };
   //     done();
   // });
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(instance as any), {
-    logger: logLevelsDefault,
-    snapshot: true,
-  });
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(instance),
+    {
+      logger: logLevelsDefault,
+      snapshot: true,
+    },
+  );
   // ------------- Config ---------------
   const configService = app.get(ConfigService);
-  const port: number = configService.get<number>('PORT');
+  const port: number = configService.get<number>('PORT') || 4000;
   const LISTEN_ON: string = configService.get<string>('LISTEN_ON') || '0.0.0.0';
-  const DOMAIN_WHITELIST: string[] = (configService.get<string>('DOMAIN_WHITELIST') || '*').split(',');
+  const DOMAIN_WHITELIST: string[] = (
+    configService.get<string>('DOMAIN_WHITELIST') || '*'
+  ).split(',');
   // -------------------------------------------
 
   // -------------- Middleware --------------
@@ -53,7 +73,7 @@ async function bootstrap() {
 
   // -------------- Global filter/pipes --------------
   app.useGlobalPipes(new ValidationPipe(ValidationConfig));
-  app.setGlobalPrefix(configService.get<string>('API_PREFIX'));
+  app.setGlobalPrefix(configService.get<string>('API_PREFIX') || 'api');
   // -------------------------------------------
 
   // -------------- Setup Cors --------------
@@ -68,11 +88,16 @@ async function bootstrap() {
   } else {
     app.enableCors({
       origin: (origin, callback) => {
-        if (DOMAIN_WHITELIST.indexOf('*') !== -1 || DOMAIN_WHITELIST.indexOf(origin) !== -1) {
+        if (
+          DOMAIN_WHITELIST.indexOf('*') !== -1 ||
+          DOMAIN_WHITELIST.indexOf(origin) !== -1
+        ) {
           callback(null, true);
         } else {
           callback(
-            new ForbiddenException(`The CORS policy for this site does not allow access from the specified Origin.`),
+            new ForbiddenException(
+              `The CORS policy for this site does not allow access from the specified Origin.`,
+            ),
             false,
           );
         }
@@ -95,12 +120,15 @@ async function bootstrap() {
   // await initAdapters(app);
   // -------------------------------------------
 
-  await app.listen(port, LISTEN_ON, async () => {
-    const url = await app.getUrl();
-    LoggerService.log(`==========================================================`);
+  await app.listen(port, LISTEN_ON, (error, addr) => {
+    LoggerService.log(
+      `==========================================================`,
+    );
     LoggerService.log(`Server is running on port : ${port}`, 'Server');
-    LoggerService.log(`Application is running on : ${url}`, 'Application');
-    LoggerService.log(`==========================================================`);
+    LoggerService.log(`Application is running on : ${addr}`, 'Application');
+    LoggerService.log(
+      `==========================================================`,
+    );
   });
 }
 
@@ -110,13 +138,22 @@ function ConfigDocument(app: INestApplication) {
     .setDescription('API docs')
     .setVersion('1.0')
     .addTag('Document For API')
-    .addBearerAuth({ type: 'http', in: 'header', scheme: 'bearer', bearerFormat: 'JWT' })
+    .addBearerAuth({
+      type: 'http',
+      in: 'header',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    })
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-  LoggerService.log(`==========================================================`);
+  LoggerService.log(
+    `==========================================================`,
+  );
   LoggerService.log(`Swagger Init: /docs`, ConfigDocument.name);
-  LoggerService.log(`==========================================================`);
+  LoggerService.log(
+    `==========================================================`,
+  );
 }
 
 void bootstrap();

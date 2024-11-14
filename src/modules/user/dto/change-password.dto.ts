@@ -16,6 +16,8 @@ export class ChangePasswordDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @Validate(IsEqualField, ['new_password'], { message: 'password confirmation is not equal new password' })
+  @Validate(IsEqualField, ['new_password'], {
+    message: 'password confirmation is not equal new password',
+  })
   newPasswordConfirmation: string;
 }

@@ -10,7 +10,6 @@ export class mailQueueProcessor {
 
   @Process(TopicEnum.EMAIL_SENDMAIL)
   async processFile(job: Job) {
-    const data = job.data;
     await this.nodemailer.example();
   }
 }

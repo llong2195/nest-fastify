@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  Length,
+  Validate,
+} from 'class-validator';
 
 import { RoleEnum } from '@/enums';
 import { IsEqualField } from '@/validators/is-equal-field.validator';

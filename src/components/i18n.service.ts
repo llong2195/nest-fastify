@@ -12,15 +12,21 @@ export class I18nService {
     I18nService.langs = langs;
   }
 
-  lang(message: string, language: string = null): string {
+  lang(message: string, language?: string): string {
     const lang = language ? language : I18nService.languageDefault;
 
     if (I18nService.langs) {
       if (I18nService.langs.has(lang)) {
-        return I18nService.langs.get(lang).get(message) ?? message;
+        const langMap = I18nService.langs.get(lang);
+        return langMap ? (langMap.get(message) ?? message) : message;
       } else {
         //fallback to default
-        return I18nService.langs.get(I18nService.languageDefault).get(message) ?? message;
+        const defaultLangMap = I18nService.langs.get(
+          I18nService.languageDefault,
+        );
+        return defaultLangMap
+          ? (defaultLangMap.get(message) ?? message)
+          : message;
       }
     }
 

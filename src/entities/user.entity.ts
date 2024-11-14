@@ -37,7 +37,8 @@ export class UserEntity extends DateAudit {
   }
 
   @Expose()
-  get fullName(): string {
-    if (this?.firstName && this?.lastName) return `${this?.firstName} ${this?.lastName}`;
+  get fullName() {
+    if (this?.firstName && this?.lastName)
+      return `${this?.firstName} ${this?.lastName}`;
   }
 }

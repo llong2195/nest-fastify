@@ -13,7 +13,11 @@ import {
 } from '@nestjs/common';
 
 // 400
-export const throwBadRequest = (error: string, cause: string | Record<string, unknown>, errorCode: number): void => {
+export const throwBadRequest = (
+  error: string,
+  cause: string | Record<string, unknown>,
+  errorCode: number,
+): void => {
   throw new BadRequestException({
     message: error,
     cause: cause,
@@ -22,7 +26,11 @@ export const throwBadRequest = (error: string, cause: string | Record<string, un
 };
 
 // 502
-export const throwBadGateway = (error: string, cause: string | Record<string, unknown>, errorCode: number): void => {
+export const throwBadGateway = (
+  error: string,
+  cause: string | Record<string, unknown>,
+  errorCode: number,
+): void => {
   throw new BadGatewayException({
     message: error,
     cause: cause,
@@ -31,7 +39,11 @@ export const throwBadGateway = (error: string, cause: string | Record<string, un
 };
 
 // 409
-export const throwConflict = (error: string, cause: string | Record<string, unknown>, errorCode: number): void => {
+export const throwConflict = (
+  error: string,
+  cause: string | Record<string, unknown>,
+  errorCode: number,
+): void => {
   throw new ConflictException({
     message: error,
     cause: cause,
@@ -40,7 +52,11 @@ export const throwConflict = (error: string, cause: string | Record<string, unkn
 };
 
 // 403
-export const throwForbidden = (error: string, cause: string | Record<string, unknown>, errorCode: number): void => {
+export const throwForbidden = (
+  error: string,
+  cause: string | Record<string, unknown>,
+  errorCode: number,
+): void => {
   throw new ForbiddenException({
     message: error,
     cause: cause,
@@ -114,7 +130,11 @@ export const throwServiceUnavailable = (
 };
 
 // 401
-export const throwUnauthorized = (error: string, cause: string | Record<string, unknown>, errorCode: number): void => {
+export const throwUnauthorized = (
+  error: string,
+  cause: string | Record<string, unknown>,
+  errorCode: number,
+): void => {
   throw new UnauthorizedException({
     message: error,
     cause: cause,

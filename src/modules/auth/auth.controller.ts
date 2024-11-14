@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
@@ -30,14 +38,18 @@ export class AuthController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('/my-profile')
-  async myProfile(@CurrentUser() currentUser: CurrentUserDto): Promise<BaseResponseDto<UserEntity>> {
+  async myProfile(
+    @CurrentUser() currentUser: CurrentUserDto,
+  ): Promise<BaseResponseDto<UserEntity>> {
     const user = await this.userService.findById(currentUser.id);
     return new BaseResponseDto<UserEntity>(user);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('/register')
-  async register(@Body() registerRequestDto: RegisterRequestDto): Promise<BaseResponseDto<UserEntity>> {
+  async register(
+    @Body() registerRequestDto: RegisterRequestDto,
+  ): Promise<BaseResponseDto<UserEntity>> {
     const user = await this.userService._store(registerRequestDto);
     return new BaseResponseDto<UserEntity>(user);
   }

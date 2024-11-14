@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEmail, IsNotEmpty, Length, Validate } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  Length,
+  Validate,
+} from 'class-validator';
 
 import { IsEqualField } from '@/validators/is-equal-field.validator';
 import { IsNotExist } from '@/validators/is-not-exist.validator';

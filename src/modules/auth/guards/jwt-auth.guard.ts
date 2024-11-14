@@ -1,24 +1,49 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
+import { FastifyRequest } from 'fastify';
 
-import { LoggerService } from '@/logger/custom.logger';
-import { ErrorMessageCode } from '@/constants';
+import { IS_PUBLIC_KEY } from '@/decorators';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  canActivate(context: ExecutionContext) {
-    // Add your custom authentication logic here
-    // for example, call super.logIn(request) to establish a session.
-    return super.canActivate(context);
+export class JwtAuthGuard implements CanActivate {
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest<FastifyRequest>();
+    const isSkippedAuth = this.reflector.getAllAndOverride<boolean>(
+      IS_PUBLIC_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+    if (isSkippedAuth) return true;
+
+    const token = this.extractTokenFromHeader(request);
+
+    if (!token) {
+      throw new UnauthorizedException('Unauthorized: token not found!');
+    }
+
+    try {
+      const payload = await this.jwtService.verifyAsync<{ [key: string]: any }>(
+        token,
+      );
+      Object.defineProperty(request, 'adminUser', payload);
+    } catch (error) {
+      throw new UnauthorizedException('Unauthorized', { cause: error });
+    }
+    return true;
   }
 
-  handleRequest(err: any, user: any, info: any, context: ExecutionContext, status?: any) {
-    // You can throw an exception based on either "info" or "err" arguments
-
-    if (err || !user || info) {
-      LoggerService.error(err, user, info, context.switchToHttp().getRequest().ip, status);
-      throw new UnauthorizedException(ErrorMessageCode.AUTH_INVALID_TOKEN);
-    }
-    return super.handleRequest(err, user, info, context, status);
+  private extractTokenFromHeader(request: FastifyRequest): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

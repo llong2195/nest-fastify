@@ -17,7 +17,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/my-profile')
-  async myProfile(@CurrentUser() currentUserDto: CurrentUserDto): Promise<BaseResponseDto<UserEntity>> {
+  async myProfile(
+    @CurrentUser() currentUserDto: CurrentUserDto,
+  ): Promise<BaseResponseDto<UserEntity>> {
     const user = await this.userService.findById(currentUserDto.id);
     return new BaseResponseDto<UserEntity>(user);
   }
@@ -27,7 +29,10 @@ export class UserController {
     @CurrentUser() currentUserDto: CurrentUserDto,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<BaseResponseDto<UserEntity>> {
-    const data = await this.userService.updateProfile(currentUserDto.id, updateUserDto);
+    const data = await this.userService.updateProfile(
+      currentUserDto.id,
+      updateUserDto,
+    );
     return new BaseResponseDto<UserEntity>(data);
   }
 
@@ -36,7 +41,10 @@ export class UserController {
     @CurrentUser() currentUserDto: CurrentUserDto,
     @Body() password: ChangePasswordDto,
   ): Promise<BaseResponseDto<UserEntity>> {
-    const user = await this.userService.changePassword(currentUserDto.id, password);
+    const user = await this.userService.changePassword(
+      currentUserDto.id,
+      password,
+    );
     return new BaseResponseDto<UserEntity>(user);
   }
 }

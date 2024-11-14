@@ -79,7 +79,7 @@ if (isEnv(EnvEnum.Production)) {
 
     HttpModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         timeout: configService.get('HTTP_TIMEOUT'),
         maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
       }),
@@ -91,7 +91,7 @@ if (isEnv(EnvEnum.Production)) {
     QrCodeModule,
     IORedisModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
+      useFactory: (configService: ConfigService): IRedisModuleOptions => {
         return {
           connectionOptions: {
             host: configService.get<string>('REDIS_HOST'),

@@ -7,7 +7,7 @@ import { ConvertToBoolean, ConvertToNumber } from '@/utils/transformers.util';
 
 export class PaginationResponse<T> {
   message: string;
-  body: T | T[] | unknown | any;
+  body: T | T[] | null;
   meta: {
     pagination: {
       currentPage: number;
@@ -32,6 +32,33 @@ export class PaginationResponse<T> {
     this.message = message;
     this.body = body;
     this.meta = meta;
+  }
+
+  static create<T>(
+    items: T[],
+    total: number,
+    page: number,
+    limit: number,
+  ): PaginationResponse<T> {
+    const totalPage = Math.ceil(total / limit);
+    if (total <= 0 || page > totalPage) {
+      return new PaginationResponse<T>([], {
+        pagination: {
+          currentPage: totalPage > 0 ? totalPage : 1,
+          limit: limit,
+          total: 0,
+          totalPages: 0,
+        },
+      });
+    }
+    return new PaginationResponse(items, {
+      pagination: {
+        currentPage: Number(page),
+        limit: limit,
+        total: total,
+        totalPages: totalPage,
+      },
+    });
   }
 }
 

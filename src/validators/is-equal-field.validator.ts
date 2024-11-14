@@ -1,9 +1,13 @@
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 
 @ValidatorConstraint({ name: 'IsEqualField', async: false })
 export class IsEqualField implements ValidatorConstraintInterface {
   defaultMessage(validationArguments?: ValidationArguments): string {
-    return `${validationArguments.property}" should be equal to "${validationArguments.constraints[0]}.`;
+    return `${validationArguments?.property}" should be equal to "${validationArguments?.constraints?.[0]}.`;
   }
 
   /**
@@ -14,7 +18,18 @@ export class IsEqualField implements ValidatorConstraintInterface {
    * following properties:
    * @returns A boolean value.
    */
-  validate(value: any, validationArguments?: ValidationArguments): Promise<boolean> | boolean {
-    return value === validationArguments.object[validationArguments.constraints[0]];
+  validate(
+    value: any,
+    validationArguments?: ValidationArguments,
+  ): Promise<boolean> | boolean {
+    if (
+      !validationArguments ||
+      !validationArguments.object ||
+      !validationArguments.constraints
+    ) {
+      return false;
+    }
+    const field = validationArguments.constraints[0] as string;
+    return value === (validationArguments.object as Record<string, any>)[field];
   }
 }

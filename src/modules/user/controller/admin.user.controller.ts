@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
 
@@ -16,8 +26,12 @@ export class AdminUserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async index(@Query() filter: PaginationOption): Promise<PaginationResponse<UserEntity>> {
-    const data = await this.userService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
+  async index(
+    @Query() filter: PaginationOption,
+  ): Promise<PaginationResponse<UserEntity>> {
+    const data = await this.userService._paginate(filter.page, filter.limit, {
+      deleted: filter.deleted,
+    });
     return new PaginationResponse<UserEntity>(data.body, data.meta);
   }
 
@@ -31,19 +45,26 @@ export class AdminUserController {
   }
 
   @Post()
-  async create(@Body() userData: CreateUserDto): Promise<BaseResponseDto<UserEntity>> {
+  async create(
+    @Body() userData: CreateUserDto,
+  ): Promise<BaseResponseDto<UserEntity>> {
     const createdUser = await this.userService._store(userData);
     return new BaseResponseDto<UserEntity>(createdUser);
   }
 
   @Patch('/:id')
-  async update(@Param('id') id: number, @Body() userData: UpdateUserDto): Promise<BaseResponseDto<UserEntity>> {
+  async update(
+    @Param('id') id: number,
+    @Body() userData: UpdateUserDto,
+  ): Promise<BaseResponseDto<UserEntity>> {
     const updateUser = await this.userService._update(id, userData);
     return new BaseResponseDto<UserEntity>(updateUser);
   }
 
   @Delete('/:id')
-  async destroy(@Param('id') id: number): Promise<BaseResponseDto<DeleteResult>> {
+  async destroy(
+    @Param('id') id: number,
+  ): Promise<BaseResponseDto<DeleteResult>> {
     await this.userService._softDelete(id);
     return new BaseResponseDto<DeleteResult>(null);
   }

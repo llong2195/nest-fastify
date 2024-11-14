@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { ValidationArguments } from 'class-validator';
 import { DataSource, EntityTarget } from 'typeorm';
 
@@ -38,6 +41,6 @@ export class IsNotExist implements ValidatorConstraintInterface {
   }
 
   defaultMessage(validationArguments?: ValidationArguments): string {
-    return `${validationArguments.value} is taken, please try another`;
+    return `${validationArguments?.value} is taken, please try another`;
   }
 }

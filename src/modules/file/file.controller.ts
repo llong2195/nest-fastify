@@ -5,7 +5,6 @@ import {
   Get,
   Headers,
   HttpCode,
-  HttpException,
   HttpStatus,
   NotFoundException,
   Param,
@@ -20,15 +19,23 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import contentDisposition from 'content-disposition';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import mime from 'mime-types';
-import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'node:fs';
+import {
+  createReadStream,
+  createWriteStream,
+  existsSync,
+  mkdirSync,
+  statSync,
+} from 'node:fs';
 import { join } from 'node:path';
 import { pipeline } from 'node:stream';
 import util from 'node:util';
 
-import { BaseResponseDto, CurrentUserDto } from '@/base/base.dto';
+import { BaseController } from '@/base/base.controller';
+import { BaseResponseDto } from '@/base/base.dto';
 import { PaginationOption, PaginationResponse } from '@/base/pagination.dto';
+import { I18nService } from '@/components/i18n.service';
 import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@/configs';
-import { CurrentUser, Roles } from '@/decorators';
+import { Roles } from '@/decorators';
 import { FileEntity } from '@/entities';
 import { RoleEnum } from '@/enums';
 import { getFullDate } from '@/utils';
@@ -42,8 +49,13 @@ const pump = util.promisify(pipeline);
 @ApiBearerAuth()
 @ApiTags('/v1/file')
 @Controller('v1/file')
-export class FileController {
-  constructor(private readonly uploadFileService: FileService) {}
+export class FileController extends BaseController {
+  constructor(
+    private readonly uploadFileService: FileService,
+    i18n: I18nService,
+  ) {
+    super(i18n);
+  }
 
   // @UseGuards(JwtAuthGuard)
   @ApiConsumes('multipart/form-data')
@@ -53,63 +65,61 @@ export class FileController {
   })
   @HttpCode(HttpStatus.OK)
   @Post('/upload-image-local')
-  async local(@Req() req: FastifyRequest, @CurrentUser() currentUser?: CurrentUserDto) {
+  async local(
+    @Req() req: FastifyRequest,
+    // @CurrentUser() currentUser: CurrentUserDto,
+  ) {
     try {
       const file = await this.uploadImageService(req);
-      const uploadfile = await this.uploadFileService.uploadFile(currentUser?.id, file);
+      const uploadfile = await this.uploadFileService.uploadFile(
+        // currentUser.id,
+        0,
+        file,
+      );
       return new BaseResponseDto<FileEntity>(uploadfile);
     } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
-  // @UseGuards(JwtAuthGuard)
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'file image',
-    type: CreateFileDto,
-  })
-  @HttpCode(HttpStatus.OK)
-  @Post('/upload-image-cloud')
-  async cloud(
-    @Req() req: FastifyRequest,
-    @CurrentUser() currentUser?: CurrentUserDto,
-  ): Promise<BaseResponseDto<FileEntity>> {
-    try {
-      const file = await this.uploadImageService(req);
-      const data = await this.uploadFileService.uploadImageToCloudinary(file, currentUser?.id);
-      return new BaseResponseDto<FileEntity>(data);
-    } catch (error) {
-      throw new HttpException(error.message, 500);
+      this.throwErrorProcess(error);
     }
   }
 
   @UseGuards(JwtAuthGuard)
   @Roles(RoleEnum.ADMIN)
   @Get('/get-all')
-  async getAll(@Query() filter: PaginationOption): Promise<PaginationResponse<FileEntity>> {
-    const data = await this.uploadFileService._paginate(filter.page, filter.limit, { deleted: filter.deleted });
+  async getAll(
+    @Query() filter: PaginationOption,
+  ): Promise<PaginationResponse<FileEntity>> {
+    const data = await this.uploadFileService._paginate(
+      filter.page,
+      filter.limit,
+      { deleted: filter.deleted },
+    );
     return new PaginationResponse<FileEntity>(data.body, data.meta);
   }
 
   @Get('/:path')
-  async stream(
+  stream(
     @Param('path') path: string,
-    @Headers() headers,
+    @Headers() headers: FastifyRequest['headers'],
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
     @Query() filter: FilterFileDto,
-  ): Promise<any> {
+  ) {
     try {
       // Sanitize the path to prevent directory traversal
       const sanitizedPath = path.replace(/\.\.\//g, '');
-      const filePath = join(process.cwd(), UPLOAD_LOCATION, sanitizedPath);
+      const filePath = join(
+        process.cwd(),
+        UPLOAD_LOCATION || '',
+        sanitizedPath,
+      );
       if (!existsSync(filePath)) {
         throw new NotFoundException();
       }
       const { size } = statSync(filePath);
-      const contentType = mime.contentType(filePath.split('.').pop());
-      const header = {
+      const contentType =
+        mime.contentType(filePath.split('.').pop() || '') ||
+        'application/octet-stream';
+      const header: Record<string, string | number> = {
         'Content-Type': contentType,
         'Content-Length': size,
       };
@@ -152,7 +162,7 @@ export class FileController {
         return new StreamableFile(file);
       }
     } catch (error) {
-      throw new BadRequestException(error.message);
+      this.throwErrorProcess(error);
     }
   }
 
@@ -173,7 +183,10 @@ export class FileController {
           if (fieldName !== 'file') {
             return false;
           }
-          if (contentType.match(/\/(jpg|jpeg|png|gif)$/) || fileName.match(/\.(jpg|jpeg|png|gif)$/)) {
+          if (
+            (contentType && contentType.match(/\/(jpg|jpeg|png|gif)$/)) ||
+            (fileName && fileName.match(/\.(jpg|jpeg|png|gif)$/))
+          ) {
             // Allow storage of file
             return true;
           } else {
@@ -185,12 +198,15 @@ export class FileController {
       if (!file || file == undefined || file == null) {
         throw new BadRequestException();
       } else {
-        const path = join(process.cwd(), UPLOAD_LOCATION);
+        const path = join(process.cwd(), UPLOAD_LOCATION || '');
         if (!existsSync(path)) {
           mkdirSync(path, { recursive: true });
         }
         file.filename = `${getFullDate()}-${file.filename}`;
-        await pump(file.file, createWriteStream(join(path, `${file.filename}`)));
+        await pump(
+          file.file,
+          createWriteStream(join(path, `${file.filename}`)),
+        );
       }
       return file;
     } catch (error) {

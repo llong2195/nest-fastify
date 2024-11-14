@@ -26,7 +26,12 @@ export class FileEntity extends DateAudit {
   @Column({ name: 'user_id', type: 'int', nullable: true })
   userId: number;
 
-  @Column({ name: 'type', type: 'int', nullable: true, default: FileType.IMAGE })
+  @Column({
+    name: 'type',
+    type: 'int',
+    nullable: true,
+    default: FileType.IMAGE,
+  })
   type: number;
 
   @Column({ name: 'data', type: 'varchar', nullable: true, select: false })
