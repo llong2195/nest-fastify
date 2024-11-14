@@ -2,7 +2,6 @@ import { HttpModule } from '@nestjs/axios';
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { join } from 'node:path';
@@ -41,16 +40,6 @@ if (isEnv(EnvEnum.Production)) {
     provide: APP_INTERCEPTOR,
     useClass: LoggingInterceptor,
   });
-  modules.push(
-    DevtoolsModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
-        port: config.get<number>('PORT'),
-      }),
-    }),
-  );
 }
 @Module({
   imports: [
@@ -98,16 +87,7 @@ if (isEnv(EnvEnum.Production)) {
     }),
 
     LoggerModule,
-    ComponentModule,
-    DatabaseModule,
-    ValidatorsModule,
-    SettingModule,
-    CronModule,
-    AuthModule,
-    UserModule,
-    FileModule,
-    NodemailerModule,
-    QueueModule,
+
     QrCodeModule,
     IORedisModule.registerAsync({
       imports: [ConfigModule],
@@ -123,6 +103,17 @@ if (isEnv(EnvEnum.Production)) {
       },
       inject: [ConfigService],
     }),
+
+    ComponentModule,
+    DatabaseModule,
+    ValidatorsModule,
+    QueueModule,
+    CronModule,
+    SettingModule,
+    AuthModule,
+    UserModule,
+    FileModule,
+    NodemailerModule,
 
     ...modules,
   ],

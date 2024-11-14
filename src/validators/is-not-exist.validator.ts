@@ -23,7 +23,7 @@ export class IsNotExist implements ValidatorConstraintInterface {
     if (!value || !entity) {
       return false;
     }
-    const repo = await this.dataSource.getRepository(entity);
+    const repo = this.dataSource.getRepository(entity);
     if (!repo) {
       return false;
     }
