@@ -88,7 +88,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     if (Array.isArray(responseBody.message)) {
       responseBody.message = responseBody.message[0];
     }
-    if (responseBody.message) responseBody.message = this.i18nService.lang(responseBody.message as string, lang);
+    if (responseBody.message) responseBody.message = this.i18nService.lang(responseBody.message, lang);
     response.status(statusCode).send(responseBody);
     this.handleMessage(exception, request, responseBody);
   }

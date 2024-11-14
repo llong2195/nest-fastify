@@ -51,7 +51,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
    * @returns The updated entity.
    */
   async _update(id: EntityId, data: QueryDeepPartialEntity<T>): Promise<T | null> {
-    await this.repository.update(id, data as QueryDeepPartialEntity<T>);
+    await this.repository.update(id, data);
     return await this.repository.findOne({
       where: { id: id } as unknown as FindOptionsWhere<T>,
     });

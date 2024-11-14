@@ -27,13 +27,14 @@ export class IsNotExist implements ValidatorConstraintInterface {
     if (!repo) {
       return false;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const rs = await repo.findOne({
       where: {
         [validationArguments.property]: value,
       },
     });
 
-    return !Boolean(rs);
+    return !rs;
   }
 
   defaultMessage(validationArguments?: ValidationArguments): string {

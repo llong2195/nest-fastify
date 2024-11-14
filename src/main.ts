@@ -48,7 +48,7 @@ async function bootstrap() {
   // -------------------------------------------
 
   // -------------- Middleware --------------
-  app.register(FastifyMultipart as any);
+  await app.register(FastifyMultipart);
   // -------------------------------------------
 
   // -------------- Global filter/pipes --------------
@@ -63,7 +63,7 @@ async function bootstrap() {
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
     // -----------Setup Swagger-------------
-    await ConfigDocument(app);
+    ConfigDocument(app);
     // -------------------------------------------
   } else {
     app.enableCors({
@@ -79,7 +79,7 @@ async function bootstrap() {
       },
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
-    await app.register(helmet as any);
+    await app.register(helmet);
   }
   // -------------------------------------------
 
@@ -96,14 +96,15 @@ async function bootstrap() {
   // -------------------------------------------
 
   await app.listen(port, LISTEN_ON, async () => {
+    const url = await app.getUrl();
     LoggerService.log(`==========================================================`);
     LoggerService.log(`Server is running on port : ${port}`, 'Server');
-    LoggerService.log(`Application is running on : ${await app.getUrl()}`, 'Application');
+    LoggerService.log(`Application is running on : ${url}`, 'Application');
     LoggerService.log(`==========================================================`);
   });
 }
 
-async function ConfigDocument(app: INestApplication): Promise<void> {
+function ConfigDocument(app: INestApplication) {
   const config = new DocumentBuilder()
     .setTitle('API')
     .setDescription('API docs')
@@ -118,6 +119,6 @@ async function ConfigDocument(app: INestApplication): Promise<void> {
   LoggerService.log(`==========================================================`);
 }
 
-bootstrap();
+void bootstrap();
 
 // runInCluster(bootstrap);

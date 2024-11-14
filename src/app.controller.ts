@@ -3,8 +3,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
 
 import { ErrorMessageCode } from './constants';
-import { LoggerService } from './logger/custom.logger';
 import { ValidateError } from './exceptions/errors';
+import { LoggerService } from './logger/custom.logger';
 
 @ApiTags('/')
 @Controller()
@@ -17,7 +17,7 @@ export class AppController {
   }
 
   @Get('/profile')
-  async profile(@Req() req: FastifyRequest): Promise<any> {
+  profile(@Req() req: FastifyRequest) {
     this.logger.verbose('verbose main');
     this.logger.debug('verbose 1', 'verbose 1');
     this.logger.log('log', 'verbose 1');

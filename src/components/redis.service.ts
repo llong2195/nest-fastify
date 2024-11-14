@@ -122,7 +122,6 @@ export class RedisService {
     try {
       const data = await this.redis.hget(key, field);
       if (data !== null && data !== '') {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return JSON.parse(data) as T;
       }
     } catch (e) {
