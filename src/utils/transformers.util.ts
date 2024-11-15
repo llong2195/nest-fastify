@@ -1,16 +1,42 @@
 import { Transform } from 'class-transformer';
 
 /**
+ * It converts a string or array of strings
+ */
+export const ConvertToArray = (separator?: string) =>
+  Transform(({ value }: { value: string | string[] }) => {
+    separator = separator || ',';
+    const values: string | string[] = value;
+    if (values == null || values == undefined) {
+      return [];
+    }
+    return Array.isArray(values)
+      ? values
+      : typeof values == 'string'
+        ? values.split(separator)
+        : [values];
+  });
+
+/**
  * It converts a string or array of strings into an array of numbers
  */
 export const ConvertToArrayOfNumbers = () =>
-  Transform(({ value }: { value: any }) => {
-    if (value == null || value == undefined) {
+  Transform(({ value }: { value: string | string[] }) => {
+    const values = value;
+
+    if (values == null || values == undefined) {
       return [];
     }
-    return (Array.isArray(value) ? value : (value as string).split(',')).map(
-      (i: string) => Number(i),
-    );
+
+    return (
+      Array.isArray(values)
+        ? values
+        : typeof values == 'string'
+          ? values.split(',')
+          : [values]
+    )
+      .map((value: string) => Number(value))
+      .filter((value: number) => !isNaN(value));
   });
 
 /**
@@ -18,30 +44,11 @@ export const ConvertToArrayOfNumbers = () =>
  */
 export const ConvertToBoolean = () =>
   Transform(({ value }) => {
-    if (value === 'true') {
+    if (value === 'true' || value === '1' || value == 1) {
       return true;
     }
-    if (value === 'false') {
+    if (value === 'false' || value === '0' || value == 0) {
       return false;
     }
-    if (value === '1' || value == 1 || value == '1') {
-      return true;
-    }
-    if (value === '0' || value == 0 || value == '0') {
-      return false;
-    }
+    return Boolean(value);
   });
-
-/**
- * It takes a string and returns a date
- */
-export const ConvertToDate = () =>
-  Transform(({ value }) => {
-    return new Date(value as string | number | Date);
-  });
-
-/**
- * ConvertToNumber() is a function that returns a Transform() function that takes a value and returns a
- * Number() of that value.
- */
-export const ConvertToNumber = () => Transform(({ value }) => Number(value));

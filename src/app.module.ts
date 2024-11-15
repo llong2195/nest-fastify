@@ -1,4 +1,3 @@
-import { HttpModule } from '@nestjs/axios';
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
@@ -77,18 +76,8 @@ if (isEnv(EnvEnum.Production)) {
         }) as ThrottlerModuleOptions,
     }),
 
-    HttpModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        timeout: configService.get('HTTP_TIMEOUT'),
-        maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
-      }),
-      inject: [ConfigService],
-    }),
-
     LoggerModule,
 
-    QrCodeModule,
     IORedisModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService): IRedisModuleOptions => {
@@ -109,6 +98,7 @@ if (isEnv(EnvEnum.Production)) {
     ValidatorsModule,
     QueueModule,
     CronModule,
+    QrCodeModule,
     SettingModule,
     AuthModule,
     UserModule,

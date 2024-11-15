@@ -31,7 +31,6 @@
     "@fastify/multipart": "8.3.0",
     "@fastify/static": "^7.0.4",
     "@nestjs-modules/mailer": "^2.0.2",
-    "@nestjs/axios": "^3.1.2",
     "@nestjs/bull": "^10.2.2",
     "@nestjs/common": "^10.4.7",
     "@nestjs/config": "^3.3.0",

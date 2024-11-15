@@ -1,10 +1,12 @@
 import { BadRequestException, HttpException } from '@nestjs/common';
 import { isString } from 'class-validator';
+import { FastifyError } from 'fastify';
 import { QueryFailedError } from 'typeorm';
 
 import { I18nService } from '@/components/i18n.service';
 import { ErrorCode, ErrorMessageCode } from '@/constants';
 import { BaseError, DatabaseError, ValidateError } from '@/exceptions/errors';
+import { isProd } from '@/utils';
 
 export class BaseController {
   protected i18n: I18nService;
@@ -55,9 +57,27 @@ export class BaseController {
       });
     }
 
+    if (
+      (error as { name?: string })?.name &&
+      (error as { name?: string })?.name === 'FastifyError'
+    ) {
+      const err = error as FastifyError;
+      throw new BadRequestException({
+        message: this.i18n.lang(err.message, lang),
+        cause: err.stack,
+        errorCode: err.statusCode,
+      });
+    }
+
+    let msg = this.i18n.lang('DATABASE_ERROR', lang);
+    if (error instanceof Error) {
+      msg = this.i18n.lang(error.message, lang);
+    }
+
     throw new DatabaseError(
-      this.i18n.lang(ErrorMessageCode.UNKNOWN, lang),
-      ErrorCode.UNKNOWN,
+      isProd() ? this.i18n.lang('DATABASE_ERROR', lang) : msg,
+      ErrorCode.DATABASE_ERROR,
+      error as Error,
     );
   }
 }

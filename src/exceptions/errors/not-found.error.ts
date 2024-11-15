@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 
-import { ErrorCode } from '@/constants/error-code';
+import { ErrorCode } from '@/constants/error-code.constants';
 import { BaseError } from './base.error';
 
 export class NotFoundError extends BaseError {

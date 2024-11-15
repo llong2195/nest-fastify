@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "esModuleInterop": false,
     "newLine": "lf",
-    "strict": true,
+    "strict": false,
     "strictPropertyInitialization": false,
     "paths": {
       "@/*": ["src/*"]

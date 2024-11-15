@@ -31,6 +31,21 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
   }
 
   /**
+   * Retrieves an EntityManager instance. If no manager is provided, it logs a warning
+   * and returns the default manager from the repository.
+   *
+   * @param {EntityManager} [manager=null] - The EntityManager instance to use. If not provided, the default manager will be used.
+   * @returns {EntityManager} The EntityManager instance to be used.
+   */
+  getManager(manager?: EntityManager): EntityManager {
+    if (!manager) {
+      this.logger.warn('No manager provided, using default manager');
+      return this.repository.manager;
+    }
+    return manager;
+  }
+
+  /**
    * It wraps a function in a transaction, and if a manager is passed in, it uses that manager,
    * otherwise it creates a new one
    * @param operation - (...args) => unknown
@@ -216,16 +231,8 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
     ]);
     const tableName = customTable ?? this.repository.metadata.tableName;
 
-    const results: T[] = data.map((item) => {
-      const a: Record<string, unknown> = {};
-
-      Object.keys(item).forEach((key) => {
-        a[trim(key, tableName + '_')] = item[key];
-      });
-      return a as T;
-    });
-
-    return this.pagination<T>(results, total, page, limit);
+    const results: T[] = this.tranformToEntity<T>(data, tableName);
+    return PaginationResponse.create<T>(results, total, page, limit);
   }
 
   /**
@@ -243,24 +250,17 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
     page = 1,
     limit = PAGE_SIZE,
   ): PaginationResponse<T> {
-    const totalPage = Math.ceil(total / limit);
-    if (total <= 0 || page > totalPage) {
-      return new PaginationResponse<T>([], {
-        pagination: {
-          currentPage: page,
-          limit: limit,
-          total: 0,
-          totalPages: 0,
-        },
+    return PaginationResponse.create<T>(items, total, page, limit);
+  }
+
+  tranformToEntity<T>(data: Record<string, unknown>[], tableName: string): T[] {
+    return data.map((item) => {
+      const a: Record<string, unknown> = {};
+
+      Object.keys(item).forEach((key) => {
+        a[trim(key, tableName + '_')] = item[key];
       });
-    }
-    return new PaginationResponse(items, {
-      pagination: {
-        currentPage: Number(page),
-        limit: limit,
-        total: total,
-        totalPages: totalPage,
-      },
+      return a as T;
     });
   }
 

@@ -1,4 +1,4 @@
-import { Logger, QueryRunner } from 'typeorm';
+import { Logger } from 'typeorm';
 
 import { LoggerService } from './custom.logger';
 
@@ -10,12 +10,8 @@ export class DbCustomLogger implements Logger {
    * @param {unknown[]} [parameters] - []
    * @param {QueryRunner} [queryRunner] - The QueryRunner instance that is used to execute queries.
    */
-  logQuery(
-    query: string,
-    parameters?: unknown[],
-    queryRunner?: QueryRunner,
-  ): void {
-    // this.logger.log("logQuery->>>:", [query, parameters])
+  logQuery(query: string, parameters?: unknown[]): void {
+    this.logger.log('logQuery->>>:', [query, parameters]);
   }
 
   /**
@@ -29,7 +25,6 @@ export class DbCustomLogger implements Logger {
     error: string | Error,
     query: string,
     parameters?: unknown[],
-    queryRunner?: QueryRunner,
   ): void {
     this.logger.error('logQueryError->>>:', error, query, parameters);
   }
@@ -41,12 +36,7 @@ export class DbCustomLogger implements Logger {
    * @param {unknown[]} [parameters] -
    * @param {QueryRunner} [queryRunner] - QueryRunner
    */
-  logQuerySlow(
-    time: number,
-    query: string,
-    parameters?: unknown[],
-    queryRunner?: QueryRunner,
-  ): void {
+  logQuerySlow(time: number, query: string, parameters?: unknown[]): void {
     this.logger.warn('logQuerySlow->>>:', time, query, parameters);
   }
 
@@ -55,7 +45,7 @@ export class DbCustomLogger implements Logger {
    * @param {string} message - The message to be logged.
    * @param {QueryRunner} [queryRunner] - The QueryRunner instance that is used to execute queries.
    */
-  logSchemaBuild(message: string, queryRunner?: QueryRunner): void {
+  logSchemaBuild(message: string): void {
     this.logger.debug('logSchemaBuild->>>:', message);
   }
 
@@ -64,7 +54,7 @@ export class DbCustomLogger implements Logger {
    * @param {string} message - The message to log.
    * @param {QueryRunner} [queryRunner] - The QueryRunner instance that is used to execute queries.
    */
-  logMigration(message: string, queryRunner?: QueryRunner): void {
+  logMigration(message: string): void {
     this.logger.debug('logMigration->>>:', message);
   }
 
@@ -76,11 +66,7 @@ export class DbCustomLogger implements Logger {
    * @param {QueryRunner} [queryRunner] - QueryRunner - QueryRunner instance.
    * @returns The return type is void.
    */
-  log(
-    level: 'log' | 'info' | 'warn',
-    message: unknown,
-    queryRunner?: QueryRunner,
-  ): void {
+  log(level: 'log' | 'info' | 'warn', message: unknown): void {
     switch (level) {
       case 'info':
         return this.logger.debug(message);
