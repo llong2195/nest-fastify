@@ -15,7 +15,7 @@ import {
   StreamableFile,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import contentDisposition from 'content-disposition';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import mime from 'mime-types';
@@ -36,6 +36,7 @@ import { PaginationOption, PaginationResponse } from '@/base/pagination.dto';
 import { I18nService } from '@/components/i18n.service';
 import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@/configs';
 import { Roles } from '@/decorators';
+import { ApiFile } from '@/decorators/swagger.decorator';
 import { FileEntity } from '@/entities';
 import { RoleEnum } from '@/enums';
 import { getFullDate } from '@/utils';
@@ -57,10 +58,8 @@ export class FileController extends BaseController {
     super(i18n);
   }
 
-  // @UseGuards(JwtAuthGuard)
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'file image',
+  @ApiFile({
+    description: 'Upload file',
     type: CreateFileDto,
   })
   @HttpCode(HttpStatus.OK)
