@@ -21,7 +21,7 @@ import { UserService } from '../user.service';
 
 @ApiTags('/v1/admin/user')
 @ApiBearerAuth()
-@Controller('v1/admin/user')
+@Controller({ version: '1', path: 'admin/user' })
 export class AdminUserController {
   constructor(private readonly userService: UserService) {}
 

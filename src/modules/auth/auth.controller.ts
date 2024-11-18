@@ -5,22 +5,20 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
 import { BaseResponseDto, CurrentUserDto } from '@/base/base.dto';
-import { CurrentUser } from '@/decorators';
+import { Authorize, CurrentUser } from '@/decorators';
 import { UserEntity } from '@/entities';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { RegisterRequestDto } from './dto/register-request.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('v1/auth')
-@Controller('v1/auth')
+@Controller({ version: '1', path: 'auth' })
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -36,7 +34,7 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @Authorize()
   @Get('/my-profile')
   async myProfile(
     @CurrentUser() currentUser: CurrentUserDto,

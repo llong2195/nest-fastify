@@ -9,11 +9,11 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
 
-import { generateQR } from '@/utils';
+import { QrCodeHelper } from '@/utils/qr-code.helper';
 import { QRCodeDto } from './dto/create-qr-code.dto';
 
 @ApiTags('v1/qr-code')
-@Controller('v1/qr-code')
+@Controller({ version: '1', path: 'qr-code' })
 export class QrCodeController {
   @Get()
   @Header('Content-Type', 'image/png')
@@ -21,7 +21,7 @@ export class QrCodeController {
     @Query() param: QRCodeDto,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const qr = await generateQR(param.text, param.size);
+    const qr = await QrCodeHelper.generateQR(param.text, param.size);
     return new StreamableFile(qr);
   }
 }

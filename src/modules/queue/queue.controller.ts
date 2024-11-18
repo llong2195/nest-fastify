@@ -3,8 +3,8 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { QueueService } from './queue.service';
 
-@ApiTags('queue')
-@Controller('queue')
+@ApiTags('v1/queue')
+@Controller({ version: '1', path: 'queue' })
 export class QueueController {
   constructor(private queueService: QueueService) {}
 

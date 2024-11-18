@@ -1,4 +1,4 @@
-export * from './geo.util';
-export * from './hash.util';
+export * from './geo.helper';
+export * from './hash.helper';
 export * from './transformers.util';
 export * from './util';

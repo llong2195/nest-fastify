@@ -4,8 +4,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { BaseResponseDto } from '@/base/base.dto';
 import { NodemailerService } from './nodemailer.service';
 
-@ApiTags('nodemailer')
-@Controller('nodemailer')
+@ApiTags('v1/nodemailer')
+@Controller({ version: '1', path: 'nodemailer' })
 export class NodemailerController {
   constructor(private readonly nodemailerService: NodemailerService) {}
 

@@ -5,6 +5,7 @@ import {
   INestApplication,
   LogLevel,
   ValidationPipe,
+  VersioningType,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -74,6 +75,7 @@ async function bootstrap() {
   // -------------- Global filter/pipes --------------
   app.useGlobalPipes(new ValidationPipe(ValidationConfig));
   app.setGlobalPrefix(configService.get<string>('API_PREFIX') || 'api');
+  app.enableVersioning({ type: VersioningType.URI });
   // -------------------------------------------
 
   // -------------- Setup Cors --------------

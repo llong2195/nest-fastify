@@ -144,29 +144,6 @@ export const sleep = async (ms: number): Promise<unknown> => {
   });
 };
 
-/**
- *
- * @param text
- * @param size
- * @param qualityLevel
- * @returns
- */
-export const generateQR = async (
-  text: string,
-  size = 108,
-  qualityLevel = 'M',
-) => {
-  // const qrStream = await QRCode.toDataURL(text, { //errorCorrectionLevel: 'L', version: 8 })
-  const qrStream = new PassThrough();
-  await QRCode.toFileStream(qrStream, text, {
-    // type: 'png',
-    width: size,
-    errorCorrectionLevel: qualityLevel,
-  } as QRCodeToFileStreamOptions);
-  // console.log(text, url, qrStream)
-  return qrStream;
-};
-
 export const encryptObj = (obj: any, secretKey: string): string => {
   // return CryptoJS.AES.encrypt(JSON.stringify(obj), secretKey).toString();
   const encJson = CryptoJS.AES.encrypt(

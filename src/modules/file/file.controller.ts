@@ -13,7 +13,6 @@ import {
   Req,
   Res,
   StreamableFile,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import contentDisposition from 'content-disposition';
@@ -35,12 +34,11 @@ import { BaseResponseDto } from '@/base/base.dto';
 import { PaginationOption, PaginationResponse } from '@/base/pagination.dto';
 import { I18nService } from '@/components/i18n.service';
 import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@/configs';
-import { Roles } from '@/decorators';
+import { Authorize } from '@/decorators';
 import { ApiFile } from '@/decorators/swagger.decorator';
 import { FileEntity } from '@/entities';
 import { RoleEnum } from '@/enums';
 import { getFullDate } from '@/utils';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FilterFileDto } from './dto/get-file.dto';
 import { FileService } from './file.service';
@@ -49,7 +47,7 @@ const pump = util.promisify(pipeline);
 
 @ApiBearerAuth()
 @ApiTags('/v1/file')
-@Controller('v1/file')
+@Controller({ version: '1', path: 'file' })
 export class FileController extends BaseController {
   constructor(
     private readonly uploadFileService: FileService,
@@ -81,8 +79,7 @@ export class FileController extends BaseController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Roles(RoleEnum.ADMIN)
+  @Authorize(RoleEnum.ADMIN)
   @Get('/get-all')
   async getAll(
     @Query() filter: PaginationOption,
