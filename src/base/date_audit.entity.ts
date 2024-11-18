@@ -1,4 +1,9 @@
-import { BaseEntity, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export class DateAudit extends BaseEntity {
   @Column({ name: 'deleted', default: false })

@@ -12,8 +12,14 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UserService extends BaseService<UserEntity, Repository<UserEntity>> {
-  constructor(@InjectRepository(UserEntity) repository: Repository<UserEntity>, logger: LoggerService) {
+export class UserService extends BaseService<
+  UserEntity,
+  Repository<UserEntity>
+> {
+  constructor(
+    @InjectRepository(UserEntity) repository: Repository<UserEntity>,
+    logger: LoggerService,
+  ) {
     super(repository, logger);
   }
 
@@ -21,11 +27,14 @@ export class UserService extends BaseService<UserEntity, Repository<UserEntity>>
     return this.repository.findOne({ where: { email: email } });
   }
 
-  findById(id: EntityId): Promise<UserEntity> {
+  findById(id: EntityId) {
     return this._findById(id);
   }
 
-  async changePassword(userId: EntityId, changePass: ChangePasswordDto): Promise<UserEntity> {
+  async changePassword(
+    userId: EntityId,
+    changePass: ChangePasswordDto,
+  ): Promise<UserEntity> {
     const user = await this._findById(userId);
     if (!user) {
       throw new NotFoundError('NOT_FOUND');
@@ -39,7 +48,7 @@ export class UserService extends BaseService<UserEntity, Repository<UserEntity>>
     return user;
   }
 
-  async updateProfile(userId: EntityId, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+  async updateProfile(userId: EntityId, updateUserDto: UpdateUserDto) {
     const user = await this._findById(userId);
     if (!user) {
       throw new NotFoundError('USER_NOT_FOUND');

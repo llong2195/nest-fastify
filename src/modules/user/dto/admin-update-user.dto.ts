@@ -1,8 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, Length, Validate } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  Length,
+  Validate,
+} from 'class-validator';
 
 import { RoleEnum } from '@/enums';
-import { PasswordConfirmValidator } from '@/validators/password-confirm.validator';
+import { IsEqualField } from '@/validators/is-equal-field.validator';
 
 export class AdminUpdateUserDto {
   @ApiProperty({ required: false, description: 'first name' })
@@ -22,7 +29,7 @@ export class AdminUpdateUserDto {
   @ApiProperty({ required: false, description: 'passwordConfirmation' })
   @IsOptional()
   @IsNotEmpty()
-  @Validate(PasswordConfirmValidator, ['password'])
+  @Validate(IsEqualField, ['password'])
   passwordConfirmation: string;
 
   @ApiProperty({ required: false, description: 'role', enum: RoleEnum })

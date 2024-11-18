@@ -8,8 +8,8 @@ export const TRANSCODING_QUEUE = 'transcode';
 export class QueueService {
   constructor(@InjectQueue() private queue: Queue) {}
 
-  transcode() {
-    this.queue.add(TRANSCODING_QUEUE, {
+  async transcode() {
+    await this.queue.add(TRANSCODING_QUEUE, {
       file: 'audio.mp3',
     });
   }

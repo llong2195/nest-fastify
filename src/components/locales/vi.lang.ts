@@ -23,7 +23,8 @@ const viLangs = {
   AUTH_EXPIRED_TOKEN: 'Token hết hạn.',
   AUTH_INVALID_EMAIL_ADDRESS: 'Email không hợp lệ.',
   AUTH_INVALID_PASSWORD: 'Password không đúng.',
-  NEW_PASSWORD_SAME_AS_CURRENT_PASSWORD: 'Mật khẩu mới giống với mật khẩu hiện tại.',
+  NEW_PASSWORD_SAME_AS_CURRENT_PASSWORD:
+    'Mật khẩu mới giống với mật khẩu hiện tại.',
   NON_ACTIVATED_ACCOUNT: 'Tài khoản chưa kích hoạt.',
   OTP_LIMIT_REACHED: 'Đạt đến giới hạn otp.',
   USER_NOT_FOUND: 'Không tìm thấy người dùng.',

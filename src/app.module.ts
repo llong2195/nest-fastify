@@ -1,8 +1,6 @@
-import { HttpModule } from '@nestjs/axios';
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { join } from 'node:path';
@@ -41,16 +39,6 @@ if (isEnv(EnvEnum.Production)) {
     provide: APP_INTERCEPTOR,
     useClass: LoggingInterceptor,
   });
-  modules.push(
-    DevtoolsModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        http: config.get<string>('NODE_ENV') !== EnvEnum.Production,
-        port: config.get<number>('PORT'),
-      }),
-    }),
-  );
 }
 @Module({
   imports: [
@@ -88,30 +76,11 @@ if (isEnv(EnvEnum.Production)) {
         }) as ThrottlerModuleOptions,
     }),
 
-    HttpModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        timeout: configService.get('HTTP_TIMEOUT'),
-        maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
-      }),
-      inject: [ConfigService],
-    }),
-
     LoggerModule,
-    ComponentModule,
-    DatabaseModule,
-    ValidatorsModule,
-    SettingModule,
-    CronModule,
-    AuthModule,
-    UserModule,
-    FileModule,
-    NodemailerModule,
-    QueueModule,
-    QrCodeModule,
+
     IORedisModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService): Promise<IRedisModuleOptions> => {
+      useFactory: (configService: ConfigService): IRedisModuleOptions => {
         return {
           connectionOptions: {
             host: configService.get<string>('REDIS_HOST'),
@@ -123,6 +92,18 @@ if (isEnv(EnvEnum.Production)) {
       },
       inject: [ConfigService],
     }),
+
+    ComponentModule,
+    DatabaseModule,
+    ValidatorsModule,
+    QueueModule,
+    CronModule,
+    QrCodeModule,
+    SettingModule,
+    AuthModule,
+    UserModule,
+    FileModule,
+    NodemailerModule,
 
     ...modules,
   ],

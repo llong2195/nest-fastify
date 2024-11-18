@@ -7,7 +7,11 @@ import type { RedisAsyncModuleOptions } from './redis.interface';
 @Global()
 @Module({})
 export class IORedisModule {
-  static async registerAsync({ useFactory, imports, inject }: RedisAsyncModuleOptions): Promise<DynamicModule> {
+  static registerAsync({
+    useFactory,
+    imports,
+    inject,
+  }: RedisAsyncModuleOptions): DynamicModule {
     const redisProvider = {
       provide: IORedisKey,
       useFactory: async (...args: any) => {
@@ -18,9 +22,12 @@ export class IORedisModule {
           onClientReady(client);
         }
         client.on('connect', () => {
-          Logger.log(`Connected to redis on ${client.options.host}:${client.options.port}`, IORedisModule.name);
+          Logger.log(
+            `Connected to redis on ${client.options.host}:${client.options.port}`,
+            IORedisModule.name,
+          );
         });
-        client.on('error', err => {
+        client.on('error', (err) => {
           Logger.error(err, IORedisModule.name);
         });
         return client;

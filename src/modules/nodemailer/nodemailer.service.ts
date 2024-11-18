@@ -14,18 +14,18 @@ export class NodemailerService {
     private readonly logger: LoggerService,
   ) {}
 
-  public async example(): Promise<void> {
-    this.mailerService
+  async example(): Promise<void> {
+    await this.mailerService
       .sendMail({
         to: 'email@gmail.com',
-        from: 'noreply@nestjs.com',
+        from: 'noreply@gmail.com',
         subject: 'Testing Nest Mailermodule with template ✔',
         template: 'welcome',
         context: {
           // Data to be sent to template engine.
         },
       })
-      .catch(e => {
+      .catch((e) => {
         this.logger.error(e);
       });
   }

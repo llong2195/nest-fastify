@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsOptional, Max, Min } from 'class-validator';
 
-import { MessageCode } from '@/constants/message-code';
-import { ConvertToBoolean, ConvertToNumber } from '@/utils/transformers.util';
+import { MessageCode } from '@/constants/message-code.constants';
+import { ConvertToBoolean } from '@/utils/transformers.util';
 
 export class PaginationResponse<T> {
   message: string;
-  body: T | T[] | unknown | any;
+  body: T | T[] | null;
   meta: {
     pagination: {
       currentPage: number;
@@ -33,6 +33,33 @@ export class PaginationResponse<T> {
     this.body = body;
     this.meta = meta;
   }
+
+  static create<T>(
+    items: T[],
+    total: number,
+    page: number,
+    limit: number,
+  ): PaginationResponse<T> {
+    const totalPage = Math.ceil(total / limit);
+    if (total <= 0 || page > totalPage) {
+      return new PaginationResponse<T>([], {
+        pagination: {
+          currentPage: totalPage > 0 ? totalPage : 1,
+          limit: limit,
+          total: 0,
+          totalPages: 0,
+        },
+      });
+    }
+    return new PaginationResponse(items, {
+      pagination: {
+        currentPage: Number(page),
+        limit: limit,
+        total: total,
+        totalPages: totalPage,
+      },
+    });
+  }
 }
 
 export class PaginationOption {
@@ -43,7 +70,6 @@ export class PaginationOption {
   })
   @IsInt()
   @Type(() => Number)
-  @ConvertToNumber()
   @IsOptional()
   @Min(0)
   page: number;
@@ -55,7 +81,6 @@ export class PaginationOption {
   })
   @IsInt()
   @Type(() => Number)
-  @ConvertToNumber()
   @IsOptional()
   @Min(1)
   @Max(1000)

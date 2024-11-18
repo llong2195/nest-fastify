@@ -11,7 +11,7 @@ export class RedisComponent {
     const url = process.env.REDIS_URL || '';
     const useTls = parseInt(process.env.REDIS_TLS || '0') == 1;
     const host = process.env.REDIS_HOST;
-    const port = parseInt(process.env.REDIS_PORT) || 6379;
+    const port = parseInt(process.env.REDIS_PORT || '6379');
     const password = process.env.REDIS_PASS;
     const username = process.env.REDIS_USER || '';
     const db = redisDb ? redisDb : parseInt(process.env.REDIS_DB || '0') || 0;
@@ -21,7 +21,7 @@ export class RedisComponent {
       username: username,
       password: password,
       db,
-      tls: useTls ? {} : null,
+      tls: useTls ? {} : undefined,
     };
 
     try {
@@ -58,7 +58,7 @@ export class RedisComponent {
    * @param [expireTime=60] - The expiration time of the key, in seconds. If it is 0, it will not expire.
    * @returns A promise that resolves to the string 'OK'
    */
-  async set(key: string, data: string | number | Buffer, expireTime = 60): Promise<'OK'> {
+  async set(key: string, data: string | number | Buffer, expireTime = 60) {
     if (data !== null) {
       if (expireTime === 0) {
         return this.redis.set(key, data);
@@ -85,12 +85,17 @@ export class RedisComponent {
    * expire.
    * @returns A promise that resolves to the string 'OK'
    */
-  async setJson(key: string, data: any | Record<string, unknown>, expireTime = 60): Promise<'OK'> {
+  async setJson(key: string, data: Record<string, unknown>, expireTime = 60) {
     if (data !== null) {
       if (expireTime === 0) {
         return await this.redis.set(key, JSON.stringify(data));
       } else {
-        return await this.redis.set(key, JSON.stringify(data), 'EX', expireTime || 60);
+        return await this.redis.set(
+          key,
+          JSON.stringify(data),
+          'EX',
+          expireTime || 60,
+        );
       }
     }
   }
@@ -101,7 +106,7 @@ export class RedisComponent {
    * @param {string} key - The key to get the value from
    * @returns T
    */
-  async getJson<T>(key: string): Promise<T> {
+  async getJson<T>(key: string) {
     const data = await this.redis.get(key);
     if (data !== null && data !== '') {
       return JSON.parse(data) as T;
@@ -118,7 +123,7 @@ export class RedisComponent {
    * @param {string | number} value - string | number
    * @returns The number of fields that were added.
    */
-  async hSet(key: string, field: string, value: string | number): Promise<number> {
+  async hSet(key: string, field: string, value: string | number) {
     return this.redis.hset(key, field, value);
   }
 
@@ -129,7 +134,7 @@ export class RedisComponent {
    * @param fields - Map<string, any>
    * @returns A promise that resolves to the string 'OK'
    */
-  async hmSet(key: string, fields: Map<string, any>): Promise<'OK'> {
+  async hmSet(key: string, fields: Map<string, any>) {
     return this.redis.hmset(key, fields);
   }
 
@@ -139,7 +144,7 @@ export class RedisComponent {
    * @param {string} field - The field to get the value of.
    * @returns A promise that resolves to a string.
    */
-  async hGet(key: string, field: string): Promise<string> {
+  async hGet(key: string, field: string) {
     return this.redis.hget(key, field);
   }
 
@@ -149,11 +154,10 @@ export class RedisComponent {
    * @param {string} field - The field to get the value from
    * @returns A Promise that resolves to null or T
    */
-  async hGetJson<T>(key: string, field: string): Promise<null | T> {
+  async hGetJson<T>(key: string, field: string) {
     try {
       const data = await this.redis.hget(key, field);
       if (data !== null && data !== '') {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return JSON.parse(data) as T;
       }
     } catch (e) {
@@ -167,7 +171,7 @@ export class RedisComponent {
    * @param {string} key - The key to get the hash from.
    * @returns A promise that resolves to an object with the key/value pairs of the hash.
    */
-  async hGetAll(key: string): Promise<Record<string, string>> {
+  async hGetAll(key: string) {
     return this.redis.hgetall(key);
   }
 
@@ -178,7 +182,7 @@ export class RedisComponent {
    * @returns The number of fields that were removed from the hash, not including specified but non
    * existing fields.
    */
-  async hDel(name: string, key: string): Promise<number> {
+  async hDel(name: string, key: string) {
     return this.redis.hdel(name, key);
   }
 
@@ -187,7 +191,7 @@ export class RedisComponent {
    * @param {string} key - The key to delete
    * @returns The number of keys that were deleted.
    */
-  async delete(key: string): Promise<number> {
+  async delete(key: string) {
     return this.redis.del(key);
   }
 
@@ -196,7 +200,7 @@ export class RedisComponent {
    * @param {string[]} key - The key to be deleted.
    * @returns The number of keys that were removed.
    */
-  async deleteArr(key: string[]): Promise<number> {
+  async deleteArr(key: string[]) {
     return this.redis.del(key);
   }
 
@@ -206,7 +210,7 @@ export class RedisComponent {
    * @param {string | number} data - The data to be pushed to the list.
    * @returns The number of elements in the list after the push operation.
    */
-  async lPush(key: string, data: string | number): Promise<number> {
+  async lPush(key: string, data: string | number) {
     if (data !== null) {
       return this.redis.lpush(key, data);
     }
@@ -219,7 +223,7 @@ export class RedisComponent {
    * @param {string | number} data - The data to be pushed to the list.
    * @returns The number of elements in the list after the push operation.
    */
-  async rPush(key: string, data: string | number): Promise<number> {
+  async rPush(key: string, data: string | number) {
     if (data !== null) {
       return this.redis.rpush(key, data);
     }
@@ -231,7 +235,7 @@ export class RedisComponent {
    * @param {string} key - The key of the list you want to pop from.
    * @returns The first element of the list stored at key.
    */
-  async lPop(key: string): Promise<string> {
+  async lPop(key: string) {
     return await this.redis.lpop(key);
   }
 
@@ -240,7 +244,7 @@ export class RedisComponent {
    * @param {string} key - The key of the list you want to pop from.
    * @returns The last element of the list stored at key.
    */
-  async rPop(key: string): Promise<string> {
+  async rPop(key: string) {
     return await this.redis.rpop(key);
   }
 
@@ -254,7 +258,7 @@ export class RedisComponent {
    * @param {number} value - number - The value to increment by
    * @returns The value of the key after the increment.
    */
-  async inc(name: string, key: string, value: number): Promise<number> {
+  async inc(name: string, key: string, value: number) {
     return this.redis.hincrby(name, key, value);
   }
 
@@ -267,7 +271,7 @@ export class RedisComponent {
    * @returns The number of elements added to the set, not including all the elements already present
    * into the set.
    */
-  async sAdd(key: string, value: (string | Buffer | number)[]): Promise<number> {
+  async sAdd(key: string, value: (string | Buffer | number)[]) {
     if (value !== null) {
       return this.redis.sadd(key, value);
     }
@@ -280,7 +284,10 @@ export class RedisComponent {
    * @param {string | number | Buffer} value - The value to check for in the set.
    * @returns A boolean value.
    */
-  async sisMember(key: string, value: string | number | Buffer): Promise<boolean> {
+  async sisMember(
+    key: string,
+    value: string | number | Buffer,
+  ): Promise<boolean> {
     if (value !== null) {
       const ret = await this.redis.sismember(key, value);
       return !!ret;
@@ -338,14 +345,14 @@ export class RedisComponent {
    * It takes an array of keys and deletes them all
    * @param {string[]} keys - An array of keys to delete.
    */
-  async deleteKeys(keys: string[]): Promise<void> {
-    Promise.all(keys.map(key => this.delete(key)));
+  async deleteKeys(keys: string[]): Promise<number[]> {
+    return Promise.all(keys.map((key) => this.delete(key)));
   }
 
   /**
    * It deletes all the keys in the Redis database
    */
-  async deleteAll(): Promise<'OK'> {
+  async deleteAll() {
     return this.redis.flushall();
   }
 }

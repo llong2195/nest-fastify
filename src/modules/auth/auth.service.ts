@@ -1,14 +1,18 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import { DecodeOptions, SignOptions } from 'jsonwebtoken';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 
+import { CurrentUserDto } from '@/base/base.dto';
+import { ErrorMessageCode } from '@/constants';
+import { UserEntity } from '@/entities';
 import { UserService } from '../user/user.service';
 import { LoginRequestDto } from './dto/login-request.dto';
-import { CurrentUserDto } from '../../base/base.dto';
-import { ErrorMessageCode } from '../../constants';
-import { UserEntity } from '../../entities';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +28,10 @@ export class AuthService {
    * @param {string} password - The password that the user entered in the login form.
    * @returns The user object is being returned.
    */
-  async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserEntity | undefined> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
@@ -42,7 +49,7 @@ export class AuthService {
    * to the server.
    * @returns user and token
    */
-  async login(request: LoginRequestDto): Promise<any> {
+  async login(request: LoginRequestDto) {
     const user = await this.userService.findByEmail(request.email);
     if (!user) {
       throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
@@ -55,7 +62,10 @@ export class AuthService {
       throw new UnauthorizedException(ErrorMessageCode.AUTH_DISABLED_ACCOUNT);
     }
     if (user.deleted) {
-      throw new HttpException(ErrorMessageCode.AUTH_DELETED_ACCOUNT, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        ErrorMessageCode.AUTH_DELETED_ACCOUNT,
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const payload: CurrentUserDto = {
       email: user.email,
@@ -80,8 +90,8 @@ export class AuthService {
    * @param {string} token - The token that was sent in the request.
    * @returns The user object
    */
-  public async getUserFromAuthenticationToken(token: string): Promise<UserEntity> {
-    const payload: any = this.jwtService.verify(token, {
+  public async getUserFromAuthenticationToken(token: string) {
+    const payload = this.jwtService.verify<{ id: string }>(token, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
     });
     if (payload.id) {
@@ -96,31 +106,10 @@ export class AuthService {
    * @param signOptions - jwt.SignOptions = {}
    * @returns A string
    */
-  async generateToken(payload: Record<string, unknown>, signOptions: SignOptions = {}): Promise<string> {
+  generateToken(
+    payload: Record<string, unknown>,
+    signOptions: JwtSignOptions = {},
+  ) {
     return this.jwtService.sign(payload, signOptions);
-  }
-
-  /**
-   * This function decodes a token and returns a promise that resolves to either null, a string, or
-   * an object.
-   * @param {string} token - string - The token to decode.
-   * @param decodeOptions - jwt.DecodeOptions = {}
-   * @returns The return type is a Promise of a null, string, or object.
-   */
-  async decodeToken(
-    token: string,
-    decodeOptions: DecodeOptions = {},
-  ): Promise<null | string | { [key: string]: unknown }> {
-    return this.jwtService.decode(token, decodeOptions);
-  }
-
-  /**
-   * This function verifies a token and returns a promise that resolves to a record of unknowns.
-   * @param {string} token - The token to verify.
-   * @param {JwtVerifyOptions} verifyOptions - JwtVerifyOptions = {}
-   * @returns A promise that resolves to a record of unknowns.
-   */
-  async verifyToken(token: string, verifyOptions: JwtVerifyOptions = {}): Promise<Record<string, unknown>> {
-    return this.jwtService.verifyAsync(token, verifyOptions);
   }
 }

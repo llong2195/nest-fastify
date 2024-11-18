@@ -27,7 +27,7 @@ export class RedisService {
    * @param [expireTime=60] - The expiration time of the key, in seconds. If it is 0, it will not expire.
    * @returns A promise that resolves to the string 'OK'
    */
-  async set(key: string, data: string | number | Buffer, expireTime = 60): Promise<'OK'> {
+  async set(key: string, data: string | number | Buffer, expireTime = 60) {
     if (data !== null) {
       if (expireTime === 0) {
         return this.redis.set(key, data);
@@ -54,12 +54,17 @@ export class RedisService {
    * expire.
    * @returns A promise that resolves to the string 'OK'
    */
-  async setJson(key: string, data: any | Record<string, unknown>, expireTime = 60): Promise<'OK'> {
+  async setJson(key: string, data: Record<string, unknown>, expireTime = 60) {
     if (data !== null) {
       if (expireTime === 0) {
         return await this.redis.set(key, JSON.stringify(data));
       } else {
-        return await this.redis.set(key, JSON.stringify(data), 'EX', expireTime || 60);
+        return await this.redis.set(
+          key,
+          JSON.stringify(data),
+          'EX',
+          expireTime || 60,
+        );
       }
     }
   }
@@ -70,7 +75,7 @@ export class RedisService {
    * @param {string} key - The key to get the value from
    * @returns T
    */
-  async getJson<T>(key: string): Promise<T> {
+  async getJson<T>(key: string) {
     const data = await this.redis.get(key);
     if (data !== null && data !== '') {
       return JSON.parse(data) as T;
@@ -87,7 +92,11 @@ export class RedisService {
    * @param {string | number} value - string | number
    * @returns The number of fields that were added.
    */
-  async hSet(key: string, field: string, value: string | number): Promise<number> {
+  async hSet(
+    key: string,
+    field: string,
+    value: string | number,
+  ): Promise<number> {
     return this.redis.hset(key, field, value);
   }
 
@@ -108,7 +117,7 @@ export class RedisService {
    * @param {string} field - The field to get the value of.
    * @returns A promise that resolves to a string.
    */
-  async hGet(key: string, field: string): Promise<string> {
+  async hGet(key: string, field: string) {
     return this.redis.hget(key, field);
   }
 
@@ -122,7 +131,6 @@ export class RedisService {
     try {
       const data = await this.redis.hget(key, field);
       if (data !== null && data !== '') {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return JSON.parse(data) as T;
       }
     } catch (e) {
@@ -200,7 +208,7 @@ export class RedisService {
    * @param {string} key - The key of the list you want to pop from.
    * @returns The first element of the list stored at key.
    */
-  async lPop(key: string): Promise<string> {
+  async lPop(key: string) {
     return await this.redis.lpop(key);
   }
 
@@ -209,7 +217,7 @@ export class RedisService {
    * @param {string} key - The key of the list you want to pop from.
    * @returns The last element of the list stored at key.
    */
-  async rPop(key: string): Promise<string> {
+  async rPop(key: string) {
     return await this.redis.rpop(key);
   }
 
@@ -223,7 +231,7 @@ export class RedisService {
    * @param {number} value - number - The value to increment by
    * @returns The value of the key after the increment.
    */
-  async inc(name: string, key: string, value: number): Promise<number> {
+  async inc(name: string, key: string, value: number) {
     return this.redis.hincrby(name, key, value);
   }
 
@@ -236,7 +244,7 @@ export class RedisService {
    * @returns The number of elements added to the set, not including all the elements already present
    * into the set.
    */
-  async sAdd(key: string, value: (string | Buffer | number)[]): Promise<number> {
+  async sAdd(key: string, value: (string | Buffer | number)[]) {
     if (value !== null) {
       return this.redis.sadd(key, value);
     }
@@ -249,7 +257,7 @@ export class RedisService {
    * @param {string | number | Buffer} value - The value to check for in the set.
    * @returns A boolean value.
    */
-  async sisMember(key: string, value: string | number | Buffer): Promise<boolean> {
+  async sisMember(key: string, value: string | number | Buffer) {
     if (value !== null) {
       const ret = await this.redis.sismember(key, value);
       return !!ret;
@@ -307,8 +315,8 @@ export class RedisService {
    * It takes an array of keys and deletes them all
    * @param {string[]} keys - An array of keys to delete.
    */
-  async deleteKeys(keys: string[]): Promise<void> {
-    Promise.all(keys.map(key => this.delete(key)));
+  async deleteKeys(keys: string[]): Promise<number[]> {
+    return Promise.all(keys.map((key) => this.delete(key)));
   }
 
   /**

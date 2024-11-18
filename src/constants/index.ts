@@ -1,3 +1,3 @@
-export * from './error-code';
-export * from './error-message-code';
-export * from './message-code';
+export * from './error-code.constants';
+export * from './error-message-code.constants';
+export * from './message-code.constants';

@@ -23,7 +23,8 @@ const enLangs = {
   AUTH_EXPIRED_TOKEN: 'expired token.',
   AUTH_INVALID_EMAIL_ADDRESS: 'invalid email address.',
   AUTH_INVALID_PASSWORD: 'invalid password.',
-  NEW_PASSWORD_SAME_AS_CURRENT_PASSWORD: 'new password same as current password.',
+  NEW_PASSWORD_SAME_AS_CURRENT_PASSWORD:
+    'new password same as current password.',
   NON_ACTIVATED_ACCOUNT: 'non activated account.',
   OTP_LIMIT_REACHED: 'otp limit reached.',
   USER_NOT_FOUND: 'user not found.',

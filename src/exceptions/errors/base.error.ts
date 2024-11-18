@@ -10,7 +10,12 @@ export class BaseError extends HttpException {
    * @param errorCode
    * @param cause
    */
-  constructor(message: string | Record<string, any>, status: HttpStatus, errorCode: number, cause?: Error) {
+  constructor(
+    message: string | Record<string, any>,
+    status: HttpStatus,
+    errorCode: number,
+    cause?: Error,
+  ) {
     super(message, status, {
       cause: cause,
     });

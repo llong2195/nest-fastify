@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { ValidationArguments } from 'class-validator';
 import { DataSource, EntityTarget } from 'typeorm';
 
@@ -23,20 +26,21 @@ export class IsNotExist implements ValidatorConstraintInterface {
     if (!value || !entity) {
       return false;
     }
-    const repo = await this.dataSource.getRepository(entity);
+    const repo = this.dataSource.getRepository(entity);
     if (!repo) {
       return false;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const rs = await repo.findOne({
       where: {
         [validationArguments.property]: value,
       },
     });
 
-    return !Boolean(rs);
+    return !rs;
   }
 
   defaultMessage(validationArguments?: ValidationArguments): string {
-    return `${validationArguments.value} is taken, please try another`;
+    return `${validationArguments?.value} is taken, please try another`;
   }
 }
