@@ -102,7 +102,10 @@ export class FileController extends BaseController {
   ) {
     try {
       // Sanitize the path to prevent directory traversal
-      const sanitizedPath = path.replace(/\.\.\//g, '');
+      let sanitizedPath = path;
+      while (sanitizedPath.includes('../')) {
+        sanitizedPath = sanitizedPath.replace(/\.\.\//g, '');
+      }
       const filePath = join(
         process.cwd(),
         UPLOAD_LOCATION || '',
