@@ -80,7 +80,7 @@
     "@types/jest": "^29.5.14",
     "@types/lodash.camelcase": "^4.3.9",
     "@types/mime-types": "^2.1.4",
-    "@types/node": "^22.9.1",
+    "@types/node": "^22.9.3",
     "@types/qrcode": "^1.5.5",
     "@types/request-ip": "^0.0.41",
     "@types/supertest": "^6.0.2",
