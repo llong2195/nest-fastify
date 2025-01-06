@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@fastify/helmet':
-        specifier: ^12.0.1
-        version: 12.0.1
+        specifier: ^13.0.1
+        version: 13.0.1
       '@fastify/multipart':
         specifier: 8.3.0
         version: 8.3.0
@@ -544,8 +544,8 @@ packages:
   '@fastify/formbody@7.4.0':
     resolution: {integrity: sha512-H3C6h1GN56/SMrZS8N2vCT2cZr7mIHzBHzOBa5OPpjfB/D6FzP9mMpE02ZzrFX0ANeh0BAJdoXKOF2e7IbV+Og==}
 
-  '@fastify/helmet@12.0.1':
-    resolution: {integrity: sha512-kkjBcedWwdflRThovGuvN9jB2QQLytBqArCFPdMIb7o2Fp0l/H3xxYi/6x/SSRuH/FFt9qpTGIfJz2bfnMrLqA==}
+  '@fastify/helmet@13.0.1':
+    resolution: {integrity: sha512-i+ifqazG3d0HwHL3zuZdg6B/WPc9Ee6kVfGpwGho4nxm0UaK1htss0zq+1rVhOoAorZlCgTZ3/i4S58hUGkkoA==}
 
   '@fastify/merge-json-schemas@0.1.1':
     resolution: {integrity: sha512-fERDVz7topgNjtXsJTTW1JKLy0rhuLRcquYqNR9rF7OcVpCa2OVW49ZPDIhaRRCaUuvVxI+N416xUoF76HNSXA==}
@@ -2885,9 +2885,9 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
-  helmet@7.2.0:
-    resolution: {integrity: sha512-ZRiwvN089JfMXokizgqEPXsl2Guk094yExfoDXR0cBYWxtBbaSww/w+vT4WEJsBW2iTUi1GgZ6swmoug3Oy4Xw==}
-    engines: {node: '>=16.0.0'}
+  helmet@8.0.0:
+    resolution: {integrity: sha512-VyusHLEIIO5mjQPUI1wpOAEu+wl6Q0998jzTxqUYGE45xCIcAxy3MsbEK/yyJUJ3ADeMoB6MornPH6GMWAf+Pw==}
+    engines: {node: '>=18.0.0'}
 
   hexoid@2.0.0:
     resolution: {integrity: sha512-qlspKUK7IlSQv2o+5I7yhUd7TxlOG2Vr5LTa3ve2XSNVKAL/n/u/7KLvKmFNimomDIKvZFXWHv0T12mv7rT8Aw==}
@@ -5408,10 +5408,10 @@ snapshots:
       fast-querystring: 1.1.2
       fastify-plugin: 4.5.1
 
-  '@fastify/helmet@12.0.1':
+  '@fastify/helmet@13.0.1':
     dependencies:
       fastify-plugin: 5.0.1
-      helmet: 7.2.0
+      helmet: 8.0.0
 
   '@fastify/merge-json-schemas@0.1.1':
     dependencies:
@@ -8134,7 +8134,7 @@ snapshots:
   he@1.2.0:
     optional: true
 
-  helmet@7.2.0: {}
+  helmet@8.0.0: {}
 
   hexoid@2.0.0: {}
 
