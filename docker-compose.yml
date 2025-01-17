@@ -12,20 +12,30 @@ name: nest-fastify
 
 services:
   server:
+    container_name: nest-fastify
     build:
       context: .
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
+    env_file:
+      - .env
     ports:
       - 4401:4401
     restart: on-failure
-    depends_on:
-      postgres:
-        condition: service_healthy
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
 
   postgres:
-    container_name: postgres_container
-    image: postgres:15
+    container_name: postgres
+    image: postgres:latest
     restart: always
     user: postgres
     volumes:
@@ -44,7 +54,7 @@ services:
 
   pgadmin:
     container_name: pgadmin_container
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: password
@@ -57,5 +67,6 @@ services:
     restart: unless-stopped
 
 volumes:
+  redis:
   postgres:
   pgadmin:

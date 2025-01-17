@@ -6,8 +6,7 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG NODE_VERSION=20.15.1
-ARG PNPM_VERSION=9.3.0
+ARG NODE_VERSION=22
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -18,7 +17,7 @@ WORKDIR /usr/src/app
 
 # Install pnpm.
 RUN --mount=type=cache,target=/root/.npm \
-    npm install -g pnpm@${PNPM_VERSION}
+    npm install -g pnpm
 
 ################################################################################
 # Create a stage for installing production dependecies.

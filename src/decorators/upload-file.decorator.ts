@@ -51,18 +51,17 @@ const validateFileOptions = (
   };
 };
 
-export const UploadedFile = createParamDecorator<
-  UploadFileOption,
-  ExecutionContext
->(async (_data: UploadFileOption, ctx: ExecutionContext) => {
-  const req = ctx.switchToHttp().getRequest<FastifyRequest>();
-  const validateFile = validateFileOptions(_data);
-  const file = await req.file(validateFile);
-  if (file == undefined) {
-    throw new ValidateError('FILE_INVALID');
-  }
-  return file;
-});
+export const UploadedFile = createParamDecorator(
+  async (_data: UploadFileOption, ctx: ExecutionContext) => {
+    const req = ctx.switchToHttp().getRequest<FastifyRequest>();
+    const validateFile = validateFileOptions(_data);
+    const file = await req.file(validateFile);
+    if (file == undefined) {
+      throw new ValidateError('FILE_INVALID');
+    }
+    return file;
+  },
+);
 
 export type UploadedFormDataBody<T> = {
   file: MultipartFile | undefined;
@@ -73,43 +72,44 @@ export type UploadedFormDataBodyOption = {
   cls?: ClassConstructor<any>;
 } & UploadFileOption;
 
-export const UploadedFormData = createParamDecorator<
-  UploadedFormDataBodyOption,
-  ExecutionContext
->(async (_data: UploadedFormDataBodyOption, ctx: ExecutionContext) => {
-  const req = ctx.switchToHttp().getRequest<FastifyRequest>();
-  const validateFile = validateFileOptions(_data);
+export const UploadedFormData = createParamDecorator(
+  async (_data: UploadedFormDataBodyOption, ctx: ExecutionContext) => {
+    const req = ctx.switchToHttp().getRequest<FastifyRequest>();
+    const validateFile = validateFileOptions(_data);
 
-  const mergeObjectValue = (
-    root: { [key: string]: any },
-    key: string,
-    value: unknown,
-  ) => {
-    if (root[key] === undefined) {
-      body[key] = value;
-    } else if (Array.isArray(body[key])) {
-      body[key].push(value);
-    } else {
-      body[key] = [body[key], value];
+    const mergeObjectValue = (
+      root: { [key: string]: any },
+      key: string,
+      value: unknown,
+    ) => {
+      if (root[key] === undefined) {
+        body[key] = value;
+      } else if (Array.isArray(body[key])) {
+        body[key].push(value);
+      } else {
+        body[key] = [body[key], value];
+      }
+    };
+
+    const parts = req.parts(validateFile);
+
+    let file: MultipartFile | undefined = undefined;
+    const body: Record<string, any> = {};
+    for await (const part of parts) {
+      if (part.type === 'file') {
+        await part.toBuffer();
+        file = part;
+      } else {
+        mergeObjectValue(body, part.fieldname, part.value);
+      }
     }
-  };
 
-  const parts = req.parts(validateFile);
-
-  let file: MultipartFile | undefined = undefined;
-  const body: Record<string, any> = {};
-  for await (const part of parts) {
-    if (part.type === 'file') {
-      await part.toBuffer();
-      file = part;
-    } else {
-      mergeObjectValue(body, part.fieldname, part.value);
-    }
-  }
-
-  const _body: unknown = _data?.cls ? await validateDto(body, _data.cls) : body;
-  return {
-    file,
-    body: _body,
-  };
-});
+    const _body: unknown = _data?.cls
+      ? await validateDto(body, _data.cls)
+      : body;
+    return {
+      file,
+      body: _body,
+    };
+  },
+);
