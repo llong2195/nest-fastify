@@ -6,15 +6,16 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
+    "target": "ES2024", 
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "esModuleInterop": false,
     "newLine": "lf",
-    "strict": false,
+    "strict": true,
     "strictPropertyInitialization": false,
     "paths": {
       "@/*": ["src/*"]

@@ -1,6 +1,5 @@
 import {
   BaseEntity,
-  DeepPartial,
   EntityManager,
   FindManyOptions,
   FindOptionsSelect,
@@ -13,9 +12,9 @@ import {
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { EntityId } from 'typeorm/repository/EntityId';
 
-import { PAGE_SIZE } from '@/configs';
+import { PAGE_SIZE } from '@/configs/config';
 import { LoggerService } from '@/logger/custom.logger';
-import { trim } from '@/utils';
+import { tranformToEntity } from '@/utils/typeorm.util';
 import { IBaseService } from './i.base.service';
 import { PaginationResponse } from './pagination.dto';
 
@@ -54,14 +53,14 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
    * @returns The return value of the operation function.
    */
   async transactionWrap<K>(
-    operation: (manager: EntityManager) => Promise<K>,
+    runInTransaction: (entityManager: EntityManager) => Promise<K>,
     manager?: EntityManager,
-  ) {
+  ): Promise<K> {
     if (manager != undefined) {
-      return await operation(manager);
+      return await runInTransaction(manager);
     } else {
       return await this.repository.manager.transaction(async (manager) => {
-        return await operation(manager);
+        return await runInTransaction(manager);
       });
     }
   }
@@ -127,7 +126,7 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
    * @param {any} data - any - This is the data that will be stored in the database.
    * @returns The data that was saved to the database.
    */
-  async _store(data: DeepPartial<T>): Promise<T> {
+  async _store(data: T): Promise<T | null> {
     return this.repository.save(data);
   }
 
@@ -171,11 +170,11 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
     manyOptions?: FindManyOptions<T>,
   ): Promise<PaginationResponse<T>> {
     const total = await this.repository.count({ where: options });
-    const skip = page === 1 ? 0 : limit * (page - 1);
+    const offset = page === 1 ? 0 : limit * (page - 1);
     const items = await this.repository.find({
       where: options,
       select: fields,
-      skip: skip,
+      skip: offset,
       take: limit,
       ...manyOptions,
     });
@@ -192,13 +191,46 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
    */
   async _iPaginate<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    page: number,
-    limit: number,
+    page: number = 1,
+    limit: number = PAGE_SIZE,
   ): Promise<PaginationResponse<T>> {
-    const skip = (page - 1) * limit;
+    if (page <= 0) {
+      page = 1;
+    }
+    if (limit <= 0) {
+      limit = 1;
+    }
+    const skip = (page - 1) * limit || 0;
     const [items, total] = await queryBuilder
       .take(limit)
       .skip(skip)
+      .getManyAndCount();
+
+    return this.pagination<T>(items, total, page, limit);
+  }
+
+  /**
+   * Similar to @_iPaginate but support order statement with join
+   * @param queryBuilder
+   * @param page
+   * @param limit
+   * @returns
+   */
+  async _iPaginateEx<T extends ObjectLiteral>(
+    queryBuilder: SelectQueryBuilder<T>,
+    page = 1,
+    limit = PAGE_SIZE,
+  ): Promise<PaginationResponse<T>> {
+    if (page <= 0) {
+      page = 1;
+    }
+    if (limit <= 0) {
+      limit = 1;
+    }
+    const skip = (page - 1) * limit || 0;
+    const [items, total] = await queryBuilder
+      .limit(limit)
+      .offset(skip)
       .getManyAndCount();
 
     return this.pagination<T>(items, total, page, limit);
@@ -216,23 +248,29 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
    */
   async _iPaginateCustom<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
-    page: number,
-    limit: number,
+    page = 1,
+    limit = PAGE_SIZE,
     customTable?: string,
   ): Promise<PaginationResponse<T>> {
-    const skip = (page - 1) * limit;
+    if (page <= 0) {
+      page = 1;
+    }
+    if (limit <= 0) {
+      limit = 1;
+    }
+    const skip = (page - 1) * limit || 0;
 
     const [data, total] = await Promise.all([
-      queryBuilder
-        .limit(limit)
-        .offset(skip)
-        .getRawMany<Record<string, unknown>>(),
+      queryBuilder.limit(limit).offset(skip).getRawMany(),
       queryBuilder.getCount(),
     ]);
     const tableName = customTable ?? this.repository.metadata.tableName;
 
-    const results: T[] = this.tranformToEntity<T>(data, tableName);
-    return PaginationResponse.create<T>(results, total, page, limit);
+    const results: T[] = this.tranformToEntity<T>(
+      data as Record<string, unknown>[],
+      tableName,
+    );
+    return this.pagination<T>(results, total, page, limit);
   }
 
   /**
@@ -254,28 +292,6 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
   }
 
   tranformToEntity<T>(data: Record<string, unknown>[], tableName: string): T[] {
-    return data.map((item) => {
-      const a: Record<string, unknown> = {};
-
-      Object.keys(item).forEach((key) => {
-        a[trim(key, tableName + '_')] = item[key];
-      });
-      return a as T;
-    });
-  }
-
-  /**
-   * It returns the current timestamp in seconds or milliseconds
-   * @param [second=true] - boolean - If true, the timestamp will be in seconds. If false, the
-   * timestamp will be in milliseconds.
-   * @returns A timestamp in seconds or milliseconds.
-   */
-  currentTimestamp(second = true): number {
-    const date = new Date();
-    if (second) {
-      const now = Math.floor(date.getTime() / 1000);
-      return now;
-    }
-    return Date.now();
+    return tranformToEntity(data, tableName);
   }
 }
