@@ -6,11 +6,11 @@ export class BaseResponseDto<T> {
 
   constructor(body: T | T[] | null = null, message = MessageCode.SUCCESS) {
     this.message = message;
-    if (body instanceof String) {
-      this.body = { ...body };
-    } else {
-      this.body = body;
-    }
+    this.body = body;
+  }
+
+  static Ok<T>(body: T | T[] | null = null, message = MessageCode.SUCCESS) {
+    return new BaseResponseDto(body, message);
   }
 }
 

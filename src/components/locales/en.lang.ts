@@ -1,4 +1,4 @@
-import { objectToMap } from '@/utils/util';
+import { objectToFlatMap } from '@/utils/util';
 
 const enLangs = {
   SUCCESS: 'success.',
@@ -31,6 +31,6 @@ const enLangs = {
   TOKEN_NOT_FOUND: 'token not found.',
 };
 
-const lang = objectToMap(enLangs);
+const lang = objectToFlatMap(enLangs);
 
 export default lang;

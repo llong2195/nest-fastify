@@ -92,7 +92,7 @@ async function bootstrap() {
       origin: (origin, callback) => {
         if (
           DOMAIN_WHITELIST.indexOf('*') !== -1 ||
-          DOMAIN_WHITELIST.indexOf(origin) !== -1
+          (origin && DOMAIN_WHITELIST.indexOf(origin) !== -1)
         ) {
           callback(null, true);
         } else {

@@ -1,15 +1,21 @@
-import { Process, Processor } from '@nestjs/bull';
-import { Job } from 'bull';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
+import { Job } from 'bullmq';
 
-import { QueueEnum, TopicEnum } from '@/enums/queue.enum';
+import { QueueEnum } from '@/enums/queue.enum';
 import { NodemailerService } from './nodemailer.service';
 
 @Processor(QueueEnum.EMAIL_QUEUE)
-export class mailQueueProcessor {
-  constructor(private readonly nodemailer: NodemailerService) {}
+export class MailQueueProcessor extends WorkerHost {
+  constructor(private readonly nodemailer: NodemailerService) {
+    super();
+  }
 
-  @Process(TopicEnum.EMAIL_SENDMAIL)
-  async processFile(job: Job) {
+  @OnWorkerEvent('completed')
+  onCompleted(res: { jobId: string; returnvalue: string; prev?: string }) {
+    console.log('🚀 ~ MailQueueProcessor ~ res:', res);
+  }
+
+  async process(job: Job, token?: string) {
     await this.nodemailer.example();
   }
 }

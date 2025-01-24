@@ -1,4 +1,4 @@
-import { BullModule, BullRootModuleOptions } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -11,18 +11,16 @@ import { QueueService } from './queue.service';
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        ({
-          redis: {
+      useFactory: (configService: ConfigService) => {
+        return {
+          connection: {
             host: configService.get<string>('REDIS_HOST'),
             port: configService.get<number>('REDIS_PORT'),
             username: configService.get<string>('REDIS_USERNAME'),
             password: configService.get<string>('REDIS_PASSWORD'),
           },
-          defaultJobOptions: {
-            attempts: 10,
-          },
-        }) as BullRootModuleOptions,
+        };
+      },
     }),
 
     BullModule.registerQueue({
@@ -30,6 +28,6 @@ import { QueueService } from './queue.service';
     }),
   ],
   controllers: [QueueController],
-  providers: [QueueProcessor, QueueService],
+  providers: [QueueService, QueueProcessor],
 })
 export class QueueModule {}

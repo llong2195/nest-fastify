@@ -1,4 +1,4 @@
-import { objectToMap } from '@/utils/util';
+import { objectToFlatMap } from '@/utils/util';
 
 const viLangs = {
   SUCCESS: 'Thành công.',
@@ -31,6 +31,6 @@ const viLangs = {
   TOKEN_NOT_FOUND: 'Không tìm thấy token.',
 };
 
-const lang = objectToMap(viLangs);
+const lang = objectToFlatMap(viLangs);
 
 export default lang;

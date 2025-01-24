@@ -1,4 +1,4 @@
-import { BullModule } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bullmq';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { NodemailerService } from './nodemailer.service';
