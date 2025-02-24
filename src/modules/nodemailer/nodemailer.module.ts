@@ -1,12 +1,13 @@
-import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { BullModule } from '@nestjs/bull';
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'node:path';
 
-import { QueueEnum } from '@/enums/queue.enum';
-import { mailQueueProcessor } from './mailQueue.process';
+import { QueueEnum } from '@/common/enums/queue.enum';
+import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { BullModule } from '@nestjs/bullmq';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+import { MailQueueProcessor } from './mailQueue.process';
 import { NodemailerController } from './nodemailer.controller';
 import { NodemailerService } from './nodemailer.service';
 
@@ -44,6 +45,6 @@ import { NodemailerService } from './nodemailer.service';
     }),
   ],
   controllers: [NodemailerController],
-  providers: [NodemailerService, mailQueueProcessor],
+  providers: [NodemailerService, MailQueueProcessor],
 })
 export class NodemailerModule {}

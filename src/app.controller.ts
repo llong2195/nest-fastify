@@ -1,10 +1,11 @@
-import { Controller, Get, Req } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
 
-import { ErrorMessageCode } from './constants';
-import { ValidateError } from './exceptions/errors';
-import { LoggerService } from './logger/custom.logger';
+import { Controller, Get, Req } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
+import { ErrorMessageCode } from './common/constants';
+import { ValidateError } from './common/exceptions/errors';
+import { LoggerService } from './common/logger/custom.logger';
 
 @ApiTags('/')
 @Controller()

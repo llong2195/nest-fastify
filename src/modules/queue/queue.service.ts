@@ -1,6 +1,7 @@
-import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bullmq';
+
+import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
-import { Queue } from 'bull';
 
 export const TRANSCODING_QUEUE = 'transcode';
 

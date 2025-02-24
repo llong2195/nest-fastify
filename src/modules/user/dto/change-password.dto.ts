@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Length, Validate } from 'class-validator';
 
-import { IsEqualField } from '@/validators/is-equal-field.validator';
+import { IsEqualField } from '@/common/validators/is-equal-field.validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ChangePasswordDto {
   @ApiProperty()

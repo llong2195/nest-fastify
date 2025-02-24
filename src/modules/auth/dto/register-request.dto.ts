@@ -1,8 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, Length, Validate } from 'class-validator';
 
-import { IsEqualField } from '@/validators/is-equal-field.validator';
-import { IsNotExist } from '@/validators/is-not-exist.validator';
+import { IsEqualField } from '@/common/validators/is-equal-field.validator';
+import { IsNotExist } from '@/common/validators/is-not-exist.validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterRequestDto {
   @ApiProperty({ example: 'email@gmail.com' })

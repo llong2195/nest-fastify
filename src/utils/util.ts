@@ -1,13 +1,11 @@
-import { ValidationError } from '@nestjs/common';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import CryptoJS from 'crypto-js';
-import camelCase from 'lodash.camelcase';
-import { PassThrough } from 'node:stream';
-import QRCode, { QRCodeToFileStreamOptions } from 'qrcode';
+import { Readable } from 'node:stream';
 
+import { ValidateError } from '@/common/exceptions/errors';
 import { ValidationConfig } from '@/configs';
-import { ValidateError } from '@/exceptions/errors';
+import { ValidationError } from '@nestjs/common';
 
 /**
  *
@@ -61,6 +59,19 @@ export function getFullDate(): string {
 }
 
 /**
+ * Converts a Buffer into a readable stream.
+ *
+ * @param buffer - The buffer to be converted into a stream.
+ * @returns A readable stream containing the data from the buffer.
+ */
+export const bufferToStream = (buffer: Buffer) => {
+  const stream = new Readable();
+  stream.push(buffer);
+  stream.push(null);
+  return stream;
+};
+
+/**
  *
  * @param str
  * @returns
@@ -81,32 +92,12 @@ export const base64Decode = (str: string) => {
 };
 
 /**
- * It takes a string, removes the first and last characters of the string, and returns the result
- * @param {string} str - The string to be trimmed.
- * @param {string} trim_str - The string to trim from the beginning and end of the string.
- */
-export const trim = (str: string, trim_str: string): string => {
-  const reg = new RegExp(`^${trim_str}+|${trim_str}+$`, 'gm');
-  const replacedStr = str.replace(reg, '');
-
-  return camelCase(replacedStr);
-};
-
-/**
- *
- * @param str
- * @returns
- */
-export const toSnakeCase = (str: string): string =>
-  str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-
-/**
  *
  * @param min
  * @param max
  * @returns
  */
-export const getRandomInt = (min: number, max: number): number => {
+export const randomInt = (min: number, max: number): number => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -174,34 +165,42 @@ export const decryptObj = (encryptText: string, secretKey: string): unknown => {
  * @param obj - The object to be converted.
  * @returns The resulting Map<string, string>.
  */
-export const objectToMap = (
-  obj: Record<string, string | object>,
+export const objectToFlatMap = (
+  obj: Record<string, unknown>,
 ): Map<string, string> => {
   const map = new Map<string, string>();
   const stack = [{ obj, prefix: '' }];
+
   while (stack.length > 0) {
-    const popData = stack.pop();
-    if (!popData) {
-      continue;
+    const top = stack.pop();
+    if (!top) {
+      break;
     }
-    const { obj, prefix } = popData;
+    const { obj, prefix } = top;
+
     for (const key in obj) {
-      if (typeof obj[key] === 'object') {
-        if (Array.isArray(obj[key])) {
-          obj[key].forEach((item: object, index: number) => {
+      if (obj[key] === null || obj[key] === undefined) {
+        continue;
+      }
+
+      if (Array.isArray(obj[key])) {
+        (obj[key] as unknown[]).forEach((item, index) => {
+          if (typeof item === 'object' && item !== null) {
             stack.push({
-              obj: item as Record<string, string | object>,
+              obj: item as Record<string, unknown>,
               prefix: `${prefix}${key}.${index}.`,
             });
-          });
-        } else {
-          stack.push({
-            obj: obj[key] as Record<string, string | object>,
-            prefix: `${prefix}${key}.`,
-          });
-        }
-      } else if (!Array.isArray(obj[key])) {
-        map.set(`${prefix}${key}`, String(obj[key]));
+          } else {
+            map.set(`${prefix}${key}.${index}`, String(item));
+          }
+        });
+      } else if (typeof obj[key] === 'object') {
+        stack.push({
+          obj: obj[key] as Record<string, unknown>,
+          prefix: `${prefix}${key}.`,
+        });
+      } else {
+        map.set(`${prefix}${key}`, obj[key] as string);
       }
     }
   }
@@ -271,4 +270,100 @@ export const validateDto = async <T>(
     throw new ValidateError(errorMessages);
   }
   return obj;
+};
+
+/**
+ * Converts an array to a map using a specified key.
+ *
+ * @template T - The type of the array elements.
+ * @param {T[]} arr - The array to convert.
+ * @param {string} key - The key to use for mapping.
+ * @returns {Map<string, T>} - The resulting map.
+ */
+export const arrayToMap = <T>(arr: T[], key: keyof T): Map<string, T> => {
+  const map = new Map<string, T>();
+  arr.forEach((obj) => {
+    if (obj[key] !== undefined) {
+      map.set(String(obj[key]), obj);
+    }
+  });
+  return map;
+};
+
+/**
+ * Converts a Map to an array of its values.
+ *
+ * @template T - The type of the values in the Map.
+ * @param {Map<string, T>} map - The Map to convert.
+ * @returns {T[]} An array containing the values from the Map.
+ */
+export const mapToArray = <T>(map: Map<string, T>): T[] => {
+  const arr: T[] = [];
+  map.forEach((value) => {
+    arr.push(value);
+  });
+  return arr;
+};
+
+/**
+ * Removes specified keys from an object.
+ *
+ * @template T - The type of the object.
+ * @param {T} obj - The object from which keys will be removed.
+ * @param {Array<keyof T>} keys - An array of keys to be removed from the object.
+ */
+export const removeKeysFromObj = <T>(obj: T, keys: Array<keyof T>) => {
+  // Remove keys from the object
+  keys.forEach((key) => {
+    delete obj?.[key];
+  });
+};
+
+/**
+ * Attempts to execute a callback function multiple times until it succeeds
+ *
+ * @param callback - An async function to be executed
+ * @param opt - Optional configuration object
+ * @param opt.retry - Number of retry attempts (default: 3)
+ * @param opt.delay - Delay in milliseconds between retries (default: 1000)
+ *
+ * @returns A Promise that resolves with the callback's return value
+ *
+ * @throws Error if all retry attempts fail
+ *
+ * @example
+ * ```typescript
+ * const result = await tryToSuccess(
+ *   async () => await someAsyncOperation(),
+ *   { retry: 5, delay: 2000 }
+ * );
+ * ```
+ */
+export const tryToSuccess = async <T>(
+  callback: () => Promise<T>,
+  opt?: {
+    /**
+     * Number of retries. Default is 3.
+     */
+    retry?: number;
+    /**
+     * Delay in milliseconds before retrying. Default is 1000ms.
+     */
+    delay?: number;
+  },
+): Promise<T> => {
+  const retry = opt?.retry || 3;
+  const delay = opt?.delay || 1000;
+  let count = 0;
+  while (count < retry) {
+    try {
+      count++;
+      const rs = await callback();
+      return rs;
+    } catch (error: unknown) {
+      console.debug('🚀 ~ error:', error);
+      await sleep(delay);
+    }
+  }
+  throw new Error('Try to success failed');
 };

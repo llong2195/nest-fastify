@@ -1,3 +1,11 @@
+import { DeleteResult } from 'typeorm';
+
+import { BaseResponseDto } from '@/common/base/base.dto';
+import {
+  PaginationOption,
+  PaginationResponse,
+} from '@/common/base/pagination.dto';
+import { UserEntity } from '@/database/pg/entities/entities';
 import {
   Body,
   Controller,
@@ -10,11 +18,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { DeleteResult } from 'typeorm';
 
-import { BaseResponseDto } from '@/base/base.dto';
-import { PaginationOption, PaginationResponse } from '@/base/pagination.dto';
-import { UserEntity } from '@/entities';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../user.service';

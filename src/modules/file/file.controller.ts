@@ -1,3 +1,30 @@
+import contentDisposition from 'content-disposition';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import mime from 'mime-types';
+import {
+  createReadStream,
+  createWriteStream,
+  existsSync,
+  mkdirSync,
+  statSync,
+} from 'node:fs';
+import { join } from 'node:path';
+import { pipeline } from 'node:stream';
+import util from 'node:util';
+
+import { BaseController } from '@/common/base/base.controller';
+import { BaseResponseDto } from '@/common/base/base.dto';
+import {
+  PaginationOption,
+  PaginationResponse,
+} from '@/common/base/pagination.dto';
+import { Authorize } from '@/common/decorators';
+import { ApiFile } from '@/common/decorators/swagger.decorator';
+import { RoleEnum } from '@/common/enums';
+import { I18nService } from '@/common/shared/i18n.service';
+import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@/configs';
+import { FileEntity } from '@/database/pg/entities/entities';
+import { getFullDate } from '@/utils';
 import { MultipartFile } from '@fastify/multipart';
 import {
   BadRequestException,
@@ -15,30 +42,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import contentDisposition from 'content-disposition';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import mime from 'mime-types';
-import {
-  createReadStream,
-  createWriteStream,
-  existsSync,
-  mkdirSync,
-  statSync,
-} from 'node:fs';
-import { join } from 'node:path';
-import { pipeline } from 'node:stream';
-import util from 'node:util';
 
-import { BaseController } from '@/base/base.controller';
-import { BaseResponseDto } from '@/base/base.dto';
-import { PaginationOption, PaginationResponse } from '@/base/pagination.dto';
-import { I18nService } from '@/components/i18n.service';
-import { MAX_FILE_SIZE_IMAGE, UPLOAD_LOCATION } from '@/configs';
-import { Authorize } from '@/decorators';
-import { ApiFile } from '@/decorators/swagger.decorator';
-import { FileEntity } from '@/entities';
-import { RoleEnum } from '@/enums';
-import { getFullDate } from '@/utils';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FilterFileDto } from './dto/get-file.dto';
 import { FileService } from './file.service';

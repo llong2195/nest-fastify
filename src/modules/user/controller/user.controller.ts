@@ -1,9 +1,9 @@
+import { BaseResponseDto, CurrentUserDto } from '@/common/base/base.dto';
+import { Authorize, CurrentUser } from '@/common/decorators';
+import { UserEntity } from '@/database/pg/entities/entities';
 import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { BaseResponseDto, CurrentUserDto } from '@/base/base.dto';
-import { Authorize, CurrentUser } from '@/decorators';
-import { UserEntity } from '@/entities';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../user.service';

@@ -1,12 +1,17 @@
-import { Process, Processor } from '@nestjs/bull';
-import { Job } from 'bull';
+import { Job } from 'bullmq';
+
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 
 import { TRANSCODING_QUEUE } from './queue.service';
 
-@Processor()
-export class QueueProcessor {
-  @Process(TRANSCODING_QUEUE)
-  transcode({ data }: Job) {
-    console.log(data);
+@Processor(TRANSCODING_QUEUE)
+export class QueueProcessor extends WorkerHost {
+  constructor() {
+    super();
+  }
+
+  async process(job: Job, token?: string) {
+    console.log(job);
+    return Promise.resolve();
   }
 }

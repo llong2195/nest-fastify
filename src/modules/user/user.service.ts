@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EntityId } from 'typeorm/repository/EntityId';
 
-import { BaseService } from '@/base/base.service';
-import { UserEntity } from '@/entities';
-import { NotFoundError, ValidateError } from '@/exceptions/errors';
-import { LoggerService } from '@/logger/custom.logger';
-import { Hash } from '@/utils';
+import { BaseService } from '@/common/base/base.service';
+import { NotFoundError, ValidateError } from '@/common/exceptions/errors';
+import { LoggerService } from '@/common/logger/custom.logger';
+import { UserEntity } from '@/database/pg/entities/entities';
+import { Hash } from '@/utils/hash.helper';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 

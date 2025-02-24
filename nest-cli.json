@@ -5,6 +5,8 @@
   "compilerOptions": {
     "builder": "swc",
     "typeCheck": true,
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "watchAssets": true,
+    "assets": []
   }
 }

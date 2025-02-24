@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { BaseService } from '@/base/base.service';
-import { SettingEntity } from '@/entities';
-import { LoggerService } from '@/logger/custom.logger';
+import { BaseService } from '@/common/base/base.service';
+import { LoggerService } from '@/common/logger/custom.logger';
+import { SettingEntity } from '@/database/pg/entities/entities';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class SettingService extends BaseService<

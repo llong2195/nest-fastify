@@ -1,20 +1,21 @@
+import { join } from 'node:path';
+
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
-import { join } from 'node:path';
 
 import { AppController } from './app.controller';
-import { ComponentModule } from './components/component.module';
-import { DatabaseModule } from './database/database.module';
-import { EnvEnum } from './enums';
-import { AllExceptionFilter } from './filter/exception.filter';
-import { ThrottlerBehindProxyGuard } from './guard/throttler-behind-proxy.guard';
-import { LoggingInterceptor } from './interceptors/logging.interceptor';
-import { ResponseTransformInterceptor } from './interceptors/response.transform.interceptor';
-import { IORedisModule, IRedisModuleOptions } from './libs';
-import { LoggerModule } from './logger/logger.module';
+import { AllExceptionFilter } from './common/filter/exception.filter';
+import { ThrottlerBehindProxyGuard } from './common/guard/throttler-behind-proxy.guard';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { ResponseTransformInterceptor } from './common/interceptors/response.transform.interceptor';
+import { IORedisModule, IRedisModuleOptions } from './common/libs';
+import { LoggerModule } from './common/logger/logger.module';
+import { SharedModule } from './common/shared/shared.module';
+import { ValidatorsModule } from './common/validators/validators.module';
+import { DatabaseModule } from './database/pg/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CronModule } from './modules/cron/cron.module';
 import { FileModule } from './modules/file/file.module';
@@ -23,13 +24,12 @@ import { QrCodeModule } from './modules/qr-code/qr-code.module';
 import { QueueModule } from './modules/queue/queue.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
-import { isEnv } from './utils';
-import { ValidatorsModule } from './validators/validators.module';
+import { isProd } from './utils';
 
 const providers = [] as Provider[];
 const modules = [] as DynamicModule[];
 
-if (isEnv(EnvEnum.Production)) {
+if (isProd()) {
   providers.push({
     provide: APP_GUARD,
     useClass: ThrottlerBehindProxyGuard,
@@ -93,7 +93,7 @@ if (isEnv(EnvEnum.Production)) {
       inject: [ConfigService],
     }),
 
-    ComponentModule,
+    SharedModule,
     DatabaseModule,
     ValidatorsModule,
     QueueModule,

@@ -1,7 +1,8 @@
-import { HttpStatus } from '@nestjs/common';
 import { ValidatorOptions } from 'class-validator';
 
-export const ValidationConfig: ValidatorOptions | Record<string, any> = {
+import { HttpStatus, ValidationPipeOptions } from '@nestjs/common';
+
+export const ValidationConfig: ValidatorOptions | ValidationPipeOptions = {
   whitelist: true,
   errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
   forbidNonWhitelisted: true,

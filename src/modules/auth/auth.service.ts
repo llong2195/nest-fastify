@@ -1,3 +1,8 @@
+import { compare } from 'bcrypt';
+
+import { CurrentUserDto } from '@/common/base/base.dto';
+import { ErrorMessageCode } from '@/common/constants';
+import { UserEntity } from '@/database/pg/entities/entities';
 import {
   HttpException,
   HttpStatus,
@@ -6,11 +11,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { compare } from 'bcrypt';
 
-import { CurrentUserDto } from '@/base/base.dto';
-import { ErrorMessageCode } from '@/constants';
-import { UserEntity } from '@/entities';
 import { UserService } from '../user/user.service';
 import { LoginRequestDto } from './dto/login-request.dto';
 

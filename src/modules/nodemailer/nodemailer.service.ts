@@ -1,10 +1,10 @@
-import { MailerService } from '@nestjs-modules/mailer';
-import { InjectQueue } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
-import { Queue } from 'bull';
+import { Queue } from 'bullmq';
 
-import { QueueEnum, TopicEnum } from '@/enums/queue.enum';
-import { LoggerService } from '@/logger/custom.logger';
+import { QueueEnum, TopicEnum } from '@/common/enums/queue.enum';
+import { LoggerService } from '@/common/logger/custom.logger';
+import { MailerService } from '@nestjs-modules/mailer';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class NodemailerService {
