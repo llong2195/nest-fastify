@@ -1,9 +1,10 @@
-import { FastifyMultipartBaseOptions, MultipartFile } from '@fastify/multipart';
 import { ClassConstructor } from 'class-transformer';
 import { FastifyRequest } from 'fastify';
 import { lookup } from 'mime-types';
 
-import { ByteSize } from '@/constants/app.constants';
+import { ByteSize } from '@/common/constants/app.constants';
+import { FastifyMultipartBaseOptions, MultipartFile } from '@fastify/multipart';
+
 import { validateDto } from './util';
 
 export type UploadFileOption = {

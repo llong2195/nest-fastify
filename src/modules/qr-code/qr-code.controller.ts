@@ -1,3 +1,6 @@
+import { FastifyReply } from 'fastify';
+
+import { QrCodeHelper } from '@/utils/qr-code.helper';
 import {
   Controller,
   Get,
@@ -7,9 +10,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { FastifyReply } from 'fastify';
 
-import { QrCodeHelper } from '@/utils/qr-code.helper';
 import { QRCodeDto } from './dto/create-qr-code.dto';
 
 @ApiTags('v1/qr-code')

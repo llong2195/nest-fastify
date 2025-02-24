@@ -1,5 +1,6 @@
-import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
+
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 
 import { TRANSCODING_QUEUE } from './queue.service';
 

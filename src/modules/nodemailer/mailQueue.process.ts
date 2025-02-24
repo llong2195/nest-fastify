@@ -1,7 +1,8 @@
-import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 
-import { QueueEnum } from '@/enums/queue.enum';
+import { QueueEnum } from '@/common/enums/queue.enum';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
+
 import { NodemailerService } from './nodemailer.service';
 
 @Processor(QueueEnum.EMAIL_QUEUE)

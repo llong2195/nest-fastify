@@ -1,8 +1,8 @@
+import { QueueEnum } from '@/common/enums/queue.enum';
 import { BullModule } from '@nestjs/bullmq';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { NodemailerService } from './nodemailer.service';
-import { QueueEnum } from '../../enums/queue.enum';
 
 describe('NodemailerService', () => {
   let service: NodemailerService;

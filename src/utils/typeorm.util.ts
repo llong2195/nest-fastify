@@ -11,9 +11,9 @@ export const handleCatchUpsert = (error: unknown) => {
   }
 };
 
-export const warpUpsert = async <T>(promise: Promise<T>) => {
+export const warpUpsert = async <T>(callback: Promise<T>) => {
   try {
-    return await promise;
+    return await callback;
   } catch (error) {
     handleCatchUpsert(error);
   }

@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
-import { ValidateError } from '../exceptions/errors';
+
+import { ValidateError } from '@/common/exceptions/errors';
+
 import { ParseHelper } from './parse.helper';
 
 describe('ParseHelper', () => {

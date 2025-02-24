@@ -1,11 +1,11 @@
-import { ValidationError } from '@nestjs/common';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import CryptoJS from 'crypto-js';
 import { Readable } from 'node:stream';
 
+import { ValidateError } from '@/common/exceptions/errors';
 import { ValidationConfig } from '@/configs';
-import { ValidateError } from '@/exceptions/errors';
+import { ValidationError } from '@nestjs/common';
 
 /**
  *

@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsEmail,
@@ -8,8 +7,9 @@ import {
   Validate,
 } from 'class-validator';
 
-import { IsEqualField } from '@/validators/is-equal-field.validator';
-import { IsNotExist } from '@/validators/is-not-exist.validator';
+import { IsEqualField } from '@/common/validators/is-equal-field.validator';
+import { IsNotExist } from '@/common/validators/is-not-exist.validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'test1@example.com' })

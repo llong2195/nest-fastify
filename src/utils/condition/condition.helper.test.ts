@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+
 import { ConditionHelper } from './condition.helper';
 import { SupportedType } from './condition.type';
 

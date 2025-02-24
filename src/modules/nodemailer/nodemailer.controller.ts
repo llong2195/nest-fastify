@@ -1,7 +1,7 @@
+import { BaseResponseDto } from '@/common/base/base.dto';
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { BaseResponseDto } from '@/base/base.dto';
 import { NodemailerService } from './nodemailer.service';
 
 @ApiTags('v1/nodemailer')

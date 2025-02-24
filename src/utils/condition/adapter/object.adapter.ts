@@ -1,4 +1,5 @@
 import { isEqual } from 'lodash';
+
 import { IConditionAdapter } from './i.adapter';
 
 export enum ObjectOperatorEnum {

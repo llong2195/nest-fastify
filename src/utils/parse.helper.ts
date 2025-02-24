@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
-import { ValidateError } from '../exceptions/errors';
+
+import { ValidateError } from '@/common/exceptions/errors';
 
 export class ParseHelper {
   static tryToParseNumber(value: unknown): number {
