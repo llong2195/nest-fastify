@@ -57,7 +57,6 @@ async function bootstrap() {
     new FastifyAdapter(instance),
     {
       logger: logLevelsDefault,
-      snapshot: true,
     },
   );
   // ------------- Config ---------------
