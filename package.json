@@ -81,7 +81,7 @@
     "@types/content-disposition": "^0.5.8",
     "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.5.14",
-    "@types/lodash": "^4.17.15",
+    "@types/lodash": "^4.17.16",
     "@types/luxon": "^3.4.2",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^22.13.5",
