@@ -87,7 +87,7 @@
     "@types/node": "^22.14.0",
     "@types/qrcode": "^1.5.5",
     "@types/supertest": "^6.0.2",
-    "eslint": "^9.21.0",
+    "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "globals": "^16.0.0",
