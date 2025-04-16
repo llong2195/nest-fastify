@@ -1,8 +1,7 @@
-import { compare } from 'bcrypt';
-
 import { CurrentUserDto } from '@/common/base/base.dto';
 import { ErrorMessageCode } from '@/common/constants';
 import { UserEntity } from '@/database/pg/entities/entities';
+import { Hash } from '@/utils';
 import {
   HttpException,
   HttpStatus,
@@ -37,7 +36,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
     }
-    const compareResult = await compare(password, user.password);
+    const compareResult = Hash.compare(password, user.password);
     if (!compareResult) {
       throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
     }
@@ -55,7 +54,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
     }
-    const compareResult = await compare(request.password, user.password);
+    const compareResult = Hash.compare(request.password, user.password);
     if (!compareResult) {
       throw new UnauthorizedException(ErrorMessageCode.AUTH_LOGIN_FAIL);
     }

@@ -14,7 +14,7 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { EntityId } from 'typeorm/repository/EntityId';
 
 import { PAGE_SIZE } from '@/configs';
-import { tranformToEntity } from '@/utils';
+import { TypeOrmHelper } from '@/utils';
 
 import { LoggerService } from '../logger/custom.logger';
 import { IBaseService } from './i.base.service';
@@ -294,6 +294,6 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>>
   }
 
   tranformToEntity<T>(data: Record<string, unknown>[], tableName: string): T[] {
-    return tranformToEntity(data, tableName);
+    return TypeOrmHelper.tranformToEntity(data, tableName);
   }
 }

@@ -70,7 +70,7 @@ async function bootstrap() {
   // -------------------------------------------
 
   // -------------- Middleware --------------
-  await app.register(FastifyMultipart);
+  await app.register(FastifyMultipart as any);
   // -------------------------------------------
 
   // -------------- Global filter/pipes --------------

@@ -9,5 +9,5 @@ export * from './parse.helper';
 export * from './qr-code.helper';
 export * from './queue.helper';
 export * from './transformers.util';
-export * from './typeorm.util';
+export * from './typeorm.helper';
 export * from './util';
