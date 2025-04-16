@@ -60,7 +60,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "luxon": "^3.6.1",
-    "mime-types": "^2.1.35",
+    "mime-types": "^3.0.1",
     "nodemailer": "^6.10.1",
     "pg": "^8.14.1",
     "qrcode": "^1.5.4",
