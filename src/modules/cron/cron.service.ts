@@ -10,12 +10,6 @@ export class CronService {
   // @Interval(1000000)
   handleInterval(): void {
     this.logger.debug('Called every 1000 seconds');
-    this.schedulerRegistry.getCronJobs().forEach((job, key) => {
-      console.log(`${key} - ${job.running}`);
-      if (!job.running) {
-        this.schedulerRegistry.deleteCronJob(key);
-      }
-    });
   }
 
   // @Cron(CronExpression.EVERY_10_MINUTES)

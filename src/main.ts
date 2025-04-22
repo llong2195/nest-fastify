@@ -39,6 +39,7 @@ async function bootstrap() {
     const logLevel = process.env.LOG_LEVEL || 'error,debug,verbose';
     logLevelsDefault = logLevel.split(',') as LogLevel[];
   }
+
   const instance = fastify();
   // instance.addHook('onRequest', (request, reply, done) => {
   //     reply['setHeader'] = function (key, value) {
@@ -54,7 +55,7 @@ async function bootstrap() {
   // });
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(instance),
+    new FastifyAdapter(instance as any),
     {
       logger: logLevelsDefault,
     },
@@ -99,7 +100,7 @@ async function bootstrap() {
       },
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
-    await app.register(helmet);
+    await app.register(helmet as any);
   } else {
     app.enableCors({
       origin: '*',
