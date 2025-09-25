@@ -44,7 +44,7 @@
     "@nestjs/typeorm": "^11.0.0",
     "@sentry/node": "^9.46.0",
     "@supercharge/request-ip": "^1.2.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.0",
     "bcryptjs": "^3.0.2",
     "bullmq": "^5.58.4",
     "class-transformer": "^0.5.1",
