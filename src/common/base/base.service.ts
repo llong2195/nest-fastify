@@ -20,9 +20,10 @@ import { LoggerService } from '../logger/custom.logger';
 import { IBaseService } from './i.base.service';
 import { PaginationResponse } from './pagination.dto';
 
-export class BaseService<T extends BaseEntity, R extends Repository<T>>
-  implements IBaseService<T>
-{
+export class BaseService<
+  T extends BaseEntity,
+  R extends Repository<T>,
+> implements IBaseService<T> {
   protected readonly repository: R;
   protected readonly logger: LoggerService;
 

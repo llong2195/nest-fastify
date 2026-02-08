@@ -14,9 +14,10 @@ import { BaseResponseDto } from '../base/base.dto';
 import { I18nService } from '../shared/i18n.service';
 
 @Injectable()
-export class ResponseTransformInterceptor<T>
-  implements NestInterceptor<T, BaseResponseDto<T>>
-{
+export class ResponseTransformInterceptor<T> implements NestInterceptor<
+  T,
+  BaseResponseDto<T>
+> {
   constructor(private i18n: I18nService) {}
   intercept(
     context: ExecutionContext,

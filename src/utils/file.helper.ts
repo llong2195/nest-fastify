@@ -52,7 +52,7 @@ export class FileHelper {
           const regxMineType = new RegExp(`(${_contentTypes.join('|')})$`);
           return Boolean(
             contentType?.match(regxContentType) ||
-              fileName?.match(regxMineType),
+            fileName?.match(regxMineType),
           );
         } else {
           return true;
