@@ -24,6 +24,7 @@ import { LoggerService } from './common/logger/custom.logger';
 import { I18nService } from './common/shared/i18n.service';
 import { ValidatorsModule } from './common/validators/validators.module';
 import { ValidationConfig } from './configs';
+import { RedisIoAdapter } from './modules/gateway/redis-io.adapter';
 import { isEnv, isProd } from './utils';
 
 async function bootstrap() {
@@ -121,8 +122,11 @@ async function bootstrap() {
   I18nService.init();
   // -------------------------------------------
 
-  // -----------Setup Redis Adapter-------------
-  // await initAdapters(app);
+  // -----------Setup Redis Adapter for Socket.io (Scaling)-------------
+  const redisIoAdapter = new RedisIoAdapter(app, configService);
+  await redisIoAdapter.connectToRedis();
+  app.useWebSocketAdapter(redisIoAdapter);
+  LoggerService.log('Socket.IO with Redis Adapter initialized', 'WebSocket');
   // -------------------------------------------
 
   await app.listen(port, LISTEN_ON, (error, addr) => {
