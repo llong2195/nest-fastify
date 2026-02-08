@@ -75,8 +75,8 @@ export class AppGateway
   async handleConnection(client: Socket): Promise<void> {
     const userId = (client.handshake.auth?.userId as string) || client.id;
 
-    // Register in Redis (shared across all instances)
-    await this.sessionManager.registerUser(userId, client);
+    // Register in Redis (only stores socket ID, not Socket object)
+    await this.sessionManager.registerUser(userId, client.id);
 
     this.logger.log(
       `User ${userId} connected (socket: ${client.id}, instance: ${this.sessionManager.getInstanceId()})`,
