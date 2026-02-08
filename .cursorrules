@@ -1,0 +1,31 @@
+
+# NestJS + Fastify Project Rules
+
+## Tech Stack
+- NestJS 11 + Fastify
+- TypeORM + PostgreSQL
+- Redis + BullMQ
+- TypeScript 5.9
+
+## Key Conventions
+- **Imports**: Use aliases `@/*` (e.g., `import { BaseService } from '@/common/base/base.service';`).
+- **Services**: Extend `BaseService` for CRUD.
+  - Example: `export class UserService extends BaseService<UserEntity, Repository<UserEntity>>`
+- **Controllers**: 
+  - Wrap Return types in `Promise<BaseResponseDto<T>>`.
+  - Use `@ApiTags` for Swagger group name.
+  - Use `@Controller({ version: '1', path: 'name' })`.
+- **Entities**: Located in `src/database/pg/entities`.
+- **DTOs**: Use `class-validator` decorators.
+
+## File Structure
+- `src/modules/*`: Feature modules.
+- `src/common/*`: Shared code (base classes, decorators, filters).
+- `src/database/*`: DB configuration and entities.
+
+## Code Style
+- Prefer `const` over `let`.
+- Async/await for all database operations.
+- Use `LoggerService` instead of `console.log`.
+- Strict type checking (avoid `any`).
+- Use `ConfigService` for environment variables.
