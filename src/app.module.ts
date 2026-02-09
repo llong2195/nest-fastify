@@ -16,6 +16,7 @@ import { LoggerModule } from './common/logger/logger.module';
 import { SharedModule } from './common/shared/shared.module';
 import { ValidatorsModule } from './common/validators/validators.module';
 import { DatabaseModule } from './database/pg/database.module';
+import { AuctionModule } from './modules/auction/auction.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CronModule } from './modules/cron/cron.module';
 import { FileModule } from './modules/file/file.module';
@@ -104,6 +105,7 @@ if (isProd()) {
     UserModule,
     FileModule,
     NodemailerModule,
+    AuctionModule,
 
     ...modules,
   ],
