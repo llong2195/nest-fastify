@@ -24,6 +24,7 @@ import { QrCodeModule } from './modules/qr-code/qr-code.module';
 import { QueueModule } from './modules/queue/queue.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
+import { GatewayModule } from './modules/gateway/gateway.module';
 import { isProd } from './utils';
 
 const providers = [] as Provider[];
@@ -104,6 +105,7 @@ if (isProd()) {
     UserModule,
     FileModule,
     NodemailerModule,
+    GatewayModule,
 
     ...modules,
   ],
