@@ -24,6 +24,11 @@ import { QrCodeModule } from './modules/qr-code/qr-code.module';
 import { QueueModule } from './modules/queue/queue.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { UserModule } from './modules/user/user.module';
+import { AuctionModule } from './modules/auction/auction.module';
+import { KafkaModule } from './modules/kafka/kafka.module';
+import { WebsocketModule } from './modules/websocket/websocket.module';
+import { NotificationModule } from './modules/notification/notification.module';
+import { AuditModule } from './modules/audit/audit.module';
 import { isProd } from './utils';
 
 const providers = [] as Provider[];
@@ -104,6 +109,13 @@ if (isProd()) {
     UserModule,
     FileModule,
     NodemailerModule,
+
+    // Auction Platform
+    KafkaModule,
+    AuctionModule,
+    WebsocketModule,
+    NotificationModule,
+    AuditModule,
 
     ...modules,
   ],

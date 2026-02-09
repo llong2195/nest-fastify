@@ -125,6 +125,10 @@ async function bootstrap() {
   // await initAdapters(app);
   // -------------------------------------------
 
+  // -------------- Graceful Shutdown Hooks ---------------
+  app.enableShutdownHooks();
+  // -------------------------------------------
+
   await app.listen(port, LISTEN_ON, (error, addr) => {
     LoggerService.log(
       `==========================================================`,

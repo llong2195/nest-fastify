@@ -21,6 +21,13 @@ services:
       - .env
     ports:
       - 4401:4401
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_healthy
     restart: on-failure
 
   redis:
@@ -31,7 +38,6 @@ services:
       - 6379:6379
     volumes:
       - redis:/data
-
 
   postgres:
     container_name: postgres
@@ -52,6 +58,55 @@ services:
       timeout: 5s
       retries: 5
 
+  # ───── Kafka (KRaft mode, no Zookeeper) ─────
+  kafka:
+    container_name: kafka
+    image: bitnami/kafka:3.7
+    restart: always
+    ports:
+      - '9092:9092'
+      - '9094:9094'
+    environment:
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_NUM_PARTITIONS=6
+      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=1
+      - KAFKA_CFG_LOG_RETENTION_HOURS=168
+      - KAFKA_CFG_LOG_RETENTION_BYTES=1073741824
+    volumes:
+      - kafka:/bitnami/kafka
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1',
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ───── Kafka UI (optional, for development) ─────
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - '8080:8080'
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4:latest
@@ -61,7 +116,6 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin:/var/lib/pgadmin
-
     ports:
       - '5444:80'
     restart: unless-stopped
@@ -70,3 +124,4 @@ volumes:
   redis:
   postgres:
   pgadmin:
+  kafka:

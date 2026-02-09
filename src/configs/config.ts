@@ -108,3 +108,9 @@ export const AWS_REGION: string = process.env.AWS_REGION || '';
 
 //  CONFIG OTP
 export const SENTRY_DSN: string = process.env.SENTRY_DSN || '';
+
+// KAFKA
+export const KAFKA_BROKERS: string =
+  process.env.KAFKA_BROKERS || 'localhost:9092';
+export const KAFKA_CLIENT_ID: string =
+  process.env.KAFKA_CLIENT_ID || 'auction-api';

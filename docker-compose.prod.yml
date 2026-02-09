@@ -1,0 +1,114 @@
+# Docker Compose override for production-like deployment.
+# Each service can be scaled independently.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up --scale ws-gateway=3
+
+name: nest-fastify
+
+services:
+  # ───── API Service ─────
+  api:
+    container_name: auction-api
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      SERVICE_ROLE: api
+    env_file:
+      - .env
+    ports:
+      - '4401:4401'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+    restart: on-failure
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+
+  # ───── BullMQ Worker Service ─────
+  worker:
+    container_name: auction-worker
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      SERVICE_ROLE: worker
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+    restart: on-failure
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+
+  # ───── WebSocket Gateway (Kafka Consumer) ─────
+  ws-gateway:
+    container_name: auction-ws
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      SERVICE_ROLE: ws-gateway
+    env_file:
+      - .env
+    ports:
+      - '4402:4402'
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: on-failure
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+
+  # ───── Notification Consumer (Kafka Consumer) ─────
+  notification:
+    container_name: auction-notification
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      SERVICE_ROLE: notification
+    env_file:
+      - .env
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: on-failure
+
+  # ───── Audit Consumer (Kafka Consumer) ─────
+  audit:
+    container_name: auction-audit
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      SERVICE_ROLE: audit
+    env_file:
+      - .env
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: on-failure
