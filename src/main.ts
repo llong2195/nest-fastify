@@ -18,7 +18,9 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
+import { RedisIoAdapter } from './common/adapters/redis-io.adapter';
 import { EnvEnum } from './common/enums';
 import { LoggerService } from './common/logger/custom.logger';
 import { I18nService } from './common/shared/i18n.service';
@@ -122,7 +124,27 @@ async function bootstrap() {
   // -------------------------------------------
 
   // -----------Setup Redis Adapter-------------
-  // await initAdapters(app);
+  // -----------Setup Redis Adapter-------------
+  const redisIoAdapter = new RedisIoAdapter(app);
+  await redisIoAdapter.connectToRedis();
+  app.useWebSocketAdapter(redisIoAdapter);
+
+  // Connect Kafka Microservice
+  app.connectMicroservice({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: [
+          configService.get<string>('KAFKA_BROKER') || 'localhost:9092',
+        ],
+      },
+      consumer: {
+        groupId: 'auction-consumer-group',
+      },
+    },
+  });
+  await app.startAllMicroservices();
+  // -------------------------------------------
   // -------------------------------------------
 
   await app.listen(port, LISTEN_ON, (error, addr) => {
